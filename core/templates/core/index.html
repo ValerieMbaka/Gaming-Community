@@ -1,0 +1,436 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} GuildSpace | Connect Gamers Across All Platforms {% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="hero-section text-white">
+        <div class="container">
+            <div class="row align-items-center min-vh-75 py-5">
+                <div class="col-lg-6">
+                    <h1 class="display-3 fw-bold mb-4">Unite gamers across all platforms</h1>
+                    <p class="lead mb-4">The ultimate hub connecting PC, Console, and Mobile players in one competitive ecosystem.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-primary btn-lg px-4">Join Free</a>
+                        <a href="#platforms" class="btn btn-outline-light btn-lg px-4">Explore Platforms</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="{% static 'core/images/ps.jpeg' %}" alt="Gaming Illustration" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 bg-dark text-white">
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="pe-lg-5">
+                        <span class="badge bg-primary mb-3">WHO WE ARE</span>
+                        <h2 class="mb-4">Redefining Gaming Communities</h2>
+                        <p class="mb-4">GuildSpace breaks down platform barriers, creating a unified space
+	                        where gamers connect, compete, and grow together regardless of their preferred
+	                        gaming device.</p>
+
+                        <div class="d-flex mb-3">
+                            <div class="me-4">
+                                <div class="fs-1 text-primary mb-1">10K+</div>
+                                <div class="text-muted">Active Players</div>
+                            </div>
+                            <div class="me-4">
+                                <div class="fs-1 text-primary mb-1">500+</div>
+                                <div class="text-muted">Tournaments</div>
+                            </div>
+                            <div>
+                                <div class="fs-1 text-primary mb-1">4</div>
+                                <div class="text-muted">Platforms</div>
+                            </div>
+                        </div>
+
+                        <a href="#platforms" class="btn btn-outline-light">Our Platforms</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="card bg-secondary border-0 h-100">
+                                <div class="card-body p-4">
+                                    <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
+                                    <h5>Competitions</h5>
+                                    <p class="small text-muted">Weekly tournaments with cash prizes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card bg-secondary border-0 h-100">
+                                <div class="card-body p-4">
+                                    <i class="fas fa-users fa-2x text-info mb-3"></i>
+                                    <h5>Communities</h5>
+                                    <p class="small text-muted">Join game-specific clans & groups</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card bg-secondary border-0 h-100">
+                                <div class="card-body p-4">
+                                    <i class="fas fa-chart-line fa-2x text-success mb-3"></i>
+                                    <h5>Stats Tracking</h5>
+                                    <p class="small text-muted">Monitor your progress across games</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card bg-secondary border-0 h-100">
+                                <div class="card-body p-4">
+                                    <i class="fas fa-store fa-2x text-danger mb-3"></i>
+                                    <h5>Shop Discounts</h5>
+                                    <p class="small text-muted">Exclusive deals at local stores</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Games -->
+    <section id="games" class="py-5 bg-light">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge bg-primary mb-3">TRENDING NOW</span>
+                <h2>This Week's Hottest Games</h2>
+                <p class="lead text-muted">What the community is playing right now</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Game 1 -->
+                <div class="col-md-3 col-6">
+                    <div class="card game-card border-0 h-100">
+                        <div class="card-img-top position-relative">
+                            <img src="{% static 'core/images/tekken.jpeg' %}" class="img-fluid w-100" alt="Tekken">
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2">+25%</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">Tekken</h5>
+                                    <div class="d-flex small text-warning mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <span class="badge bg-primary">PC</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 42K playing</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 2 -->
+                <div class="col-md-3 col-6">
+                    <div class="card game-card border-0 h-100">
+                        <div class="card-img-top position-relative">
+                            <img src="{% static 'core/images/pubg.jpeg' %}" class="img-fluid w-100" alt="PUBG Mobile">
+                            <span class="badge bg-danger position-absolute top-0 end-0 m-2">New</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">PUBG Mobile</h5>
+                                    <div class="d-flex small text-warning mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success">Mobile</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 38K playing</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 3 -->
+                <div class="col-md-3 col-6">
+                    <div class="card game-card border-0 h-100">
+                        <div class="card-img-top">
+                            <img src="{% static 'core/images/fc.jpeg' %}" class="img-fluid w-100" alt="FIFA 25">
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">FIFA 25</h5>
+                                    <div class="d-flex small text-warning mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <span class="badge bg-warning text-dark">Xbox</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 29K playing</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 4 -->
+                <div class="col-md-3 col-6">
+                    <div class="card game-card border-0 h-100">
+                        <div class="card-img-top">
+                            <img src="{% static 'core/images/nfs.jpeg' %}" class="img-fluid w-100" alt="Need for Speed Heat">
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">Need for Speed Heat</h5>
+                                    <div class="d-flex small text-warning mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <span class="badge bg-info">PS5</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 35K playing</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-outline-primary">View All Games</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Platforms -->
+    <section id="platforms" class="py-5 bg-white">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge bg-primary mb-3">OUR PLATFORMS</span>
+                <h2>Play Anywhere, Connect Everywhere</h2>
+                <p class="lead text-muted">One account for all your gaming platforms</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- PC -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card platform-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper bg-primary bg-opacity-10 text-primary mb-4 mx-auto">
+                                <i class="fas fa-desktop fa-2x"></i>
+                            </div>
+                            <h4 class="mb-3">PC Gaming</h4>
+                            <p class="text-muted small">Connect your Steam, Epic, and Battle.net accounts</p>
+                            <div class="mt-3">
+                                <span class="badge bg-primary">12K+ Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card platform-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper bg-success bg-opacity-10 text-success mb-4 mx-auto">
+                                <i class="fas fa-mobile-alt fa-2x"></i>
+                            </div>
+                            <h4 class="mb-3">Mobile</h4>
+                            <p class="text-muted small">iOS and Android gaming with cloud support</p>
+                            <div class="mt-3">
+                                <span class="badge bg-success">15K+ Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Console -->
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card platform-card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-wrapper bg-warning bg-opacity-10 text-warning mb-4 mx-auto">
+                                <i class="fas fa-gamepad fa-2x"></i>
+                            </div>
+                            <h4 class="mb-3">Console</h4>
+                            <p class="text-muted small">PlayStation, Xbox, and Nintendo Switch integration</p>
+                            <div class="mt-3">
+                                <span class="badge bg-warning text-dark">10+ Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-primary px-4">Connect Your Platforms</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section (Enhanced) -->
+    <section id="blog" class="py-5 bg-light">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge bg-primary mb-3">COMMUNITY</span>
+                <h2>GameHub Blog & Events</h2>
+                <p class="lead text-muted">Stay updated with competitions and top players</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Competitions Column -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-0">
+                            <h3 class="mb-0"><i class="fas fa-trophy me-2 text-warning"></i>Upcoming Competitions</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Competition 1 -->
+                            <div class="d-flex mb-4">
+                                <div class="flex-shrink-0 me-3">
+                                    <img src="{% static 'core/images/codwarzone.jpeg' %}" alt="COD Tournament" width="80" class="rounded">
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Call of Duty: Warzone</h5>
+                                    <div class="d-flex small text-muted mb-2">
+                                        <span class="me-3"><i class="fas fa-calendar-alt me-1"></i> July 26, 2025</span>
+                                        <span><i class="fas fa-users me-1"></i> 120 Registered</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-warning text-dark me-2">$5,000 Prize</span>
+                                        <a href="#" class="btn btn-sm btn-outline-primary ms-auto">Register</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Competition 2 -->
+                            <div class="d-flex mb-4">
+                                <div class="flex-shrink-0 me-3">
+                                    <img src="{% static 'core/images/fortnite.jpeg' %}" alt="Fortnite Tournament" width="80" class="rounded">
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Fortnite Solo Showdown</h5>
+                                    <div class="d-flex small text-muted mb-2">
+                                        <span class="me-3"><i class="fas fa-calendar-alt me-1"></i> August 1, 2025 </span>
+                                        <span><i class="fas fa-users me-1"></i> 85 Registered</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-warning text-dark me-2">$3,000 Prize</span>
+                                        <a href="#" class="btn btn-sm btn-outline-primary ms-auto">Register</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- View All -->
+                            <div class="text-center mt-3">
+                                <a href="#" class="btn btn-outline-primary">View All Competitions</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Players Column -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-0">
+                            <h3 class="mb-0"><i class="fas fa-crown me-2 text-primary"></i>Top Players This Week</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Player 1 -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="ProGamer123" width="50" class="rounded-circle">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge bg-primary rounded-pill">1</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">ProGamer123</h6>
+                                    <small class="text-muted">42 Wins | 3,850 Points</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary">PC</span>
+                                </div>
+                            </div>
+
+                            <!-- Player 2 -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="{% static 'core/images/player1.jpeg' %}" alt="MobileKing" width="50" class="rounded-circle">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge bg-secondary rounded-pill">2</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">MobileKing</h6>
+                                    <small class="text-muted">38 Wins | 3,720 Points</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success">Mobile</span>
+                                </div>
+                            </div>
+
+                            <!-- Player 3 -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="{% static 'core/images/player2.jpeg' %}" alt="ConsoleQueen" width="50" class="rounded-circle">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge bg-warning text-dark rounded-pill">3</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">ConsoleQueen</h6>
+                                    <small class="text-muted">35 Wins | 3,600 Points</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-warning text-dark">PS5</span>
+                                </div>
+                            </div>
+
+                            <!-- Player 4 -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="{% static 'core/images/player3.jpeg' %}" alt="FIFAPro" width="50" class="rounded-circle">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge bg-light text-dark rounded-pill">4</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0">FIFAPro</h6>
+                                    <small class="text-muted">32 Wins | 3,450 Points</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-danger">Xbox</span>
+                                </div>
+                            </div>
+
+                            <!-- View All -->
+                            <div class="text-center mt-4">
+                                <a href="#" class="btn btn-outline-primary">View Full Leaderboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,167 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<title> {% block title %} GuildSpace | Connect Gamers Across All Platforms {% endblock %} </title>
+
+	<!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+
+	{% block extra_head %} {% endblock %}
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <!-- Logo + Name -->
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GuildSpace Logo" width="30" height="30" class="d-inline-block align-top me-2">
+                <span class="brand-text">GuildSpace</span>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about"><i class="fas fa-info-circle me-1"></i> About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#games"><i class="fas fa-gamepad me-1"></i> Games</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#platforms"><i class="fas fa-layer-group me-1"></i> Platforms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#blog"><i class="fas fa-newspaper me-1"></i> Blog</a></li>
+	                <li class="nav-item"><a class="nav-link" href="{% url 'users:user_dashboard' %}"> User Dashboard </a></li>
+	                <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}"> Login </a></li>
+{#                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">#}
+{#                        <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-sign-in-alt me-1"></i> Login</a>#}
+{#                    </li>#}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+	<!-- Main Content -->
+	<div>
+		{% block body %}
+
+		{% endblock %}
+	</div>
+
+    <!-- Newsletter CTA -->
+    <!-- <section class="py-5 bg-primary text-white">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="mb-4">Stay Updated with GameHub</h2>
+                    <p class="lead mb-4">Subscribe to our newsletter for tournament announcements, platform updates, and exclusive offers.</p>
+
+                    <form class="row g-2 justify-content-center">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="email" class="form-control form-control-lg" placeholder="Your email address">
+                                <button class="btn btn-dark btn-lg" type="submit">Subscribe</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <p class="small mt-3">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark text-white">
+        <div class="container py-4">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="mb-4">
+                        <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" width="40" height="40" class="me-2">
+                        <span class="fs-4 fw-bold brand-text">GameHub</span>
+                    </div>
+                    <p class="mb-4">Connecting gamers across all platforms since 2025. Join the revolution in gaming communities.</p>
+                    <div class="social-icons mb-4">
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-discord fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitch fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h5 class="mb-4">Navigation</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50">Home</a></li>
+                        <li class="mb-2"><a href="#about" class="text-white-50">About</a></li>
+                        <li class="mb-2"><a href="#games" class="text-white-50">Games</a></li>
+                        <li class="mb-2"><a href="#platforms" class="text-white-50">Platforms</a></li>
+                        <li class="mb-2"><a href="#blog" class="text-white-50">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h5 class="mb-4">Competitions</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50">Upcoming</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Past Results</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Rules</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">Prizes</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50">How to Join</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <h5 class="mb-4">Contact Us</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@gamehub.com</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +254 700 000000</li>
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Nairobi, Kenya</li>
+                    </ul>
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-outline-light me-2">Support Center</a>
+                        <a href="#" class="btn btn-primary">Report Issue</a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4 bg-secondary">
+
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-0">&copy; 2025 GameHub. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="btn btn-primary btn-lg back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'core/js/script.js' %}"></script>
+
+	{% block extra_scripts %} {% endblock %}
+
+
+</body>
+</html>

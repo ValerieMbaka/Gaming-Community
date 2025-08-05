@@ -1,0 +1,391 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Dashboard | GameHub{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+{% endblock %}
+
+{% block body %}
+	<div class="dashboard-wrapper">
+        <!-- Sidebar Toggle Button (Mobile) -->
+        <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <!-- Home Link -->
+            <a href="{% url 'home' %}" class="sidebar-home-link">
+                <i class="fas fa-home me-2"></i>
+                <span> Back to Home </span>
+            </a>
+
+            <!-- User Profile -->
+            <div class="user-profile-card text-center py-4">
+                <div class="avatar-wrapper">
+                    <img src="{% static 'core/images/player.jpeg' %}"
+                        class="user-avatar"
+                        alt="User Avatar">
+                    <span class="online-status"></span>
+                </div>
+                <h5 class="username mt-3"> MarcKing001 </h5>
+                <div class="user-badges">
+                    <span class="badge pro-badge"> Pro Gamer </span>
+                </div>
+
+                <!-- Achievement Badges -->
+                <!-- <div class="achievement-badges">
+                    <div class="badge-icon" data-tooltip="100 Hours Played">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="badge-icon" data-tooltip="Tournament Winner">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="badge-icon" data-tooltip="Community Leader">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- Dashboard Navigation -->
+            <nav class="dashboard-nav">
+                <ul>
+                    <li class="active">
+                        <a href="{% url 'users:user_dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+
+			        <li class="nav-group">
+                        <div class="nav-header">
+                            <i class="fas fa-user"></i>
+                            <span> Profile </span>
+                            <i class="dropdown-icon fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li><a href="{% url 'users:user_profile' %}"> View Profile </a></li>
+	                        {# <li><a href="#">Edit Details</a></li>#}
+							{# <li><a href="#">Game Stats</a></li>#}
+                        </ul>
+                    </li>
+
+                    <li class="nav-group">
+                        <div class="nav-header">
+                            <i class="fas fa-users"></i>
+                            <span> Communities </span>
+                            <i class="dropdown-icon fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="submenu">
+                            <li><a href="#"> My Communities </a></li>
+                            <li><a href="#"> Browse All </a></li>
+                            <li><a href="#"> Community Feeds </a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Notifications Dropdown -->
+                    <li class="notifications-dropdown">
+                        <a href="#">
+                            <i class="fas fa-bell"></i>
+                            <span> Notifications </span>
+                            <span class="badge notification-badge">5</span>
+                        </a>
+                        <div class="dropdown-content">
+                            <div class="notification-item">
+                                <i class="fas fa-trophy notification-icon"></i>
+                                <div>
+                                    <p> New tournament starting soon </p>
+                                    <small> 2 hours ago </small>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <i class="fas fa-users notification-icon"></i>
+                                <div>
+                                    <p> 3 new members in Valorant Champions </p>
+                                    <small> 5 hours ago </small>
+                                </div>
+                            </div>
+                            <a href="#" class="view-all-notifications"> View All </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <!-- Dark Mode Toggle -->
+                <div class="theme-switcher">
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span> Dark Mode </span>
+                </div>
+
+                <a href="#" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span> Logout </span>
+                </a>
+            </div>
+        </aside>
+
+		{% block dashboard_content %}
+            <!-- Main Content Area -->
+            <main class="dashboard-content">
+                <!-- Header with Command Palette -->
+                <header class="content-header">
+                    <div class="header-left">
+                        <h1> User Dashboard </h1>
+                        <div class="command-palette">
+                            <button class="btn btn-sm">
+                                <i class="fas fa-search"></i>
+                                <span> Search...</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> New Post
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Stats Summary with Progress Bars -->
+                <section class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3> 5 </h3>
+                            <p> Communities </p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 70%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3> 2 </h3>
+                            <p> Active Competitions </p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 30%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3> 87% </h3>
+                            <p> Win Rate </p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 87%"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3> 1,250 </h3>
+                            <p> Gamer Points </p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Two Column Layout -->
+                <div class="dashboard-grid">
+                    <!-- Left Column -->
+                    <div class="main-column">
+                        <!-- Quick Actions -->
+                        <section class="quick-actions card">
+                            <h2 class="card-header">
+	                            <i class="fas fa-bolt me-2"></i> Quick Actions
+                            </h2>
+                            <div class="action-buttons">
+                                <button class="action-btn">
+                                    <i class="fas fa-trophy"></i>
+                                    <span> Join Competition </span>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span> Add Friends </span>
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Recommended Games -->
+                        <section class="recommendations card">
+                            <h2 class="card-header">
+                                <i class="fas fa-star me-2"></i> Recommended For You
+                            </h2>
+                            <div class="game-carousel">
+                                <div class="game-card">
+                                    <img src="{% static 'core/images/freefire.jpeg' %}" alt="Valorant">
+                                    <div class="game-info">
+                                        <h4> Valorant </h4>
+                                        <p> FPS • 5v5 </p>
+                                        <div class="match-percentage"> 92% Match </div>
+                                    </div>
+                                </div>
+                                <div class="game-card">
+                                    <img src="{% static 'core/images/tekken.jpeg' %}" alt="Tekken">
+                                    <div class="game-info">
+                                        <h4> Tekken 8 </h4>
+                                        <p> Fighting • 1v1 </p>
+                                        <div class="match-percentage"> 85% Match </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    <!-- Recent Activity with Reactions -->
+                    <section class="activity-feed card">
+                        <h2 class="card-header">
+                            <i class="fas fa-history me-2"></i> Recent Activity
+                        </h2>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <img src="{% static 'core/images/player1.jpeg' %}"
+                                    class="activity-avatar"
+                                    alt="User">
+                                <div class="activity-content">
+                                    <h4>Joined <span class="highlight">Valorant Champions</span> community</h4>
+					                <p class="activity-meta">2 hours ago</p>
+                                    <div class="activity-actions">
+                                        <button class="btn btn-sm btn-outline-secondary react-btn">
+                                            <i class="far fa-thumbs-up"></i> Like
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary comment-btn">
+                                            <i class="far fa-comment"></i> Comment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <img src="{% static 'core/images/player2.jpeg' %}"
+                                    class="activity-avatar"
+                                    alt="User">
+                                <div class="activity-content">
+                                    <h4>Posted in <span class="highlight">FIFA Pros</span> community</h4>
+                                    <p class="activity-text">"Looking for teammates for weekend tournament!"</p>
+                                    <p class="activity-meta">5 hours ago</p>
+                                    <div class="activity-actions">
+                                        <button class="btn btn-sm btn-outline-secondary react-btn">
+                                            <i class="far fa-thumbs-up"></i> Like
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary comment-btn">
+                                            <i class="far fa-comment"></i> Comment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column -->
+                    <div class="sidebar-column">
+                        <!-- My Communities with Health Indicators -->
+                        <section class="communities-card card">
+                            <h2 class="card-header">
+                                <i class="fas fa-users me-2"></i>My Communities
+                            </h2>
+                            <div class="community-list">
+                                <div class="community-item">
+                                    <img src="{% static 'core/images/freefire.jpeg' %}"
+                                        class="community-logo"
+                                        alt="Valorant">
+                                    <div class="community-info">
+                                        <h4>Valorant Champions</h4>
+                                        <p class="member-count">125 members</p>
+                                    </div>
+	                                <div class="community-health">
+                                        <div class="health-bar health-high"></div>
+                                            <small>Very Active</small>
+                                        </div>
+                                        <a href="#" class="community-link">
+	                                        <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                </div>
+
+                                <div class="community-item">
+                                    <img src="{% static 'core/images/fc.jpeg' %}"
+                                        class="community-logo"
+                                        alt="FIFA">
+                                    <div class="community-info">
+                                        <h4>FIFA Pros</h4>
+                                        <p class="member-count">89 members</p>
+                                    </div>
+                                    <div class="community-health">
+                                        <div class="health-bar health-medium"></div>
+                                        <small>Moderately Active</small>
+                                    </div>
+                                    <a href="#" class="community-link">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+	                        <div class="card-footer">
+                                <a href="#" class="view-all-link">
+                                    View All Communities <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </section>
+
+                        <!-- Upcoming Competitions with Countdown -->
+	                    <section class="competitions-card card">
+                            <h2 class="card-header">
+                                <i class="fas fa-trophy me-2"></i>Upcoming Competitions
+                            </h2>
+                            <div class="competition-list">
+                                <div class="competition-item">
+                                    <img src="{% static 'core/images/tekken.jpeg' %}"
+                                        class="competition-image" alt="Tekken">
+                                    <div class="competition-info">
+                                        <h4>Tekken 8 Weekly</h4>
+                                        <p class="competition-meta">
+                                            <i class="fas fa-calendar-alt"></i> July 30, 2025
+                                        </p>
+                                        <div class="competition-prize">
+                                            <i class="fas fa-gem"></i> $500 Prize Pool
+                                        </div>
+                                        <div class="countdown-timer">
+                                            <div class="countdown-segment">
+                                                <span class="countdown-value">14</span>
+                                                <span class="countdown-label">Days</span>
+                                            </div>
+                                            <div class="countdown-segment">
+                                                <span class="countdown-value">06</span>
+                                                <span class="countdown-label">Hours</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </main>
+		{% endblock %}
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'users/js/dashboard.js' %}"></script>
+{% endblock %}

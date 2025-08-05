@@ -1,0 +1,300 @@
+/* ===== COLOR SYSTEM ===== */
+:root {
+    /* Primary Colors */
+    --primary: #4361ee;       /* Soft blue */
+    --primary-light: #4895ef; /* Lighter blue */
+    --primary-dark: #3a0ca3;  /* Dark blue */
+    
+    /* Neutral Colors */
+    --white: #ffffff;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-500: #adb5bd;
+    --gray-700: #495057;
+    --gray-900: #212529;
+    --black: #121212;
+    
+    /* Accents */
+    --accent: #4cc9f0;       /* Teal */
+    --success: #38b000;      /* Green */
+    --warning: #ff9e00;      /* Orange */
+    --danger: #ef233c;       /* Red */
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    
+    /* Typography */
+    --font-base: 1rem;
+    --font-lg: 1.25rem;
+    --font-xl: 1.5rem;
+    --font-xxl: 2rem;
+    
+    /* Borders */
+    --border-radius: 8px;
+    --border: 1px solid var(--gray-200);
+}
+
+/* ===== BASE RESETS ===== */
+.profile-page {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    color: var(--gray-900);
+    background-color: var(--gray-100);
+    padding: var(--space-lg);
+}
+
+/* ===== PROFILE HEADER ===== */
+.profile-header {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+}
+
+.cover-photo-container {
+    height: 200px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    position: relative;
+}
+
+.profile-meta {
+    display: flex;
+    padding: 0 var(--space-lg) var(--space-md);
+    margin-top: -60px;
+    align-items: flex-end;
+    gap: var(--space-md);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--white);
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: var(--gray-200);
+}
+
+.user-info {
+    flex: 1;
+    margin-bottom: var(--space-sm);
+}
+
+.user-info h1 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    margin: 0 0 var(--space-xs);
+    color: var(--black);
+}
+
+.user-tags {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 100px;
+    font-weight: 500;
+}
+
+.bg-primary { background: var(--primary); color: white; }
+.bg-success { background: var(--success); color: white; }
+.bg-warning { background: var(--warning); color: var(--black); }
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--space-sm);
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-value {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+/* ===== PROFILE NAVIGATION ===== */
+.profile-nav {
+    margin-bottom: var(--space-lg);
+}
+
+.profile-nav ul {
+    display: flex;
+    gap: var(--space-md);
+    padding: 0;
+    list-style: none;
+    border-bottom: var(--border);
+}
+
+.profile-nav a {
+    display: block;
+    padding: var(--space-sm) 0;
+    color: var(--gray-700);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+}
+
+.profile-nav a:hover,
+.profile-nav li.active a {
+    color: var(--primary);
+}
+
+.profile-nav li.active a::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+}
+
+/* ===== CONTENT CARDS ===== */
+.card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: var(--space-md);
+    border-bottom: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: var(--font-lg);
+    font-weight: 600;
+    color: var(--black);
+}
+
+.card-body {
+    padding: var(--space-md);
+}
+
+/* ===== ABOUT SECTION ===== */
+.user-details {
+    margin-top: var(--space-md);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+    color: var(--gray-700);
+}
+
+.detail-item i {
+    color: var(--primary);
+    width: 20px;
+    text-align: center;
+}
+
+/* ===== ACTIVITY FEED ===== */
+.activity-item {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-bottom: var(--border);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.activity-content h4 {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-base);
+    font-weight: 500;
+}
+
+.highlight {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.activity-meta {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+}
+
+/* ===== UPLOADS GRID ===== */
+.uploads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-sm);
+}
+
+.upload-card {
+    aspect-ratio: 16/9;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    background: var(--gray-200);
+}
+
+.upload-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.upload-card:hover .upload-thumbnail {
+    transform: scale(1.05);
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+    .profile-meta {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -80px;
+    }
+    
+    .user-info {
+        margin-bottom: var(--space-md);
+    }
+    
+    .profile-nav ul {
+        overflow-x: auto;
+        padding-bottom: 1px; /* For border */
+    }
+}

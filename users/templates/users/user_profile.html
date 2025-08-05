@@ -1,0 +1,321 @@
+{% extends 'users/user_dashboard.html' %}
+{% load static %}
+
+{% block title %}User Profile | GameHub{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+
+{% block dashboard_content %}
+<main class="dashboard-content profile-page">
+  <!-- ===== PROFILE HEADER ===== -->
+  <header class="profile-header">
+    <div class="cover-photo-container">
+      <img src="{% static 'core/images/profile-banner.jpg' %}" class="cover-photo" alt="Cover Photo">
+      <button class="edit-cover-btn" id="edit-cover-btn">
+        <i class="fas fa-camera"></i> Edit Cover
+      </button>
+    </div>
+
+    <div class="profile-meta">
+      <div class="avatar-upload">
+        <img src="{% static 'core/images/player.jpeg' %}" class="profile-avatar" id="avatar-preview" alt="Avatar">
+        <input type="file" id="avatar-upload" accept="image/*" hidden>
+        <button class="edit-avatar-btn" id="edit-avatar-btn">
+          <i class="fas fa-camera"></i>
+        </button>
+      </div>
+
+      <div class="user-info">
+        <h1 contenteditable="true" id="editable-username">MarcKing001</h1>
+        <div class="user-tags">
+          <span class="badge bg-primary">Pro Gamer</span>
+          <span class="badge bg-success">Tournament Champion</span>
+          <span class="badge bg-warning">Top 100 Global</span>
+          <button class="btn btn-sm btn-outline-accent" id="add-tag-btn">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="stat-card">
+        <span class="stat-value">42</span>
+        <span class="stat-label">Wins</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">87%</span>
+        <span class="stat-label">Win Rate</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">#15</span>
+        <span class="stat-label">Global Rank</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== PROFILE NAVIGATION ===== -->
+  <nav class="profile-nav">
+    <ul>
+      <li class="active"><a href="#overview" data-section="overview">Overview</a></li>
+      <li><a href="#stats" data-section="stats">Game Stats</a></li>
+      <li><a href="#uploads" data-section="uploads">Uploads</a></li>
+      <li><a href="#settings" data-section="settings">Settings</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== MAIN CONTENT SECTIONS ===== -->
+  <div class="profile-sections">
+    <!-- OVERVIEW SECTION -->
+    <section id="overview" class="profile-section active">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+          <!-- About Card -->
+          <div class="card about-card">
+            <div class="card-header">
+              <h3><i class="fas fa-user me-2"></i>About</h3>
+              <button class="btn btn-sm btn-outline-secondary" id="edit-bio-btn">Edit Bio</button>
+            </div>
+            <div class="card-body">
+              <div class="bio-content">
+                <p id="user-bio">Competitive gamer specializing in FPS and fighting games. Currently ranked in the top 1% globally for Valorant and Tekken 7.</p>
+              </div>
+              <div class="bio-editor" style="display: none;">
+                <textarea class="form-control mb-2" id="bio-textarea">Competitive gamer specializing in FPS and fighting games. Currently ranked in the top 1% globally for Valorant and Tekken 7.</textarea>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-primary" id="save-bio-btn">Save</button>
+                  <button class="btn btn-sm btn-outline-secondary" id="cancel-bio-btn">Cancel</button>
+                </div>
+              </div>
+              <div class="user-details">
+                <div class="detail-item">
+                  <i class="fas fa-gamepad"></i>
+                  <span>Main Games: Valorant, Tekken 7, FIFA 23</span>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>Location: Nairobi, Kenya</span>
+                </div>
+                <div class="detail-item">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span>Member Since: January 2023</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="card activity-card">
+            <div class="card-header">
+              <h3><i class="fas fa-history me-2"></i>Recent Activity</h3>
+            </div>
+            <div class="activity-list">
+              <!-- Dummy Activity Items -->
+              <div class="activity-item">
+                <img src="{% static 'core/images/player1.jpeg' %}" class="activity-avatar" alt="User">
+                <div class="activity-content">
+                  <h4>Won <span class="highlight">Valorant Weekly Tournament</span></h4>
+                  <p class="activity-meta">2 days ago • 15 likes</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="{% static 'core/images/player2.jpeg' %}" class="activity-avatar" alt="User">
+                <div class="activity-content">
+                  <h4>Joined <span class="highlight">Tekken Elite</span> community</h4>
+                  <p class="activity-meta">1 week ago • 8 comments</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+          <!-- Connected Platforms -->
+          <div class="card platforms-card">
+            <div class="card-header">
+              <h3><i class="fas fa-plug me-2"></i>Connected Platforms</h3>
+            </div>
+            <div class="card-body">
+              <!-- Dummy Platforms -->
+              <div class="platform-connection connected">
+                <img src="{% static 'core/images/steam-icon.png' %}" class="platform-icon" alt="Steam">
+                <div class="platform-meta">
+                  <h5>Steam</h5>
+                  <small>Connected: Mar 15, 2023</small>
+                </div>
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="platform-connection">
+                <img src="{% static 'core/images/xbox-icon.png' %}" class="platform-icon" alt="Xbox">
+                <div class="platform-meta">
+                  <h5>Xbox Live</h5>
+                  <small>Not Connected</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary">Connect</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tournament History -->
+          <div class="card tournaments-card">
+            <div class="card-header">
+              <h3><i class="fas fa-trophy me-2"></i>Tournament History</h3>
+            </div>
+            <div class="tournament-list">
+              <!-- Dummy Tournaments -->
+              <div class="tournament-item">
+                <div class="tournament-meta">
+                  <h4>Valorant Champions</h4>
+                  <span class="badge bg-warning">2nd Place</span>
+                </div>
+                <small>June 2023 • $1,200 Prize</small>
+              </div>
+              <div class="tournament-item">
+                <div class="tournament-meta">
+                  <h4>Tekken East Africa</h4>
+                  <span class="badge bg-success">1st Place</span>
+                </div>
+                <small>April 2023 • $800 Prize</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME STATS SECTION -->
+    <section id="stats" class="profile-section">
+      <div class="game-tabs">
+        <button class="game-tab active" data-game="valorant">
+          <img src="{% static 'core/images/valorant-icon.png' %}" alt="Valorant"> Valorant
+        </button>
+        <button class="game-tab" data-game="tekken">
+          <img src="{% static 'core/images/tekken-icon.png' %}" alt="Tekken"> Tekken 7
+        </button>
+      </div>
+
+      <div class="game-stats-content">
+        <!-- Valorant Stats -->
+        <div class="game-stats active" data-game="valorant">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stat-card">
+                <h4>K/D Ratio</h4>
+                <div class="stat-value">1.8</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 75%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="stat-card">
+                <h4>Headshot %</h4>
+                <div class="stat-value">32%</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 32%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tekken Stats -->
+        <div class="game-stats" data-game="tekken">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stat-card">
+                <h4>Win Streak</h4>
+                <div class="stat-value">15</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 90%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPLOADS SECTION -->
+    <section id="uploads" class="profile-section">
+      <div class="uploads-header">
+        <h2><i class="fas fa-upload"></i> My Uploads</h2>
+        <button class="btn btn-primary" id="upload-media-btn">
+          <i class="fas fa-plus"></i> New Upload
+        </button>
+      </div>
+
+      <div class="uploads-grid">
+        <!-- Dummy Uploads -->
+        <div class="upload-card">
+          <img src="{% static 'core/images/valorant-clip.jpg' %}" class="upload-thumbnail" alt="Valorant Clip">
+          <div class="upload-actions">
+            <button class="btn btn-sm btn-danger">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div class="upload-card">
+          <img src="{% static 'core/images/tekken-match.jpg' %}" class="upload-thumbnail" alt="Tekken Match">
+          <div class="upload-actions">
+            <button class="btn btn-sm btn-danger">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS SECTION -->
+    <section id="settings" class="profile-section">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-user-cog"></i> Account Settings</h3>
+        </div>
+        <div class="card-body">
+          <form id="settings-form">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" value="marcking@example.com">
+            </div>
+            <div class="form-group">
+              <label>Change Password</label>
+              <input type="password" class="form-control" placeholder="New Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+
+          <div class="danger-zone">
+            <h4><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
+            <button class="btn btn-danger" id="delete-account-btn">
+              <i class="fas fa-trash"></i> Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal" id="avatar-modal">
+    <div class="modal-content">
+      <h3>Change Avatar</h3>
+      <input type="file" id="avatar-file-input" accept="image/*">
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancel-avatar-btn">Cancel</button>
+        <button class="btn btn-primary" id="save-avatar-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'users/js/profile.js' %}"></script>
+{% endblock %}

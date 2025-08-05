@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %} Sign Up {% endblock %}
+{% block extra_head %}
+	<link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+	<link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+{% endblock %}
+
+{% block body %}
+	<main class="sign-up-form mt-3 mb-2" id="signup-form">
+		<div class="container">
+			<div class="row d-flex align-items-center justify-content-center">
+				<h2 class="text-center mt-4"> Create an Account </h2>
+				<div class="col-md-6 signup-form-container">
+					<form action="" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<h2 class="text-center"> Sign Up </h2>
+						<div class="mb-3">
+							<label for="full_name" class="form-label">Full Name</label>
+							<input type="text" class="form-control" id="full_name" name="full_name" placeholder="Full Name" required autocomplete="name">
+						</div>
+
+						<div class="mb-3">
+							<label for="email" class="form-label">Email</label>
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" required autocomplete="email">
+						</div>
+
+						<div class="mb-3">
+							<label for="password" class="form-label">Password</label>
+							<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required autocomplete="new-password">
+						</div>
+
+						<div class="mb-3">
+							<label for="password_confirmation" class="form-label">Confirm Password</label>
+							<input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password" required autocomplete="new-password">
+						</div>
+
+						<div class="mb-3">
+							<button type="submit" class="btn btn-success"> Sign Up </button>
+						</div>
+
+						<div class="mb-3">
+							<a href="{% url 'users:login' %}"> Already have an account? LOGIN instead. </a>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

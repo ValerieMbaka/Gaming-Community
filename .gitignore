@@ -38,6 +38,9 @@ var/
 # PyCharm
 .idea/
 
+# VS Code
+.vscode/
+
 # Django
 *.log
 local_settings.py
