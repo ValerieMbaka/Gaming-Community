@@ -1,321 +1,648 @@
-{% extends 'users/user_dashboard.html' %}
+{% extends 'core/base_minimal.html' %}
 {% load static %}
 
-{% block title %}User Profile | GameHub{% endblock %}
+{% block title %} User Profile | GuildSpace {% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
-<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+	<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
-{% block dashboard_content %}
-<main class="dashboard-content profile-page">
-  <!-- ===== PROFILE HEADER ===== -->
-  <header class="profile-header">
-    <div class="cover-photo-container">
-      <img src="{% static 'core/images/profile-banner.jpg' %}" class="cover-photo" alt="Cover Photo">
-      <button class="edit-cover-btn" id="edit-cover-btn">
-        <i class="fas fa-camera"></i> Edit Cover
-      </button>
-    </div>
-
-    <div class="profile-meta">
-      <div class="avatar-upload">
-        <img src="{% static 'core/images/player.jpeg' %}" class="profile-avatar" id="avatar-preview" alt="Avatar">
-        <input type="file" id="avatar-upload" accept="image/*" hidden>
-        <button class="edit-avatar-btn" id="edit-avatar-btn">
-          <i class="fas fa-camera"></i>
-        </button>
-      </div>
-
-      <div class="user-info">
-        <h1 contenteditable="true" id="editable-username">MarcKing001</h1>
-        <div class="user-tags">
-          <span class="badge bg-primary">Pro Gamer</span>
-          <span class="badge bg-success">Tournament Champion</span>
-          <span class="badge bg-warning">Top 100 Global</span>
-          <button class="btn btn-sm btn-outline-accent" id="add-tag-btn">
-            <i class="fas fa-plus"></i> Add
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="profile-stats">
-      <div class="stat-card">
-        <span class="stat-value">42</span>
-        <span class="stat-label">Wins</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">87%</span>
-        <span class="stat-label">Win Rate</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">#15</span>
-        <span class="stat-label">Global Rank</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===== PROFILE NAVIGATION ===== -->
-  <nav class="profile-nav">
-    <ul>
-      <li class="active"><a href="#overview" data-section="overview">Overview</a></li>
-      <li><a href="#stats" data-section="stats">Game Stats</a></li>
-      <li><a href="#uploads" data-section="uploads">Uploads</a></li>
-      <li><a href="#settings" data-section="settings">Settings</a></li>
-    </ul>
-  </nav>
-
-  <!-- ===== MAIN CONTENT SECTIONS ===== -->
-  <div class="profile-sections">
-    <!-- OVERVIEW SECTION -->
-    <section id="overview" class="profile-section active">
-      <div class="row">
-        <!-- Left Column -->
-        <div class="col-lg-8">
-          <!-- About Card -->
-          <div class="card about-card">
-            <div class="card-header">
-              <h3><i class="fas fa-user me-2"></i>About</h3>
-              <button class="btn btn-sm btn-outline-secondary" id="edit-bio-btn">Edit Bio</button>
-            </div>
-            <div class="card-body">
-              <div class="bio-content">
-                <p id="user-bio">Competitive gamer specializing in FPS and fighting games. Currently ranked in the top 1% globally for Valorant and Tekken 7.</p>
-              </div>
-              <div class="bio-editor" style="display: none;">
-                <textarea class="form-control mb-2" id="bio-textarea">Competitive gamer specializing in FPS and fighting games. Currently ranked in the top 1% globally for Valorant and Tekken 7.</textarea>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-primary" id="save-bio-btn">Save</button>
-                  <button class="btn btn-sm btn-outline-secondary" id="cancel-bio-btn">Cancel</button>
-                </div>
-              </div>
-              <div class="user-details">
-                <div class="detail-item">
-                  <i class="fas fa-gamepad"></i>
-                  <span>Main Games: Valorant, Tekken 7, FIFA 23</span>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Location: Nairobi, Kenya</span>
-                </div>
-                <div class="detail-item">
-                  <i class="fas fa-calendar-alt"></i>
-                  <span>Member Since: January 2023</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Recent Activity -->
-          <div class="card activity-card">
-            <div class="card-header">
-              <h3><i class="fas fa-history me-2"></i>Recent Activity</h3>
-            </div>
-            <div class="activity-list">
-              <!-- Dummy Activity Items -->
-              <div class="activity-item">
-                <img src="{% static 'core/images/player1.jpeg' %}" class="activity-avatar" alt="User">
-                <div class="activity-content">
-                  <h4>Won <span class="highlight">Valorant Weekly Tournament</span></h4>
-                  <p class="activity-meta">2 days ago • 15 likes</p>
-                </div>
-              </div>
-              <div class="activity-item">
-                <img src="{% static 'core/images/player2.jpeg' %}" class="activity-avatar" alt="User">
-                <div class="activity-content">
-                  <h4>Joined <span class="highlight">Tekken Elite</span> community</h4>
-                  <p class="activity-meta">1 week ago • 8 comments</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="col-lg-4">
-          <!-- Connected Platforms -->
-          <div class="card platforms-card">
-            <div class="card-header">
-              <h3><i class="fas fa-plug me-2"></i>Connected Platforms</h3>
-            </div>
-            <div class="card-body">
-              <!-- Dummy Platforms -->
-              <div class="platform-connection connected">
-                <img src="{% static 'core/images/steam-icon.png' %}" class="platform-icon" alt="Steam">
-                <div class="platform-meta">
-                  <h5>Steam</h5>
-                  <small>Connected: Mar 15, 2023</small>
-                </div>
-                <i class="fas fa-check-circle"></i>
-              </div>
-              <div class="platform-connection">
-                <img src="{% static 'core/images/xbox-icon.png' %}" class="platform-icon" alt="Xbox">
-                <div class="platform-meta">
-                  <h5>Xbox Live</h5>
-                  <small>Not Connected</small>
-                </div>
-                <button class="btn btn-sm btn-outline-primary">Connect</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tournament History -->
-          <div class="card tournaments-card">
-            <div class="card-header">
-              <h3><i class="fas fa-trophy me-2"></i>Tournament History</h3>
-            </div>
-            <div class="tournament-list">
-              <!-- Dummy Tournaments -->
-              <div class="tournament-item">
-                <div class="tournament-meta">
-                  <h4>Valorant Champions</h4>
-                  <span class="badge bg-warning">2nd Place</span>
-                </div>
-                <small>June 2023 • $1,200 Prize</small>
-              </div>
-              <div class="tournament-item">
-                <div class="tournament-meta">
-                  <h4>Tekken East Africa</h4>
-                  <span class="badge bg-success">1st Place</span>
-                </div>
-                <small>April 2023 • $800 Prize</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- GAME STATS SECTION -->
-    <section id="stats" class="profile-section">
-      <div class="game-tabs">
-        <button class="game-tab active" data-game="valorant">
-          <img src="{% static 'core/images/valorant-icon.png' %}" alt="Valorant"> Valorant
-        </button>
-        <button class="game-tab" data-game="tekken">
-          <img src="{% static 'core/images/tekken-icon.png' %}" alt="Tekken"> Tekken 7
-        </button>
-      </div>
-
-      <div class="game-stats-content">
-        <!-- Valorant Stats -->
-        <div class="game-stats active" data-game="valorant">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="stat-card">
-                <h4>K/D Ratio</h4>
-                <div class="stat-value">1.8</div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 75%"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="stat-card">
-                <h4>Headshot %</h4>
-                <div class="stat-value">32%</div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 32%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tekken Stats -->
-        <div class="game-stats" data-game="tekken">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="stat-card">
-                <h4>Win Streak</h4>
-                <div class="stat-value">15</div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 90%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- UPLOADS SECTION -->
-    <section id="uploads" class="profile-section">
-      <div class="uploads-header">
-        <h2><i class="fas fa-upload"></i> My Uploads</h2>
-        <button class="btn btn-primary" id="upload-media-btn">
-          <i class="fas fa-plus"></i> New Upload
-        </button>
-      </div>
-
-      <div class="uploads-grid">
-        <!-- Dummy Uploads -->
-        <div class="upload-card">
-          <img src="{% static 'core/images/valorant-clip.jpg' %}" class="upload-thumbnail" alt="Valorant Clip">
-          <div class="upload-actions">
-            <button class="btn btn-sm btn-danger">
-              <i class="fas fa-trash"></i>
+{% block body %}
+    <!-- Top Navigation Bar (same as dashboard) -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
             </button>
-          </div>
-        </div>
-        <div class="upload-card">
-          <img src="{% static 'core/images/tekken-match.jpg' %}" class="upload-thumbnail" alt="Tekken Match">
-          <div class="upload-actions">
-            <button class="btn btn-sm btn-danger">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SETTINGS SECTION -->
-    <section id="settings" class="profile-section">
-      <div class="card">
-        <div class="card-header">
-          <h3><i class="fas fa-user-cog"></i> Account Settings</h3>
-        </div>
-        <div class="card-body">
-          <form id="settings-form">
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" class="form-control" value="marcking@example.com">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search games, communities, friends...">
             </div>
-            <div class="form-group">
-              <label>Change Password</label>
-              <input type="password" class="form-control" placeholder="New Password">
-            </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-          </form>
-
-          <div class="danger-zone">
-            <h4><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
-            <button class="btn btn-danger" id="delete-account-btn">
-              <i class="fas fa-trash"></i> Delete Account
-            </button>
-          </div>
         </div>
-      </div>
-    </section>
-  </div>
 
-  <!-- MODALS -->
-  <div class="modal" id="avatar-modal">
-    <div class="modal-content">
-      <h3>Change Avatar</h3>
-      <input type="file" id="avatar-file-input" accept="image/*">
-      <div class="modal-actions">
-        <button class="btn btn-outline" id="cancel-avatar-btn">Cancel</button>
-        <button class="btn btn-primary" id="save-avatar-btn">Save</button>
-      </div>
+        <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <button class="nav-icon theme-toggle-btn" id="darkModeToggle" aria-label="Toggle dark mode" data-tooltip="Dark Mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+
+            <!-- Messages Quick Access -->
+            <div class="nav-dropdown">
+                <button class="nav-icon" title="Messages" data-tooltip="Messages">
+                    <i class="fas fa-envelope"></i>
+                    <span class="notification-bubble">3</span>
+                </button>
+                <div class="nav-dropdown-content messages-dropdown">
+                    <div class="dropdown-header">
+                        <h4>Messages</h4>
+                        <button class="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="dropdown-list">
+                        <div class="message-item unread">
+                            <img src="{% static 'core/images/player1.jpeg' %}" class="message-avatar" alt="User">
+                            <div class="message-content">
+                                <h5>AlexPro</h5>
+                                <p>Hey, are you joining the tournament tonight?</p>
+                                <small>2 hours ago</small>
+                            </div>
+                        </div>
+                        <div class="message-item">
+                            <img src="{% static 'core/images/player2.jpeg' %}" class="message-avatar" alt="User">
+                            <div class="message-content">
+                                <h5>GameMaster</h5>
+                                <p>Your match is scheduled for tomorrow</p>
+                                <small>1 day ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="dropdown-footer">View All Messages</a>
+                </div>
+            </div>
+
+            <!-- Notifications Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-icon" title="Notifications" data-tooltip="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-bubble">5</span>
+                </button>
+                <div class="nav-dropdown-content notifications-dropdown">
+                    <div class="dropdown-header">
+                        <h4>Notifications</h4>
+                        <button class="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="dropdown-list">
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Tournament Alert:</strong> Valorant Championship starts in 2 hours</p>
+                                <small>45 minutes ago</small>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Community:</strong> 3 new members joined your FIFA Pros group</p>
+                                <small>2 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="dropdown-footer">View All Notifications</a>
+                </div>
+            </div>
+
+            <!-- User Profile Dropdown -->
+            <div class="nav-dropdown profile-dropdown">
+                <button class="profile-btn" aria-label="User profile">
+                    <img src="{% static 'core/images/player.jpeg' %}" class="profile-avatar" alt="User Avatar">
+                    <span class="username">MarcKing001</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="nav-dropdown-content profile-dropdown-content">
+                    <div class="profile-header">
+                        <img src="{% static 'core/images/player.jpeg' %}" class="dropdown-avatar" alt="User Avatar">
+                        <div class="profile-info">
+                            <h4>MarcKing001</h4>
+                            <small>Pro Gamer</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'users:user_profile' %}" class="dropdown-item">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-friends"></i> Friends
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+        <!-- Sidebar (same as dashboard) -->
+        <aside class="dashboard-sidebar">
+            <!-- Profile Section at Top -->
+            <div class="sidebar-profile">
+                <img src="{% static 'core/images/player.jpeg' %}" class="sidebar-avatar" alt="User Avatar">
+                <div class="sidebar-profile-info">
+                    <h4>MarcKing001</h4>
+                    <small>Pro Gamer</small>
+                </div>
+                <button class="sidebar-profile-toggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="dashboard-nav">
+                <!-- Gaming Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Gaming</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{% url 'users:user_dashboard' %}" data-tooltip="Dashboard">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-group">
+                            <div class="nav-header" data-tooltip="My Games">
+                                <i class="fas fa-gamepad"></i>
+                                <span>My Games</span>
+                                <i class="dropdown-icon fas fa-chevron-down"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" data-tooltip="Valorant">
+                                        <img src="{% static 'core/images/valorant-icon.png' %}" class="game-icon" alt="Valorant">
+                                        <span>Valorant</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-tooltip="FIFA 23">
+                                        <img src="{% static 'core/images/fifa-icon.png' %}" class="game-icon" alt="FIFA">
+                                        <span>FIFA 23</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Tournaments">
+                                <i class="fas fa-trophy"></i>
+                                <span>Tournaments</span>
+                                <span class="badge">2</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-users"></i>
+                        <span>Social</span>
+                    </div>
+                    <ul>
+                        <li class="nav-group">
+                            <div class="nav-header" data-tooltip="Communities">
+                                <i class="fas fa-users"></i>
+                                <span>Communities</span>
+                                <i class="dropdown-icon fas fa-chevron-down"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" data-tooltip="Valorant Champions">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Valorant Champions</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-tooltip="FIFA Pros">
+                                        <i class="fas fa-futbol"></i>
+                                        <span>FIFA Pros</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Friends">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Friends</span>
+                                <span class="badge">12</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Messages">
+                                <i class="fas fa-envelope"></i>
+                                <span>Messages</span>
+                                <span class="badge">3</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{% url 'users:user_profile' %}" class="active" data-tooltip="View Profile">
+                                <i class="fas fa-id-card"></i>
+                                <span>View Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Statistics">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Statistics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Achievements">
+                                <i class="fas fa-trophy"></i>
+                                <span>Achievements</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-content profile-content">
+            <!-- Profile Header Section -->
+            <section class="profile-header-wrapper">
+                <div class="profile-cover-container">
+                    <div class="profile-cover-overlay"></div>
+                    <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
+                    <div class="profile-avatar-wrapper">
+                        <img src="{% static 'core/images/player.jpeg' %}" alt="Profile Avatar" class="profile-main-avatar">
+                        <button class="edit-avatar-btn" aria-label="Edit profile picture">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-header-content">
+                    <div class="profile-header-info">
+                        <div class="profile-name-wrapper">
+                            <h1 class="profile-name">MarcKing001</h1>
+                            <span class="verified-badge" title="Verified Account">
+                                <i class="fas fa-check-circle"></i>
+                            </span>
+                        </div>
+                        <p class="profile-title">Pro Gamer | Valorant Specialist</p>
+                        <div class="profile-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Los Angeles, CA</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-stats-container">
+                        <div class="profile-stat">
+                            <span class="stat-value">87%</span>
+                            <span class="stat-label">Win Rate</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-value">24</span>
+                            <span class="stat-label">Tournaments</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-value">1,250</span>
+                            <span class="stat-label">Followers</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-value">342</span>
+                            <span class="stat-label">Following</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions-container">
+                        <button class="btn btn-primary btn-action">
+                            <i class="fas fa-user-plus"></i> Follow
+                        </button>
+                        <button class="btn btn-outline-primary btn-action">
+                            <i class="fas fa-envelope"></i> Message
+                        </button>
+                        <button class="btn btn-icon btn-action">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Navigation Tabs -->
+            <nav class="profile-tabs-container">
+                <div class="profile-tabs-inner">
+                    <button class="profile-tab active" data-tab="overview">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Overview</span>
+                    </button>
+                    <button class="profile-tab" data-tab="achievements">
+                        <i class="fas fa-trophy"></i>
+                        <span>Achievements</span>
+                    </button>
+                    <button class="profile-tab" data-tab="stats">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Stats</span>
+                    </button>
+                    <button class="profile-tab" data-tab="games">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Games</span>
+                    </button>
+                    <button class="profile-tab" data-tab="friends">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Friends</span>
+                    </button>
+                    <button class="profile-tab" data-tab="streams">
+                        <i class="fas fa-video"></i>
+                        <span>Streams</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Tab Content -->
+            <div class="profile-tab-content active" id="overview">
+                <div class="profile-content-grid">
+                    <!-- Left Column -->
+                    <div class="profile-main-content">
+                        <!-- About Section -->
+                        <section class="profile-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>About</span>
+                                </h2>
+                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="about-content">
+                                    <p class="about-text">Professional gamer specializing in FPS and sports games. Currently competing in Valorant Champions Tour and FIFA eWorld Cup qualifiers.</p>
+
+                                    <div class="about-details">
+                                        <div class="detail-item">
+                                            <i class="fas fa-birthday-cake"></i>
+                                            <span>Joined GuildSpace: <strong>March 2021</strong></span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-globe"></i>
+                                            <span><a href="#" class="text-link">twitch.tv/marcking</a></span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-gamepad"></i>
+                                            <span>Main Games: <strong>Valorant, FIFA 23, CS:GO</strong></span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-trophy"></i>
+                                            <span>Highest Rank: <strong>Radiant (Valorant)</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Recent Activity -->
+                        <section class="profile-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-history"></i>
+                                    <span>Recent Activity</span>
+                                </h2>
+                                <a href="#" class="view-all-link">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-feed">
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <img src="{% static 'core/images/valorant-icon.png' %}" alt="Valorant">
+                                        </div>
+                                        <div class="activity-content">
+                                            <h3 class="activity-title">Won Valorant Weekly Tournament</h3>
+                                            <p class="activity-meta">Yesterday at 9:42 PM</p>
+                                            <p class="activity-description">Finished first place in the weekly Valorant tournament with a 5-0 record!</p>
+                                            <div class="activity-stats">
+                                                <span class="activity-stat">
+                                                    <i class="fas fa-trophy"></i>
+                                                    <span>1st Place</span>
+                                                </span>
+                                                <span class="activity-stat">
+                                                    <i class="fas fa-coins"></i>
+                                                    <span>$1,200 Prize</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <img src="{% static 'core/images/fifa-icon.png' %}" alt="FIFA">
+                                        </div>
+                                        <div class="activity-content">
+                                            <h3 class="activity-title">Posted in FIFA Pros Community</h3>
+                                            <p class="activity-meta">2 days ago</p>
+                                            <p class="activity-description">"Looking for teammates for the upcoming FIFA 23 Global Series qualifiers. Must be Division 1 or Elite."</p>
+                                            <div class="activity-stats">
+                                                <span class="activity-stat">
+                                                    <i class="fas fa-comment"></i>
+                                                    <span>12 Comments</span>
+                                                </span>
+                                                <span class="activity-stat">
+                                                    <i class="fas fa-heart"></i>
+                                                    <span>24 Likes</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="profile-side-content">
+                        <!-- Featured Game -->
+                        <section class="profile-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-crown"></i>
+                                    <span>Featured Game</span>
+                                </h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="featured-game-card">
+                                    <div class="game-banner-container">
+                                        <img src="{% static 'core/images/valorant-banner.jpg' %}" alt="Valorant" class="game-banner">
+                                    </div>
+                                    <div class="game-info-container">
+                                        <h3 class="game-title">Valorant</h3>
+                                        <div class="game-stats-grid">
+                                            <div class="game-stat">
+                                                <span class="stat-value">1,250</span>
+                                                <span class="stat-label">Hours Played</span>
+                                            </div>
+                                            <div class="game-stat">
+                                                <span class="stat-value">87%</span>
+                                                <span class="stat-label">Win Rate</span>
+                                            </div>
+                                            <div class="game-stat">
+                                                <span class="stat-value">24</span>
+                                                <span class="stat-label">Tournaments</span>
+                                            </div>
+                                        </div>
+                                        <div class="game-rank-card">
+                                            <div class="rank-icon-container">
+                                                <img src="{% static 'core/images/valorant-radiant.png' %}" alt="Radiant Rank" class="rank-icon">
+                                            </div>
+                                            <div class="rank-info">
+                                                <span class="rank-name">Radiant</span>
+                                                <span class="rank-position">Top 0.1%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Recent Achievements -->
+                        <section class="profile-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-trophy"></i>
+                                    <span>Recent Achievements</span>
+                                </h2>
+                                <a href="#" class="view-all-link">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="achievements-list">
+                                    <div class="achievement-item">
+                                        <div class="achievement-badge gold">
+                                            <i class="fas fa-trophy"></i>
+                                        </div>
+                                        <div class="achievement-details">
+                                            <h4 class="achievement-title">Valorant Weekly Champion</h4>
+                                            <p class="achievement-date">Yesterday</p>
+                                        </div>
+                                    </div>
+                                    <div class="achievement-item">
+                                        <div class="achievement-badge silver">
+                                            <i class="fas fa-medal"></i>
+                                        </div>
+                                        <div class="achievement-details">
+                                            <h4 class="achievement-title">FIFA Regional Runner-Up</h4>
+                                            <p class="achievement-date">1 week ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="achievement-item">
+                                        <div class="achievement-badge bronze">
+                                            <i class="fas fa-award"></i>
+                                        </div>
+                                        <div class="achievement-details">
+                                            <h4 class="achievement-title">1000 Headshots</h4>
+                                            <p class="achievement-date">2 weeks ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Friends Online -->
+                        <section class="profile-card">
+                            <div class="card-header">
+                                <h2>
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>Friends Online</span>
+                                </h2>
+                                <a href="#" class="view-all-link">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="online-friends-list">
+                                    <div class="friend-item">
+                                        <div class="friend-avatar-container">
+                                            <img src="{% static 'core/images/player1.jpeg' %}" alt="Friend" class="friend-avatar">
+                                            <span class="online-status"></span>
+                                        </div>
+                                        <div class="friend-info">
+                                            <h4 class="friend-name">AlexPro</h4>
+                                            <p class="friend-status">Playing Valorant</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-primary">Join</button>
+                                    </div>
+                                    <div class="friend-item">
+                                        <div class="friend-avatar-container">
+                                            <img src="{% static 'core/images/player2.jpeg' %}" alt="Friend" class="friend-avatar">
+                                            <span class="online-status"></span>
+                                        </div>
+                                        <div class="friend-info">
+                                            <h4 class="friend-name">GameMaster</h4>
+                                            <p class="friend-status">Online</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-primary">Message</button>
+                                    </div>
+                                    <div class="friend-item">
+                                        <div class="friend-avatar-container">
+                                            <img src="{% static 'core/images/player3.jpeg' %}" alt="Friend" class="friend-avatar">
+                                            <span class="online-status streaming"></span>
+                                        </div>
+                                        <div class="friend-info">
+                                            <h4 class="friend-name">ShroudFan99</h4>
+                                            <p class="friend-status">Streaming</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-primary">Watch</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Tab Content -->
+            <div class="profile-tab-content" id="achievements">
+                <section class="profile-card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-trophy"></i>
+                            <span>All Achievements</span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="empty-state">
+                            <i class="fas fa-trophy"></i>
+                            <h3>No achievements to display yet</h3>
+                            <p>Complete challenges and win tournaments to earn achievements</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Stats Tab Content -->
+            <div class="profile-tab-content" id="stats">
+                <section class="profile-card">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-chart-line"></i>
+                            <span>Performance Statistics</span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-pie"></i>
+                            <h3>No statistics available yet</h3>
+                            <p>Play some games to see your performance metrics</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Other tabs would have similar empty states initially -->
+        </main>
     </div>
-  </div>
-
-</main>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'users/js/profile.js' %}"></script>
+	<script src="{% static 'users/js/dashboard.js' %}"></script>
+    <script src="{% static 'users/js/profile.js' %}"></script>
 {% endblock %}
