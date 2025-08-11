@@ -19,61 +19,72 @@ document.addEventListener('DOMContentLoaded', function () {
         darkModeToggle.addEventListener('click', toggleDarkMode);
     }
     
-    // Tooltip functionality
+    // Base tooltip functionality
     function initTooltips() {
-        const tooltipItems = document.querySelectorAll('[data-tooltip]');
+        const tooltipItems = document.querySelectorAll('[data-tooltip]:not(.tooltip-initialized)');
         
         tooltipItems.forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'custom-tooltip';
-                tooltip.textContent = this.getAttribute('data-tooltip');
-                
-                const rect = this.getBoundingClientRect();
-                tooltip.style.position = 'fixed';
+            item.classList.add('tooltip-initialized');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'custom-tooltip';
+            tooltip.textContent = item.getAttribute('data-tooltip');
+            document.body.appendChild(tooltip);
+            
+            const positionTooltip = () => {
+                const rect = item.getBoundingClientRect();
+                const offset = document.querySelector('.dashboard-sidebar.collapsed') ? 70 : 280;
                 tooltip.style.left = `${rect.left + (rect.width / 2)}px`;
                 tooltip.style.top = `${rect.top - 10}px`;
-                tooltip.style.transform = 'translateX(-50%) translateY(-100%)';
-                
-                document.body.appendChild(tooltip);
-                
-                this._tooltip = tooltip;
+            };
+            
+            item.addEventListener('mouseenter', () => {
+                positionTooltip();
+                tooltip.style.display = 'block';
             });
             
-            item.addEventListener('mouseleave', function() {
-                if (this._tooltip) {
-                    document.body.removeChild(this._tooltip);
-                    delete this._tooltip;
-                }
+            item.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
             });
+            
+            window.addEventListener('resize', positionTooltip);
         });
     }
     
     initTooltips();
     
-    // Tab system functionality
-    const tabButtons = document.querySelectorAll('.tab-btn, .profile-tab');
+    // Sidebar toggle functionality
+    const sidebarToggle = document.querySelector('.sidebar-toggle-btn');
+    const sidebar = document.querySelector('.dashboard-sidebar');
+    const topNav = document.querySelector('.top-nav');
+    const dashboardContent = document.querySelector('.dashboard-content');
     
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabContainer = this.closest('.content-tabs, .profile-tabs-container');
-            if (!tabContainer) return;
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            topNav.classList.toggle('sidebar-collapsed');
+            dashboardContent.classList.toggle('sidebar-collapsed');
             
-            // Remove active class from all buttons and content in this container
-            const allButtons = tabContainer.querySelectorAll('.tab-btn, .profile-tab');
-            const allContents = document.querySelectorAll('.tab-content, .profile-tab-content');
-            
-            allButtons.forEach(el => el.classList.remove('active'));
-            allContents.forEach(el => el.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Show corresponding content
-            const tabId = this.getAttribute('data-tab');
-            if (tabId) {
-                document.getElementById(tabId)?.classList.add('active');
-            }
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        });
+        
+        // Initialize sidebar state
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+            topNav.classList.add('sidebar-collapsed');
+            dashboardContent.classList.add('sidebar-collapsed');
+        }
+    }
+    
+    // Sidebar dropdown functionality
+    const navGroups = document.querySelectorAll('.nav-group');
+    
+    navGroups.forEach(group => {
+        const header = group.querySelector('.nav-header');
+        
+        header.addEventListener('click', (e) => {
+            e.stopPropagation();
+            group.classList.toggle('active');
         });
     });
 });

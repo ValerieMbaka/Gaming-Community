@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %} GameHub {% endblock %}</title>
+    <title>{% block title %} GuildSpace {% endblock %}</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,23 +18,236 @@
 
     <!-- Base CSS -->
     <link rel="stylesheet" href="{% static 'users/css/base.css' %}">
-    <!-- Dashboard CSS (only included in dashboard pages) -->
+    <!-- Dashboard CSS -->
     {% block dashboard_css %}{% endblock %}
-    <!-- Profile CSS (only included in profile pages) -->
+    <!-- Profile CSS -->
     {% block profile_css %}{% endblock %}
 
     {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
-    {% block body %}{% endblock %}
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search games, communities, friends...">
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <button class="nav-icon theme-toggle-btn" id="darkModeToggle" aria-label="Toggle dark mode" data-tooltip="Dark Mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+
+            <!-- Notifications Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-icon" title="Notifications" data-tooltip="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-bubble">5</span>
+                </button>
+                <div class="nav-dropdown-content notifications-dropdown">
+                    <div class="dropdown-header">
+                        <h4>Notifications</h4>
+                        <button class="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="dropdown-list">
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Tournament Alert:</strong> Valorant Championship starts in 2 hours</p>
+                                <small>45 minutes ago</small>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Community:</strong> 3 new members joined your FIFA Pros group</p>
+                                <small>2 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="dropdown-footer">View All Notifications</a>
+                </div>
+            </div>
+
+            <!-- User Profile Dropdown -->
+            <div class="nav-dropdown profile-dropdown">
+                <button class="profile-btn" aria-label="User profile">
+                    <img src="{% static 'core/images/player.jpeg' %}" class="profile-avatar" alt="User Avatar">
+                    <span class="username">MarcKing001</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="nav-dropdown-content profile-dropdown-content">
+                    <div class="profile-header">
+                        <img src="{% static 'core/images/player.jpeg' %}" class="dropdown-avatar" alt="User Avatar">
+                        <div class="profile-info">
+                            <h4>MarcKing001</h4>
+                            <small>Pro Gamer</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'users:user_dashboard' %}" class="dropdown-item">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <!-- Profile Section at Top -->
+            <div class="sidebar-profile">
+                <img src="{% static 'core/images/player.jpeg' %}" class="sidebar-avatar" alt="User Avatar">
+                <div class="sidebar-profile-info">
+                    <h4>MarcKing001</h4>
+                    <small>Pro Gamer</small>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="dashboard-nav">
+                <!-- Gaming Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Gaming</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{% url 'users:user_dashboard' %}" class="active" data-tooltip="Dashboard">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-group">
+                            <div class="nav-header" data-tooltip="My Games">
+                                <i class="fas fa-gamepad"></i>
+                                <span>My Games</span>
+                                <i class="dropdown-icon fas fa-chevron-down"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" data-tooltip="Valorant">
+                                        <img src="{% static 'core/images/valorant-icon.png' %}" class="game-icon" alt="Valorant">
+                                        <span>Valorant</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-tooltip="FIFA 23">
+                                        <img src="{% static 'core/images/fifa-icon.png' %}" class="game-icon" alt="FIFA">
+                                        <span>FIFA 23</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Competitions">
+                                <i class="fas fa-trophy"></i>
+                                <span>Competitions</span>
+                                <span class="badge">2</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-users"></i>
+                        <span>Social</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="#" data-tooltip="Feeds">
+                                <i class="fas fa-newspaper"></i>
+                                <span>Feeds</span>
+                            </a>
+                        </li>
+                        <li class="nav-group">
+                            <div class="nav-header" data-tooltip="Communities">
+                                <i class="fas fa-users"></i>
+                                <span>Communities</span>
+                                <i class="dropdown-icon fas fa-chevron-down"></i>
+                            </div>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#" data-tooltip="Valorant Champions">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Valorant Champions</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" data-tooltip="FIFA Pros">
+                                        <i class="fas fa-futbol"></i>
+                                        <span>FIFA Pros</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="nav-section">
+                    <div class="section-header">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="#" data-tooltip="Notifications">
+                                <i class="fas fa-bell"></i>
+                                <span>Notifications</span>
+                                <span class="badge">5</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-tooltip="Settings">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Base JS -->
     <script src="{% static 'users/js/base.js' %}"></script>
-    <!-- Dashboard JS (only included in dashboard pages) -->
+    <!-- Dashboard JS -->
     {% block dashboard_js %}{% endblock %}
-    <!-- Profile JS (only included in profile pages) -->
+    <!-- Profile JS -->
     {% block profile_js %}{% endblock %}
 
     {% block scripts %}{% endblock %}
