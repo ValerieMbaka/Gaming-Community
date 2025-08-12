@@ -63,16 +63,15 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-       // In both login.html and register.html
-const firebaseConfig = {
-    apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
-    authDomain: "django-4c5e9.firebaseapp.com",
-    projectId: "django-4c5e9",
-    storageBucket: "django-4c5e9.appspot.com",  // Changed from firebasestorage.app
-    messagingSenderId: "748834554329",
-    appId: "1:748834554329:web:a5cb30ea9e7583e5cd99c8",
-    measurementId: "G-JSHRP5E2GB"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
+            authDomain: "django-4c5e9.firebaseapp.com",
+            projectId: "django-4c5e9",
+            storageBucket: "django-4c5e9.firebasestorage.app",
+            messagingSenderId: "748834554329",
+            appId: "1:748834554329:web:a5cb30ea9e7583e5cd99c8",
+            measurementId: "G-JSHRP5E2GB"
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
