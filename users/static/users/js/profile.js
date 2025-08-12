@@ -1,36 +1,24 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialize tooltips for achievement badges
-    const achievementItems = document.querySelectorAll('.achievement-item');
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile picture preview
+    const profilePicInput = document.getElementById('id_profile_picture');
+    const avatarPreview = document.getElementById('avatarPreview');
     
-    achievementItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'custom-tooltip';
-            
-            // Get achievement details
-            const achievementName = this.querySelector('.achievement-title').textContent;
-            const achievementDate = this.querySelector('.achievement-date').textContent;
-            
-            tooltip.innerHTML = `<strong>${achievementName}</strong><br>${achievementDate}`;
-            
-            const rect = this.getBoundingClientRect();
-            tooltip.style.position = 'fixed';
-            tooltip.style.left = `${rect.left + (rect.width / 2)}px`;
-            tooltip.style.top = `${rect.top - 10}px`;
-            tooltip.style.transform = 'translateX(-50%) translateY(-100%)';
-            
-            document.body.appendChild(tooltip);
-            
-            this._tooltip = tooltip;
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            if (this._tooltip) {
-                document.body.removeChild(this._tooltip);
-                delete this._tooltip;
+    if (profilePicInput && avatarPreview) {
+        profilePicInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    avatarPreview.style.backgroundImage = `url(${event.target.result})`;
+                };
+                reader.readAsDataURL(file);
             }
         });
-    });
+    }
+
+    // Initialize games and platforms selector
+    // To be replaced with actual game/platform selection logic
+    const gamesData = document.getElementById('id_games');
+    const platformsData = document.getElementById('id_platforms');
     
-    // Initialize any other profile-specific functionality here
 });

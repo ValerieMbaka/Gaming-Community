@@ -6,16 +6,30 @@
 {% block dashboard_css %}
     <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+	<link rel="stylesheet" href="{% static 'users/css/modal.css' %}">
 {% endblock %}
 
 {% block content %}
+<div id="profileCompletionModal" class="modal {% if not user.bio or not user.profile_picture %}show{% endif %}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Complete Your Profile</h3>
+            <p>Please fill in your profile details to continue using GuildSpace</p>
+        </div>
+        <div class="modal-body">
+            {% include 'users/profile_completion.html' %}
+        </div>
+    </div>
+</div>
+
 <!-- Profile Header Section -->
 <section class="profile-header-wrapper">
     <div class="profile-cover-container">
         <div class="profile-cover-overlay"></div>
         <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
         <div class="profile-avatar-wrapper">
-            <img src="{% static 'core/images/player.jpeg' %}" alt="Profile Avatar" class="profile-main-avatar">
+            img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
+                 alt="Profile Avatar" class="profile-main-avatar">
             <button class="edit-avatar-btn" aria-label="Edit profile picture">
                 <i class="fas fa-camera"></i>
             </button>
@@ -25,7 +39,7 @@
     <div class="profile-header-content">
         <div class="profile-header-info">
             <div class="profile-name-wrapper">
-                <h1 class="profile-name">MarcKing001</h1>
+                <h1 class="profile-name">{{ user.username }}</h1>
                 <span class="verified-badge" title="Verified Account">
                     <i class="fas fa-check-circle"></i>
                 </span>

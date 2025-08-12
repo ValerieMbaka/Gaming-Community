@@ -51,3 +51,7 @@ db.sqlite3-journal
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Keys
+django-4c5e9-firebase-adminsdk-fbsvc-c18ae0b3af.json
+firebase_config.py
+/django-4c5e9-firebase-adminsdk-fbsvc-c18ae0b3af.json

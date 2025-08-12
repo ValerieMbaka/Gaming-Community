@@ -1,0 +1,292 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Complete Profile | GameHub{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
+    <style>
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+        .selectize-input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-completion-container">
+    <div class="profile-completion-card">
+        <div class="card-header">
+            <h2><i class="fas fa-user-edit"></i> Complete Your Profile</h2>
+            <p>Please fill in all required fields to continue using GuildSpace</p>
+        </div>
+
+        <form id="profileForm" method="post" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            <!-- Profile Picture (Optional) -->
+            <div class="form-section">
+                <label>Profile Picture</label>
+                <div class="avatar-upload">
+                    <div class="avatar-preview" id="avatarPreview"
+                         style="background-image: url({% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %});">
+                    </div>
+                    <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
+                    <label for="id_profile_picture" class="avatar-upload-label">
+                        <i class="fas fa-camera"></i> Choose Photo
+                    </label>
+                </div>
+            </div>
+
+            <!-- Username (Mandatory) -->
+            <div class="form-section">
+                <label for="id_username" class="required-field">Username</label>
+                <input type="text" id="id_username" name="username"
+                       value="{{ form.username.value|default_if_none:'' }}" required>
+                <div id="username-error" class="error-message"></div>
+            </div>
+
+            <!-- Bio (Mandatory) -->
+            <div class="form-section">
+                <label for="id_bio" class="required-field">Bio</label>
+                <textarea name="bio" id="id_bio" rows="3" required
+                          placeholder="Tell us about yourself in a few words...">{% if form.bio.value %}{{ form.bio.value }}{% endif %}</textarea>
+                <div id="bio-error" class="error-message"></div>
+            </div>
+
+            <!-- About (Optional) -->
+            <div class="form-section">
+                <label for="id_about">About</label>
+                <textarea name="about" id="id_about" rows="5"
+                          placeholder="Share more details about your gaming preferences, experience, etc...">{% if form.about.value %}{{ form.about.value }}{% endif %}</textarea>
+            </div>
+
+            <!-- Date of Birth (Mandatory) -->
+            <div class="form-section">
+                <label for="id_date_of_birth" class="required-field">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="id_date_of_birth"
+                       value="{{ form.date_of_birth.value|date:'Y-m-d' }}" required>
+                <div id="date_of_birth-error" class="error-message"></div>
+            </div>
+
+            <!-- Location (Mandatory) -->
+            <div class="form-section">
+                <label for="id_location" class="required-field">Location</label>
+                <input type="text" name="location" id="id_location"
+                       value="{{ form.location.value|default_if_none:'' }}" required
+                       placeholder="City, Country">
+                <div id="location-error" class="error-message"></div>
+            </div>
+
+            <!-- Platforms (Mandatory) -->
+            <div class="form-section">
+                <label class="required-field">Platforms You Play On</label>
+                <select id="platforms-select" multiple placeholder="Select platforms...">
+                    <option value="pc">PC</option>
+                    <option value="playstation">PlayStation</option>
+                    <option value="xbox">Xbox</option>
+                    <option value="nintendo">Nintendo Switch</option>
+                    <option value="mobile">Mobile</option>
+                </select>
+                <input type="hidden" name="platforms" id="id_platforms" required>
+                <div id="platforms-error" class="error-message"></div>
+            </div>
+
+            <!-- Games (At least one required) -->
+            <div class="form-section">
+                <label class="required-field">Games You Play</label>
+                <select id="games-select" multiple placeholder="Select games...">
+                    <option value="valorant">Valorant</option>
+                    <option value="fifa">FIFA</option>
+                    <option value="cod">Call of Duty</option>
+                    <option value="fortnite">Fortnite</option>
+                    <option value="lol">League of Legends</option>
+                    <option value="dota">Dota 2</option>
+                    <option value="csgo">CS:GO</option>
+                </select>
+                <input type="hidden" name="games" id="id_games" required>
+                <div id="games-error" class="error-message"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Selectize for platforms
+    $('#platforms-select').selectize({
+        plugins: ['remove_button'],
+        onChange: function(value) {
+            $('#id_platforms').val(JSON.stringify(this.items));
+            validateField('platforms', value.length > 0);
+        }
+    });
+
+    // Initialize Selectize for games
+    $('#games-select').selectize({
+        plugins: ['remove_button'],
+        onChange: function(value) {
+            $('#id_games').val(JSON.stringify(this.items));
+            validateField('games', value.length > 0);
+        }
+    });
+
+    // Set initial values if they exist
+    {% if form.platforms.value %}
+        const platforms = JSON.parse('{{ form.platforms.value|escapejs }}');
+        const platformsSelect = $('#platforms-select')[0].selectize;
+        platformsSelect.setValue(platforms);
+    {% endif %}
+
+    {% if form.games.value %}
+        const games = JSON.parse('{{ form.games.value|escapejs }}');
+        const gamesSelect = $('#games-select')[0].selectize;
+        gamesSelect.setValue(games);
+    {% endif %}
+
+    // Profile picture preview
+    const profilePicInput = document.getElementById('id_profile_picture');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    if (profilePicInput && avatarPreview) {
+        profilePicInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    avatarPreview.style.backgroundImage = `url(${event.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Real-time validation
+    const form = document.getElementById('profileForm');
+    const fields = {
+        'username': document.getElementById('id_username'),
+        'bio': document.getElementById('id_bio'),
+        'date_of_birth': document.getElementById('id_date_of_birth'),
+        'location': document.getElementById('id_location'),
+        'platforms': document.getElementById('id_platforms'),
+        'games': document.getElementById('id_games')
+    };
+
+    // Add event listeners for validation
+    Object.entries(fields).forEach(([fieldName, field]) => {
+        if (field) {
+            field.addEventListener('input', function() {
+                if (fieldName === 'platforms' || fieldName === 'games') {
+                    // Handled by Selectize onChange
+                    return;
+                }
+                validateField(fieldName, field.value.trim() !== '');
+            });
+
+            field.addEventListener('blur', function() {
+                if (fieldName === 'platforms' || fieldName === 'games') {
+                    return;
+                }
+                validateField(fieldName, field.value.trim() !== '');
+            });
+        }
+    });
+
+    // Validate a field and show error if needed
+    function validateField(fieldName, isValid) {
+        const errorElement = document.getElementById(`${fieldName}-error`);
+        if (errorElement) {
+            errorElement.textContent = isValid ? '' : `${fieldName.replace('_', ' ')} is required`;
+        }
+        return isValid;
+    }
+
+    // Form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        // Validate all fields
+        Object.entries(fields).forEach(([fieldName, field]) => {
+            if (fieldName === 'platforms' || fieldName === 'games') {
+                const value = JSON.parse(field.value || '[]');
+                isValid = validateField(fieldName, value.length > 0) && isValid;
+            } else {
+                isValid = validateField(fieldName, field.value.trim() !== '') && isValid;
+            }
+        });
+
+        if (!isValid) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('{% url "users:complete_profile" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Store updated profile data
+                localStorage.setItem('updatedProfile', JSON.stringify({
+                    profile_picture_url: data.profile_picture_url || '{% static 'core/images/player.jpeg' %}',
+                    username: data.username
+                }));
+
+                // Close the modal
+                const modal = document.getElementById('profileCompletionModal');
+                if (modal) modal.classList.remove('show', 'mandatory');
+
+                // Show success message
+                showToast('Profile updated successfully!', 'success');
+
+                // Refresh UI
+                window.location.reload();
+            } else {
+                // Handle form errors
+                if (data.errors) {
+                    for (const field in data.errors) {
+                        const errorElement = document.getElementById(`${field}-error`);
+                        if (errorElement) {
+                            errorElement.textContent = data.errors[field][0];
+                        }
+                    }
+                    showToast('Please correct the errors in the form', 'error');
+                } else {
+                    showToast('Error updating profile. Please try again.', 'error');
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            showToast('Network error. Please try again.', 'error');
+        }
+    });
+});
+</script>
+{% endblock %}

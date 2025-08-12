@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,12 +38,32 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     
     # My Apps
     'core',
     'users',
     'communities',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backends.FirebaseBackend',
+]
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# Session settings
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Messages framework
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'users:user_dashboard'
+LOGOUT_REDIRECT_URL = 'core:home'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,7 +142,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Media files for profile pictures
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from firebase_config import default_app as FIREBASE_APP
+    if FIREBASE_APP is None:
+        raise ValueError("Firebase app initialized as None")
+    print("✅ Firebase initialized successfully")
+except Exception as e:
+    print(f"❌ Firebase initialization error: {str(e)}")
+    FIREBASE_APP = None

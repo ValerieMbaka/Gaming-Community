@@ -1,52 +1,137 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %} Sign Up {% endblock %}
+{% block title %}Sign Up | GameHub{% endblock %}
+
 {% block extra_head %}
-	<link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
-	<link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/auth_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/toast.css' %}">
+    <style>
+        .navbar, footer { display: none; }
+    </style>
 {% endblock %}
 
 {% block body %}
-	<main class="sign-up-form mt-3 mb-2" id="signup-form">
-		<div class="container">
-			<div class="row d-flex align-items-center justify-content-center">
-				<h2 class="text-center mt-4"> Create an Account </h2>
-				<div class="col-md-6 signup-form-container">
-					<form action="" method="post" enctype="multipart/form-data">
-						{% csrf_token %}
-						<h2 class="text-center"> Sign Up </h2>
-						<div class="mb-3">
-							<label for="full_name" class="form-label">Full Name</label>
-							<input type="text" class="form-control" id="full_name" name="full_name" placeholder="Full Name" required autocomplete="name">
-						</div>
+    <div id="toast-container"></div>
 
-						<div class="mb-3">
-							<label for="email" class="form-label">Email</label>
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email" required autocomplete="email">
-						</div>
+    <main class="auth-form-container">
+        <div class="auth-form-wrapper">
+            <div class="auth-form-header">
+                <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" class="auth-logo">
+                <h2>Create Account</h2>
+                <p class="text-muted">Join our gaming community</p>
+            </div>
 
-						<div class="mb-3">
-							<label for="password" class="form-label">Password</label>
-							<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required autocomplete="new-password">
-						</div>
+            <form id="registerForm" class="auth-form" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="firebase_uid" name="firebase_uid">
 
-						<div class="mb-3">
-							<label for="password_confirmation" class="form-label">Confirm Password</label>
-							<input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password" required autocomplete="new-password">
-						</div>
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
 
-						<div class="mb-3">
-							<button type="submit" class="btn btn-success"> Sign Up </button>
-						</div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
 
-						<div class="mb-3">
-							<a href="{% url 'users:login' %}"> Already have an account? LOGIN instead. </a>
-						</div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-					</form>
-				</div>
-			</div>
-		</div>
-	</main>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+
+                <button type="submit" class="auth-submit-btn">Sign Up</button>
+
+                <div class="auth-form-footer">
+                    <p>Already have an account? <a href="{% url 'users:login' %}">Log in</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'users/js/auth_scripts.js' %}"></script>
+    <script src="{% static 'users/js/toast.js' %}"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+       // In both login.html and register.html
+const firebaseConfig = {
+    apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
+    authDomain: "django-4c5e9.firebaseapp.com",
+    projectId: "django-4c5e9",
+    storageBucket: "django-4c5e9.appspot.com",  // Changed from firebasestorage.app
+    messagingSenderId: "748834554329",
+    appId: "1:748834554329:web:a5cb30ea9e7583e5cd99c8",
+    measurementId: "G-JSHRP5E2GB"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const fullName = document.getElementById('full_name').value;
+
+            if (password !== confirmPassword) {
+                showToast("Passwords don't match!", 'error');
+                return;
+            }
+
+            try {
+                showToast('Creating account...', 'info');
+
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Submit to Django backend
+                document.getElementById('firebase_uid').value = user.uid;
+                const formData = new FormData(e.target);
+
+                const response = await fetch('{% url "users:register" %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                });
+
+                if (response.ok) {
+                    showToast('Registration successful! Please login.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '{% url "users:login" %}';
+                    }, 2000);
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Registration failed');
+                }
+            } catch (error) {
+                console.error(error);
+                let errorMessage = error.message;
+
+                // Handle common Firebase errors
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password should be at least 6 characters.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
+                }
+
+                showToast(errorMessage, 'error');
+            }
+        });
+    </script>
 {% endblock %}

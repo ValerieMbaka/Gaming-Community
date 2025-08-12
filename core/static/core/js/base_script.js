@@ -1,3 +1,4 @@
+// Base Scripts
 // Back to Top Button
 window.addEventListener('scroll', function() {
     var backToTop = document.getElementById('backToTop');

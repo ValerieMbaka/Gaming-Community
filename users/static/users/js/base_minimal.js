@@ -87,4 +87,61 @@ document.addEventListener('DOMContentLoaded', function () {
             group.classList.toggle('active');
         });
     });
+    
+});
+
+// Add to the existing base_minimal.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile picture preview
+    const profilePicInput = document.querySelector('input[name="profile_picture"]');
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.createElement('img');
+                    preview.src = event.target.result;
+                    preview.className = 'profile-pic-preview';
+                    preview.style.display = 'block';
+                    
+                    const existingPreview = document.querySelector('.profile-pic-preview');
+                    if (existingPreview) {
+                        existingPreview.replaceWith(preview);
+                    } else {
+                        profilePicInput.insertAdjacentElement('afterend', preview);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Handle profile form submission
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(profileForm);
+            
+            fetch(profileForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error saving your profile. Please try again.');
+            });
+        });
+    }
 });
