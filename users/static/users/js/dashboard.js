@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Handle profile completion modal
-    const profileCompletionModal = document.getElementById('profileCompletionModal');
     if (profileCompletionModal) {
         // Close modal when clicking outside
         profileCompletionModal.addEventListener('click', function(e) {
@@ -137,10 +136,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize dashboard tabs
     const dashboardTabs = document.querySelectorAll('.profile-tab');
+    console.log('Found dashboard tabs:', dashboardTabs.length);
     
     if (dashboardTabs.length > 0) {
         dashboardTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
+            // Add a visual indicator that tabs are clickable
+            tab.style.cursor = 'pointer';
+            
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Tab clicked:', this.getAttribute('data-tab'));
+                
                 // Remove active class from all tabs
                 dashboardTabs.forEach(t => t.classList.remove('active'));
                 
@@ -155,10 +161,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show the corresponding content
                 const tabId = this.getAttribute('data-tab');
                 if (tabId) {
-                    document.getElementById(tabId)?.classList.add('active');
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        console.log('Activated tab content:', tabId);
+                    } else {
+                        console.log('Tab content not found:', tabId);
+                    }
                 }
             });
         });
+    } else {
+        console.log('No dashboard tabs found!');
     }
 
     // Dashboard-specific animations

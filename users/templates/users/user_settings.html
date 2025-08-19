@@ -87,30 +87,50 @@
                     </div>
                 </div>
                 <div class="profile-summary-details">
-                    <div class="summary-detail-item">
-                        <i class="fas fa-user"></i>
-                        <span><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</span>
+                    <div class="about-section">
+                        <h3 class="about-title">
+                            <i class="fas fa-info-circle"></i>
+                            About
+                        </h3>
+                        <div class="about-content">
+                            {% if user.about %}
+                                <p class="about-text">{{ user.about }}</p>
+                            {% else %}
+                                <p class="about-text about-placeholder">No about information added yet.</p>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="summary-detail-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Location:</strong> {{ user.location|default:"Not set" }}</span>
+                    
+                    <div class="profile-details-grid">
+                        <div class="detail-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div class="detail-content">
+                                <span class="detail-label">Bio</span>
+                                <span class="detail-value">{{ user.bio|default:"Not set" }}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="detail-content">
+                                <span class="detail-label">Location</span>
+                                <span class="detail-value">{{ user.location|default:"Not set" }}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-gamepad"></i>
+                            <div class="detail-content">
+                                <span class="detail-label">Games</span>
+                                <span class="detail-value">{% if user.games %}{{ user.games|join:", " }}{% else %}Not set{% endif %}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-desktop"></i>
+                            <div class="detail-content">
+                                <span class="detail-label">Platforms</span>
+                                <span class="detail-value">{% if user.platforms %}{{ user.platforms|join:", " }}{% else %}Not set{% endif %}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="summary-detail-item">
-                        <i class="fas fa-info-circle"></i>
-                        <span><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</span>
-                    </div>
-                    {% if user.games %}
-                    <div class="summary-detail-item">
-                        <i class="fas fa-gamepad"></i>
-                        <span><strong>Games:</strong> {{ user.games|join:", " }}</span>
-                    </div>
-                    {% endif %}
-                    {% if user.platforms %}
-                    <div class="summary-detail-item">
-                        <i class="fas fa-desktop"></i>
-                        <span><strong>Platforms:</strong> {{ user.platforms|join:", " }}</span>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         </section>
@@ -252,6 +272,14 @@
         </div>
     </div>
 </div>
+<!-- Success Message -->
+<div id="successMessage" class="success-message">
+    <div class="success-message-content">
+        <i class="fas fa-check-circle"></i>
+        <span class="success-message-text">Profile updated successfully!</span>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block dashboard_js %}

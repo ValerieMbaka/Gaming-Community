@@ -1,295 +1,221 @@
+// Edit Profile Form Handler
 document.addEventListener('DOMContentLoaded', function() {
-    // Profile Picture Upload Preview
-    const profilePicInput = document.getElementById('id_profile_picture');
-    const currentProfilePic = document.getElementById('currentProfilePic');
+    const editProfileForm = document.getElementById('editProfileForm');
+    
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submitted');
+            
+            // Show loading state
+            const submitBtn = editProfileForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            submitBtn.disabled = true;
+            
+            // Create FormData object
+            const formData = new FormData(editProfileForm);
+            
+            // Handle platforms data properly - convert to JSON string
+            const platformCheckboxes = editProfileForm.querySelectorAll('input[name="platforms"]:checked');
+            const platforms = Array.from(platformCheckboxes).map(cb => cb.value);
+            formData.delete('platforms'); // Remove existing platforms data
+            formData.append('platforms', JSON.stringify(platforms));
+            
+            // Handle games data properly - convert to JSON string
+            const gamesHiddenInput = editProfileForm.querySelector('input[name="games"]');
+            const gamesValue = gamesHiddenInput ? gamesHiddenInput.value : '';
+            const gamesArray = gamesValue ? gamesValue.split(',').map(game => game.trim()).filter(game => game) : [];
+            formData.delete('games'); // Remove existing games data
+            formData.append('games', JSON.stringify(gamesArray));
+            
+            // Debug form data
+            console.log('Platforms selected:', platforms);
+            console.log('Games value:', gamesValue);
+            console.log('Games array:', gamesArray);
+            console.log('About value:', formData.get('about'));
+            
+            // Add AJAX header
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', window.location.href, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            
+            xhr.onload = function() {
+                console.log('Response status:', xhr.status);
+                console.log('Response text:', xhr.responseText);
+                
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Parsed response:', response);
+                        
+                        if (response.success) {
+                            // Show success message
+                            showSuccessMessage(response.message);
+                            
+                            // Update profile data in localStorage for other pages
+                            localStorage.setItem('userProfileData', JSON.stringify(response.user));
+                            localStorage.setItem('userStats', JSON.stringify(response.user_stats));
+                            
+                            // Redirect to settings after a short delay
+                            setTimeout(function() {
+                                window.location.href = '/users/settings/';
+                            }, 1500);
+                        } else {
+                            // Show error message
+                            showErrorMessage('Failed to update profile. Please try again.');
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                        showErrorMessage('An error occurred. Please try again.');
+                    }
+                } else {
+                    console.error('HTTP Error:', xhr.status);
+                    showErrorMessage('An error occurred. Please try again.');
+                }
+                
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            };
+            
+            xhr.onerror = function() {
+                showErrorMessage('Network error. Please check your connection and try again.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            };
+            
+            xhr.send(formData);
+        });
+    }
+});
 
-    if (profilePicInput && currentProfilePic) {
-        profilePicInput.addEventListener('change', function(e) {
+// Success Message Handler
+function showSuccessMessage(message) {
+    // Create success message element
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.innerHTML = `
+        <div class="success-message-content">
+            <i class="fas fa-check-circle"></i>
+            <span class="success-message-text">${message}</span>
+        </div>
+    `;
+    
+    // Add to page
+    document.body.appendChild(successDiv);
+    
+    // Show message
+    setTimeout(() => {
+        successDiv.classList.add('show');
+    }, 100);
+    
+    // Remove message after 3 seconds
+    setTimeout(() => {
+        successDiv.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(successDiv);
+        }, 300);
+    }, 3000);
+}
+
+// Error Message Handler
+function showErrorMessage(message) {
+    // Create error message element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerHTML = `
+        <div class="error-message-content">
+            <i class="fas fa-exclamation-circle"></i>
+            <span class="error-message-text">${message}</span>
+        </div>
+    `;
+    
+    // Add to page
+    document.body.appendChild(errorDiv);
+    
+    // Show message
+    setTimeout(() => {
+        errorDiv.classList.add('show');
+    }, 100);
+    
+    // Remove message after 4 seconds
+    setTimeout(() => {
+        errorDiv.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(errorDiv);
+        }, 300);
+    }, 4000);
+}
+
+// Games Input Handler (existing functionality)
+document.addEventListener('DOMContentLoaded', function() {
+    const gamesInput = document.getElementById('games_input');
+    const selectedGames = document.getElementById('selectedGames');
+    const gamesHiddenInput = document.getElementById('id_games');
+    
+    if (gamesInput && selectedGames && gamesHiddenInput) {
+        gamesInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const game = this.value.trim();
+                
+                if (game && !isGameSelected(game)) {
+                    addGameTag(game);
+                    this.value = '';
+                    updateGamesHiddenInput();
+                }
+            }
+        });
+        
+        // Handle game removal
+        selectedGames.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-game')) {
+                const gameTag = e.target.parentElement;
+                gameTag.remove();
+                updateGamesHiddenInput();
+            }
+        });
+    }
+});
+
+function addGameTag(game) {
+    const gameTag = document.createElement('span');
+    gameTag.className = 'game-tag';
+    gameTag.innerHTML = `${game} <i class="fas fa-times remove-game" data-game="${game}"></i>`;
+    selectedGames.appendChild(gameTag);
+}
+
+function isGameSelected(game) {
+    const existingGames = selectedGames.querySelectorAll('.game-tag');
+    return Array.from(existingGames).some(tag => 
+        tag.textContent.trim().replace('×', '').trim() === game
+    );
+}
+
+function updateGamesHiddenInput() {
+    const gameTags = selectedGames.querySelectorAll('.game-tag');
+    const games = Array.from(gameTags).map(tag => 
+        tag.textContent.trim().replace('×', '').trim()
+    );
+    gamesHiddenInput.value = games.join(',');
+}
+
+// Profile Picture Preview
+document.addEventListener('DOMContentLoaded', function() {
+    const profilePictureInput = document.getElementById('id_profile_picture');
+    const currentProfilePic = document.getElementById('currentProfilePic');
+    
+    if (profilePictureInput && currentProfilePic) {
+        profilePictureInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    currentProfilePic.src = event.target.result;
+                reader.onload = function(e) {
+                    currentProfilePic.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
-
-    // Games Input Handling
-    const gamesInput = document.getElementById('games_input');
-    const selectedGames = document.getElementById('selectedGames');
-    const gamesHiddenInput = document.getElementById('id_games');
-    let gamesList = [];
-
-    // Initialize games list from existing games
-    if (gamesHiddenInput && gamesHiddenInput.value) {
-        gamesList = gamesHiddenInput.value.split(',').filter(game => game.trim());
-        updateGamesDisplay();
-    }
-
-    if (gamesInput) {
-        gamesInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const game = this.value.trim();
-                if (game && !gamesList.includes(game)) {
-                    gamesList.push(game);
-                    updateGamesDisplay();
-                    this.value = '';
-                }
-            }
-        });
-    }
-
-    // Remove game functionality
-    if (selectedGames) {
-        selectedGames.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-game')) {
-                const game = e.target.getAttribute('data-game');
-                gamesList = gamesList.filter(g => g !== game);
-                updateGamesDisplay();
-            }
-        });
-    }
-
-    function updateGamesDisplay() {
-        if (selectedGames && gamesHiddenInput) {
-            selectedGames.innerHTML = gamesList.map(game => 
-                `<span class="game-tag">${game} <i class="fas fa-times remove-game" data-game="${game}"></i></span>`
-            ).join('');
-            gamesHiddenInput.value = gamesList.join(',');
-        }
-    }
-
-    // Platforms Checkbox Handling
-    const platformCheckboxes = document.querySelectorAll('input[name="platforms"]');
-    const platformsHiddenInput = document.createElement('input');
-    platformsHiddenInput.type = 'hidden';
-    platformsHiddenInput.name = 'platforms';
-    platformsHiddenInput.id = 'id_platforms';
-
-    // Find the platforms form group and add the hidden input
-    const platformsGroup = document.querySelector('.form-group:has(.platforms-grid)');
-    if (platformsGroup) {
-        platformsGroup.appendChild(platformsHiddenInput);
-    }
-
-    function updatePlatformsValue() {
-        const selectedPlatforms = Array.from(platformCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-        platformsHiddenInput.value = JSON.stringify(selectedPlatforms);
-    }
-
-    platformCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updatePlatformsValue);
-    });
-
-    // Initialize platforms value
-    updatePlatformsValue();
-
-    // Form submission with AJAX
-    const editProfileForm = document.querySelector('form[action*="edit_profile"]');
-    if (editProfileForm) {
-        editProfileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            // Show loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            submitBtn.disabled = true;
-
-            fetch(window.location.href, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the settings page profile summary if it exists
-                    updateSettingsProfileSummary(data);
-                    
-                    // Show success message
-                    showToast(data.message, 'success');
-                    
-                    // Reset form state
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                } else {
-                    // Show error message
-                    showToast('Please correct the errors below', 'error');
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('An error occurred while saving', 'error');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
-        });
-    }
-
-    // Function to update settings page profile summary
-    function updateSettingsProfileSummary(data) {
-        // Update profile summary in settings page if it exists
-        const profileSummary = document.querySelector('.profile-summary');
-        if (profileSummary) {
-            // Update avatar
-            const avatar = profileSummary.querySelector('.profile-summary-avatar img');
-            if (avatar && data.user.profile_picture_url) {
-                avatar.src = data.user.profile_picture_url;
-            }
-
-            // Update display name
-            const displayName = profileSummary.querySelector('.profile-summary-info h2');
-            if (displayName) {
-                displayName.textContent = data.user.display_name;
-            }
-
-            // Update stats
-            const gamesStat = profileSummary.querySelector('.stat-item:has(.fa-gamepad)');
-            if (gamesStat) {
-                gamesStat.innerHTML = `<i class="fas fa-gamepad"></i> ${data.user_stats.games_count} Games`;
-            }
-
-            const platformsStat = profileSummary.querySelector('.stat-item:has(.fa-desktop)');
-            if (platformsStat) {
-                platformsStat.innerHTML = `<i class="fas fa-desktop"></i> ${data.user_stats.platforms_count} Platforms`;
-            }
-
-            // Update summary details
-            const usernameDetail = profileSummary.querySelector('.summary-detail-item:has(.fa-user) span');
-            if (usernameDetail) {
-                usernameDetail.innerHTML = `<strong>Username:</strong> ${data.user.custom_username || 'Not set'}`;
-            }
-
-            const locationDetail = profileSummary.querySelector('.summary-detail-item:has(.fa-map-marker-alt) span');
-            if (locationDetail) {
-                locationDetail.innerHTML = `<strong>Location:</strong> ${data.user.location || 'Not set'}`;
-            }
-
-            const bioDetail = profileSummary.querySelector('.summary-detail-item:has(.fa-info-circle) span');
-            if (bioDetail) {
-                bioDetail.innerHTML = `<strong>Bio:</strong> ${data.user.bio || 'Not set'}`;
-            }
-
-            // Update games
-            const gamesDetail = profileSummary.querySelector('.summary-detail-item:has(.fa-gamepad)');
-            if (gamesDetail && data.user.games && data.user.games.length > 0) {
-                gamesDetail.querySelector('span').innerHTML = `<strong>Games:</strong> ${data.user.games.join(', ')}`;
-            }
-
-            // Update platforms
-            const platformsDetail = profileSummary.querySelector('.summary-detail-item:has(.fa-desktop)');
-            if (platformsDetail && data.user.platforms && data.user.platforms.length > 0) {
-                platformsDetail.querySelector('span').innerHTML = `<strong>Platforms:</strong> ${data.user.platforms.join(', ')}`;
-            }
-        }
-
-        // Also update the dashboard if it exists
-        updateDashboardProfile(data);
-    }
-
-    // Function to update dashboard profile
-    function updateDashboardProfile(data) {
-        // Update username in header/sidebar
-        const usernameElements = document.querySelectorAll('.username');
-        usernameElements.forEach(element => {
-            element.textContent = data.user.display_name;
-        });
-
-        // Update profile picture in sidebar
-        const sidebarAvatar = document.querySelector('.sidebar-profile img');
-        if (sidebarAvatar && data.user.profile_picture_url) {
-            sidebarAvatar.src = data.user.profile_picture_url;
-        }
-
-        // Update dashboard profile info
-        const dashboardUsername = document.querySelector('.dashboard-profile h4');
-        if (dashboardUsername) {
-            dashboardUsername.textContent = data.user.display_name;
-        }
-    }
-
-    // Toast Notification System
-    function showToast(message, type = 'info') {
-        // Create toast element
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <div class="toast-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${message}</span>
-            </div>
-            <button class="toast-close" onclick="this.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-
-        // Add toast styles if not already present
-        if (!document.getElementById('toast-styles')) {
-            const style = document.createElement('style');
-            style.id = 'toast-styles';
-            style.textContent = `
-                .toast {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: white;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    padding: 1rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.75rem;
-                    z-index: 10000;
-                    animation: slideIn 0.3s ease;
-                    max-width: 400px;
-                }
-                .toast-success { border-left: 4px solid #28a745; }
-                .toast-error { border-left: 4px solid #dc3545; }
-                .toast-info { border-left: 4px solid #17a2b8; }
-                .toast-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    flex: 1;
-                }
-                .toast-close {
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    color: #6c757d;
-                    padding: 0.25rem;
-                }
-                .toast-close:hover { color: #495057; }
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        document.body.appendChild(toast);
-
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
-    }
-
-    // Make showToast globally available
-    window.showToast = showToast;
 });

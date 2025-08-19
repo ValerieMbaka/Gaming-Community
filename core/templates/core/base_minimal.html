@@ -136,43 +136,28 @@
             </div>
 
             <!-- Navigation -->
-            <nav class="dashboard-nav" style="display:flex; flex-direction:column; min-height:100%;">
+            <nav class="dashboard-nav">
                 <!-- Gaming Section -->
                 <div class="nav-section">
                     <div class="section-header">
                         <i class="fas fa-gamepad"></i>
                         <span>Gaming</span>
                     </div>
-                    <ul>
+                    <ul class="nav-list">
                         <li>
-                            <a href="{% url 'users:user_dashboard' %}" class="active" data-tooltip="Dashboard">
+                            <a href="{% url 'users:user_dashboard' %}" class="nav-link active" data-tooltip="Dashboard">
                                 <i class="fas fa-tachometer-alt"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-group">
-                            <div class="nav-header" data-tooltip="My Games">
+                        <li>
+                            <a href="#" class="nav-link" data-tooltip="My Games">
                                 <i class="fas fa-gamepad"></i>
                                 <span>My Games</span>
-                                <i class="dropdown-icon fas fa-chevron-down"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#" data-tooltip="Valorant">
-                                        <img src="{% static 'core/images/valorant-icon.png' %}" class="game-icon" alt="Valorant">
-                                        <span>Valorant</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-tooltip="FIFA 23">
-                                        <img src="{% static 'core/images/fifa-icon.png' %}" class="game-icon" alt="FIFA">
-                                        <span>FIFA 23</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            </a>
                         </li>
                         <li>
-                            <a href="#" data-tooltip="Competitions">
+                            <a href="#" class="nav-link" data-tooltip="Competitions">
                                 <i class="fas fa-trophy"></i>
                                 <span>Competitions</span>
                                 <span class="badge">2</span>
@@ -187,33 +172,18 @@
                         <i class="fas fa-users"></i>
                         <span>Social</span>
                     </div>
-                    <ul>
+                    <ul class="nav-list">
                         <li>
-                            <a href="#" data-tooltip="Feeds">
+                            <a href="#" class="nav-link" data-tooltip="Feeds">
                                 <i class="fas fa-newspaper"></i>
                                 <span>Feeds</span>
                             </a>
                         </li>
-                        <li class="nav-group">
-                            <div class="nav-header" data-tooltip="Communities">
+                        <li>
+                            <a href="#" class="nav-link" data-tooltip="Communities">
                                 <i class="fas fa-users"></i>
                                 <span>Communities</span>
-                                <i class="dropdown-icon fas fa-chevron-down"></i>
-                            </div>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#" data-tooltip="Valorant Champions">
-                                        <i class="fas fa-shield-alt"></i>
-                                        <span>Valorant Champions</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-tooltip="FIFA Pros">
-                                        <i class="fas fa-futbol"></i>
-                                        <span>FIFA Pros</span>
-                                    </a>
-                                </li>
-                            </ul>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -224,24 +194,26 @@
                         <i class="fas fa-user"></i>
                         <span>Profile</span>
                     </div>
-                    <ul>
+                    <ul class="nav-list">
                         <li>
-                            <a href="#" data-tooltip="Notifications">
+                            <a href="#" class="nav-link" data-tooltip="Notifications">
                                 <i class="fas fa-bell"></i>
                                 <span>Notifications</span>
                                 <span class="badge">5</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'users:user_settings' %}" data-tooltip="Settings">
+                            <a href="{% url 'users:user_settings' %}" class="nav-link" data-tooltip="Settings">
                                 <i class="fas fa-cog"></i>
                                 <span>Settings</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div style="margin-top:auto; padding: 12px 16px;">
-                    <a href="{% url 'users:logout' %}" class="dropdown-item" style="display:flex; align-items:center; gap:8px; color:#fff;">
+
+                <!-- Logout Section -->
+                <div class="nav-section logout-section">
+                    <a href="{% url 'users:logout' %}" class="nav-link logout-link" data-tooltip="Logout">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
                     </a>
@@ -261,6 +233,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Base JS -->
     <script src="{% static 'users/js/base_minimal.js' %}"></script>
+    <!-- Sidebar JS -->
+    <script src="{% static 'users/js/sidebar.js' %}"></script>
     <!-- Toast JS -->
     <script src="{% static 'users/js/toast.js' %}"></script>
     <!-- Dashboard JS -->

@@ -161,30 +161,28 @@
     </script>
 
     <!-- Firebase SDK -->
+    <script>
+        // Pass Firebase config from Django context to avoid exposing in client code
+        window.firebaseConfig = {
+            apiKey: "{{ firebase_config.api_key|default:'' }}",
+            authDomain: "{{ firebase_config.auth_domain|default:'' }}",
+            projectId: "{{ firebase_config.project_id|default:'' }}",
+            storageBucket: "{{ firebase_config.storage_bucket|default:'' }}",
+            messagingSenderId: "{{ firebase_config.messaging_sender_id|default:'' }}",
+            appId: "{{ firebase_config.app_id|default:'' }}",
+            measurementId: "{{ firebase_config.measurement_id|default:'' }}"
+        };
+    </script>
 
     <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
-    authDomain: "django-4c5e9.firebaseapp.com",
-    projectId: "django-4c5e9",
-    storageBucket: "django-4c5e9.firebasestorage.app",
-    messagingSenderId: "748834554329",
-    appId: "1:748834554329:web:a5cb30ea9e7583e5cd99c8",
-    measurementId: "G-JSHRP5E2GB"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+        
+        // Initialize Firebase with config from Django context
+        const app = initializeApp(window.firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 
 	{% block extra_scripts %} {% endblock %}
 

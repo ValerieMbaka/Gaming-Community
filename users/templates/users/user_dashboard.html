@@ -26,23 +26,27 @@
     </div>
 </div>
 
-<!-- Profile Header Section -->
-<section class="profile-header-wrapper">
-    <div class="profile-cover-container">
-        <div class="profile-cover-overlay"></div>
-        <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
-        <div class="profile-avatar-wrapper">
-            <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
-                 alt="Profile Avatar" class="profile-main-avatar">
-            <button class="edit-avatar-btn" aria-label="Edit profile picture" onclick="document.getElementById('profileCompletionModal').classList.add('show')">
-                <i class="fas fa-camera"></i>
-            </button>
-            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+<!-- Welcome Message -->
+<!-- <div class="welcome-message">
+    <div class="welcome-content">
+        <i class="fas fa-gamepad welcome-icon"></i>
+        <div class="welcome-text">
+            <h2>Welcome back, {{ display_username }}! 👋</h2>
         </div>
     </div>
+</div> -->
 
-    <div class="profile-header-content">
-        <div class="profile-header-info">
+<!-- Profile Header Section -->
+<section class="profile-header-wrapper">
+    <div class="profile-header-grid">
+        <!-- Left Column: Profile Avatar -->
+        <div class="profile-avatar-column">
+            <div class="profile-avatar-container">
+            <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
+                 alt="Profile Avatar" class="profile-main-avatar">
+            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+        </div>
+            <div class="profile-info">
             <div class="profile-name-wrapper">
                 <h1 class="profile-name">{{ display_username }}</h1>
                 <span class="verified-badge" title="Verified Account">
@@ -53,9 +57,16 @@
             <div class="profile-location">
                 <i class="fas fa-map-marker-alt"></i>
                 <span>{% if user.location and user.location != "Nairobi" and user.location != "" %}{{ user.location }}{% else %}Location not set{% endif %}</span>
+                </div>
             </div>
         </div>
 
+        <!-- Right Column: Cover Image + Stats -->
+        <div class="profile-content-column">
+            <!-- Top Section: Cover Image -->
+            <div class="profile-cover-section">
+                <div class="profile-cover-container">
+                    <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
         <div class="profile-actions-container">
             <button class="btn btn-streaming">
                 <i class="fas fa-gamepad me-2"></i> Start Streaming
@@ -63,6 +74,70 @@
             <button class="btn btn-icon btn-action" title="More options">
                 <i class="fas fa-ellipsis-h"></i>
             </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Performance Stats -->
+            <div class="performance-stats-section">
+                <h3 class="section-title">Performance Stats</h3>
+                <div class="stats-grid-horizontal">
+                    <!-- Win Rate with Progress -->
+                    <div class="stat-item-horizontal win-rate">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">87% <span class="stat-trend up">+2%</span></div>
+                                <div class="stat-label">Win Rate</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Competitions -->
+                    <div class="stat-item-horizontal competitions">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Competitions</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Play Time -->
+                    <div class="stat-item-horizontal play-time">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">24h</div>
+                                <div class="stat-label">Play Time</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Communities -->
+                    <div class="stat-item-horizontal communities">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">{{ user_stats.platforms_count }}</div>
+                                <div class="stat-label">Platforms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -129,155 +204,17 @@
         </div>
     </section>
 
-    <!-- Stats Grid Section -->
-    <section class="profile-card">
-        <div class="card-header">
-            <h2>
-                <i class="fas fa-chart-bar"></i>
-                <span>Performance Stats</span>
-            </h2>
-        </div>
-        <div class="card-body">
-            <div class="stats-grid-horizontal">
-                <!-- Win Rate with Progress -->
-                <div class="stat-item-horizontal win-rate">
-                    <div class="stat-content">
-                        <div class="stat-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="stat-text">
-                            <div class="stat-value">87% <span class="stat-trend up">+2%</span></div>
-                            <div class="stat-label">Win Rate</div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 87%"></div>
-                    </div>
-                </div>
-
-                <!-- Competitions -->
-                <div class="stat-item-horizontal competitions">
-                    <div class="stat-content">
-                        <div class="stat-icon">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="stat-text">
-                            <div class="stat-value">24</div>
-                            <div class="stat-label">Competitions</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Play Time -->
-                <div class="stat-item-horizontal play-time">
-                    <div class="stat-content">
-                        <div class="stat-icon">
-                            <i class="fas fa-hourglass-half"></i>
-                        </div>
-                        <div class="stat-text">
-                            <div class="stat-value">24h</div>
-                            <div class="stat-label">Play Time</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Communities -->
-                <div class="stat-item-horizontal communities">
-                    <div class="stat-content">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-text">
-                            <div class="stat-value">{{ user_stats.platforms_count }}</div>
-                            <div class="stat-label">Platforms</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="dashboard-grid">
-        <!-- Left Column -->
-        <div class="main-column">
-
-
-            <!-- Recent Activity -->
-            <section class="profile-card">
-                <div class="card-header">
-                    <h2>
-                        <i class="fas fa-history"></i>
-                        <span>Recent Activity</span>
-                    </h2>
-                    <a href="#" class="view-all-link">View All</a>
-                </div>
-                <div class="card-body">
-                    <div class="activity-feed">
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
-                            </div>
-                            <div class="activity-content">
-                                <h3 class="activity-title">Profile Updated</h3>
-                                <p class="activity-meta">{{ user_stats.join_date }}</p>
-                                <p class="activity-description">{% if user.games and user.games|length > 0 %}Added {{ user.games|length }} game{{ user.games|length|pluralize }} to your profile{% else %}Started your gaming journey{% endif %}</p>
-                                <div class="activity-stats">
-                                    <span class="activity-stat">
-                                        <i class="fas fa-gamepad"></i>
-                                        <span>{% if user.games and user.games|length > 0 %}{{ user.games|length }} Game{{ user.games|length|pluralize }}{% else %}No Games{% endif %}</span>
-                                    </span>
-                                    <span class="activity-stat">
-                                        <i class="fas fa-desktop"></i>
-                                        <span>{% if user.platforms and user.platforms|length > 0 %}{{ user.platforms|length }} Platform{{ user.platforms|length|pluralize }}{% else %}No Platforms{% endif %}</span>
-                                    </span>
-                                </div>
-                                <div class="activity-actions">
-                                    <button class="btn-like"><i class="far fa-heart"></i> 0</button>
-                                    <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {% if user.games and user.games|length > 0 %}
-                        <div class="activity-item">
-                            <div class="activity-icon">
-                                <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
-                            </div>
-                            <div class="activity-content">
-                                <h3 class="activity-title">Games Added to Profile</h3>
-                                <p class="activity-meta">{{ user_stats.join_date }}</p>
-                                <p class="activity-description">"{% for game in user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}"</p>
-                                <div class="activity-stats">
-                                    <span class="activity-stat">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>Profile Complete</span>
-                                    </span>
-                                    <span class="activity-stat">
-                                        <i class="fas fa-star"></i>
-                                        <span>Ready to Play</span>
-                                    </span>
-                                </div>
-                                <div class="activity-actions">
-                                    <button class="btn-like"><i class="far fa-heart"></i> 0</button>
-                                    <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Right Column -->
-        <div class="sidebar-column">
-            <!-- Featured Game -->
+    <!-- Two Column Layout: Featured Games + Recent Achievements -->
+    <div class="dashboard-two-column">
+        <!-- Left Column: Featured Games -->
+        <div class="featured-games-column">
             <section class="profile-card">
                 <div class="card-header">
                     <h2>
                         <i class="fas fa-crown"></i>
-                        <span>Featured Game</span>
+                        <span>Featured Games</span>
                     </h2>
+                    <a href="#" class="view-all-link">View All</a>
                 </div>
                 <div class="card-body">
                     {% if featured_game and featured_game.name %}
@@ -303,7 +240,7 @@
                             </div>
                             <div class="game-rank-card">
                                 <div class="rank-icon-container">
-                                    <img src="{% static 'core/images/trophy.jpeg' %}" alt="{{ featured_game.rank }} Rank" class="rank-icon">
+                                    <img src="{% static 'core/images/games.jpeg' %}" alt="{{ featured_game.rank }} Rank" class="rank-icon">
                                 </div>
                                 <div class="rank-info">
                                     <span class="rank-name">{{ featured_game.rank }}</span>
@@ -322,8 +259,10 @@
                     {% endif %}
                 </div>
             </section>
+        </div>
 
-            <!-- Recent Achievements -->
+        <!-- Right Column: Recent Achievements -->
+        <div class="recent-achievements-column">
             <section class="profile-card">
                 <div class="card-header">
                     <h2>
@@ -379,6 +318,72 @@
             </section>
         </div>
     </div>
+
+    <!-- Recent Activities Section -->
+    <section class="profile-card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-history"></i>
+                <span>Recent Activities</span>
+            </h2>
+            <a href="#" class="view-all-link">View All</a>
+        </div>
+        <div class="card-body">
+            <div class="activity-feed">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
+                    </div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Profile Updated</h3>
+                        <p class="activity-meta">{{ user_stats.join_date }}</p>
+                        <p class="activity-description">{% if user.games and user.games|length > 0 %}Added {{ user.games|length }} game{{ user.games|length|pluralize }} to your profile{% else %}Started your gaming journey{% endif %}</p>
+                        <div class="activity-stats">
+                            <span class="activity-stat">
+                                <i class="fas fa-gamepad"></i>
+                                <span>{% if user.games and user.games|length > 0 %}{{ user.games|length }} Game{{ user.games|length|pluralize }}{% else %}No Games{% endif %}</span>
+                            </span>
+                            <span class="activity-stat">
+                                <i class="fas fa-desktop"></i>
+                                <span>{% if user.platforms and user.platforms|length > 0 %}{{ user.platforms|length }} Platform{{ user.platforms|length|pluralize }}{% else %}No Platforms{% endif %}</span>
+                            </span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                            <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% if user.games and user.games|length > 0 %}
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
+                    </div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Games Added to Profile</h3>
+                        <p class="activity-meta">{{ user_stats.join_date }}</p>
+                        <p class="activity-description">"{% for game in user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}"</p>
+                        <div class="activity-stats">
+                            <span class="activity-stat">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Profile Complete</span>
+                            </span>
+                            <span class="activity-stat">
+                                <i class="fas fa-star"></i>
+                                <span>Ready to Play</span>
+                            </span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                            <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
 </div>
 
 <!-- Games Tab Content -->
@@ -429,17 +434,20 @@
             </h2>
         </div>
         <div class="card-body">
-            <div class="competition-list">
-                <div class="competition-item">
-                    <img src="{% static 'core/images/valorant-tournament.jpg' %}"
-                         class="competition-image" alt="Valorant">
-                    <div class="competition-info">
-                        <h4>Valorant Weekly</h4>
+            <div class="competition-grid">
+                <div class="competition-card">
+                    <div class="competition-card-header">
+                        <img src="{% static 'core/images/valorant-tournament.jpg' %}"
+                             class="competition-card-image" alt="Valorant">
+                        <div class="competition-status active">Active</div>
+                    </div>
+                    <div class="competition-card-body">
+                        <h4 class="competition-title">Valorant Weekly</h4>
                         <p class="competition-meta">
-                            <i class="fas fa-calendar-alt me-1"></i> Tomorrow, 8:00 PM
+                            <i class="fas fa-calendar-alt"></i> Tomorrow, 8:00 PM
                         </p>
                         <div class="competition-prize">
-                            <i class="fas fa-gem me-1"></i> $1,000 Prize Pool
+                            <i class="fas fa-gem"></i> $1,000 Prize Pool
                         </div>
                         <div class="countdown-timer">
                             <div class="countdown-segment">
@@ -451,21 +459,25 @@
                                 <span class="countdown-label">Hours</span>
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-primary btn-block mt-2">
+                        <button class="competition-btn primary">
                             Register Now
                         </button>
                     </div>
                 </div>
-                <div class="competition-item">
-                    <img src="{% static 'core/images/fifa-tournament.jpg' %}"
-                         class="competition-image" alt="FIFA">
-                    <div class="competition-info">
-                        <h4>FIFA Weekend Cup</h4>
+                
+                <div class="competition-card">
+                    <div class="competition-card-header">
+                        <img src="{% static 'core/images/fifa-tournament.jpg' %}"
+                             class="competition-card-image" alt="FIFA">
+                        <div class="competition-status upcoming">Upcoming</div>
+                    </div>
+                    <div class="competition-card-body">
+                        <h4 class="competition-title">FIFA Weekend Cup</h4>
                         <p class="competition-meta">
-                            <i class="fas fa-calendar-alt me-1"></i> Saturday, 3:00 PM
+                            <i class="fas fa-calendar-alt"></i> Saturday, 3:00 PM
                         </p>
                         <div class="competition-prize">
-                            <i class="fas fa-gem me-1"></i> $500 Prize Pool
+                            <i class="fas fa-gem"></i> $500 Prize Pool
                         </div>
                         <div class="countdown-timer">
                             <div class="countdown-segment">
@@ -477,7 +489,7 @@
                                 <span class="countdown-label">Hours</span>
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-outline-primary btn-block mt-2">
+                        <button class="competition-btn secondary">
                             View Details
                         </button>
                     </div>

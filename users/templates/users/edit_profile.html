@@ -34,7 +34,7 @@
         </div>
         
         <div class="settings-section-body">
-            <form method="post" enctype="multipart/form-data" class="settings-form">
+            <form method="post" enctype="multipart/form-data" class="settings-form" id="editProfileForm">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="update_profile">
                 

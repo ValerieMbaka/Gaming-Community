@@ -6,7 +6,9 @@ import {
     createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const firebaseConfig = {
+// Firebase config will be loaded from Django template context
+// This prevents exposing sensitive data in client-side code
+const firebaseConfig = window.firebaseConfig || {
     apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
     authDomain: "django-4c5e9.firebaseapp.com",
     projectId: "django-4c5e9",
