@@ -1,41 +1,10 @@
-{% extends 'core/base_minimal.html' %}
 {% load static %}
 
-{% block title %}Complete Profile | GameHub{% endblock %}
-
-{% block extra_head %}
-    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
-    <style>
-        .required-field::after {
-            content: " *";
-            color: red;
-        }
-        .error-message {
-            color: #dc3545;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-        }
-        .selectize-input {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ced4da;
-        }
-    </style>
-{% endblock %}
-
-{% block content %}
 <div class="profile-completion-container">
     <div class="profile-completion-card">
-        <div class="card-header">
-            <h2><i class="fas fa-user-edit"></i> Complete Your Profile</h2>
-            <p>Please fill in all required fields to continue using GuildSpace</p>
-        </div>
-
         <form id="profileForm" method="post" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
 
-            <!-- Profile Picture (Optional) -->
             <div class="form-section">
                 <label>Profile Picture</label>
                 <div class="avatar-upload">
@@ -49,30 +18,35 @@
                 </div>
             </div>
 
-            <!-- Username (Mandatory) -->
             <div class="form-section">
-                <label for="id_username" class="required-field">Username</label>
-                <input type="text" id="id_username" name="username"
-                       value="{{ form.username.value|default_if_none:'' }}" required>
-                <div id="username-error" class="error-message"></div>
+                <label for="id_custom_username" class="required-field">Username</label>
+                <div style="display:flex; gap:12px; align-items:center;">
+                <input type="text" id="id_custom_username" name="custom_username"
+                           value="{{ form.custom_username.value|default_if_none:'' }}" required style="flex:1;">
+                    <button type="button" id="generateUsernameBtn" class="avatar-upload-label" style="white-space:nowrap;">
+                        Generate
+                    </button>
+                </div>
+                <small class="text-muted">3–20 chars, letters/numbers/underscore; unique (case-insensitive)</small>
+                <div id="custom_username-error" class="error-message"></div>
             </div>
 
-            <!-- Bio (Mandatory) -->
             <div class="form-section">
                 <label for="id_bio" class="required-field">Bio</label>
-                <textarea name="bio" id="id_bio" rows="3" required
-                          placeholder="Tell us about yourself in a few words...">{% if form.bio.value %}{{ form.bio.value }}{% endif %}</textarea>
+                <input type="text" name="bio" id="id_bio" required maxlength="160" minlength="10"
+                          placeholder="Short one-line bio (10–160 chars)" value="{% if form.bio.value %}{{ form.bio.value }}{% endif %}">
                 <div id="bio-error" class="error-message"></div>
             </div>
 
-            <!-- About (Optional) -->
             <div class="form-section">
-                <label for="id_about">About</label>
-                <textarea name="about" id="id_about" rows="5"
-                          placeholder="Share more details about your gaming preferences, experience, etc...">{% if form.about.value %}{{ form.about.value }}{% endif %}</textarea>
+                <label for="id_about">About <small class="text-muted">(optional)</small></label>
+                <textarea name="about" id="id_about" rows="5" maxlength="500" minlength="30"
+                          placeholder="About you (30–500 chars). Supports emojis and line breaks.">{% if form.about.value %}{{ form.about.value }}{% endif %}</textarea>
+                <div style="display:flex; justify-content:flex-end;">
+                    <small id="aboutCounter" class="text-muted">0/500</small>
+                </div>
             </div>
 
-            <!-- Date of Birth (Mandatory) -->
             <div class="form-section">
                 <label for="id_date_of_birth" class="required-field">Date of Birth</label>
                 <input type="date" name="date_of_birth" id="id_date_of_birth"
@@ -80,7 +54,6 @@
                 <div id="date_of_birth-error" class="error-message"></div>
             </div>
 
-            <!-- Location (Mandatory) -->
             <div class="form-section">
                 <label for="id_location" class="required-field">Location</label>
                 <input type="text" name="location" id="id_location"
@@ -89,193 +62,400 @@
                 <div id="location-error" class="error-message"></div>
             </div>
 
-            <!-- Platforms (Mandatory) -->
             <div class="form-section">
                 <label class="required-field">Platforms You Play On</label>
-                <select id="platforms-select" multiple placeholder="Select platforms...">
-                    <option value="pc">PC</option>
-                    <option value="playstation">PlayStation</option>
-                    <option value="xbox">Xbox</option>
-                    <option value="nintendo">Nintendo Switch</option>
-                    <option value="mobile">Mobile</option>
-                </select>
+                <div id="platformsTags" class="chips"></div>
                 <input type="hidden" name="platforms" id="id_platforms" required>
                 <div id="platforms-error" class="error-message"></div>
             </div>
 
-            <!-- Games (At least one required) -->
             <div class="form-section">
                 <label class="required-field">Games You Play</label>
-                <select id="games-select" multiple placeholder="Select games...">
-                    <option value="valorant">Valorant</option>
-                    <option value="fifa">FIFA</option>
-                    <option value="cod">Call of Duty</option>
-                    <option value="fortnite">Fortnite</option>
-                    <option value="lol">League of Legends</option>
-                    <option value="dota">Dota 2</option>
-                    <option value="csgo">CS:GO</option>
-                </select>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <div id="gamesTags" class="chips" style="flex:1;"></div>
+                    <input type="text" id="gameInput" class="form-control" placeholder="Type a game and press Enter" style="max-width: 280px;">
+                </div>
                 <input type="hidden" name="games" id="id_games" required>
                 <div id="games-error" class="error-message"></div>
+                <small class="text-muted">Choose from suggestions or type your own games</small>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="save-btn">Save Profile</button>
+                <button type="submit" class="save-btn">Save Details</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Selectize for platforms
-    $('#platforms-select').selectize({
-        plugins: ['remove_button'],
-        onChange: function(value) {
-            $('#id_platforms').val(JSON.stringify(this.items));
-            validateField('platforms', value.length > 0);
+    // About counter
+    const about = document.getElementById('id_about');
+    const aboutCounter = document.getElementById('aboutCounter');
+    const updateAboutCounter = () => { if (aboutCounter) aboutCounter.textContent = `${(about.value||'').length}/500`; };
+    if (about) { about.addEventListener('input', updateAboutCounter); updateAboutCounter(); }
+
+    // Username generator and availability check
+    const usernameInput = document.getElementById('id_custom_username');
+    const usernameError = document.getElementById('custom_username-error');
+    const generateBtn = document.getElementById('generateUsernameBtn');
+    const usernamePattern = /^[A-Za-z0-9_]{3,20}$/;
+    const adjectives = ['Swift','Nova','Crimson','Shadow','Aero','Frost','Blaze','Quantum','Pixel','Hyper','Omega','Ultra'];
+    const nouns = ['Ranger','Ninja','Falcon','Viper','Phoenix','Comet','Drifter','Guardian','Samurai','Spectre','Voyager','Gamer'];
+
+    function generateUsernameCandidate() {
+        const a = adjectives[Math.floor(Math.random()*adjectives.length)];
+        const n = nouns[Math.floor(Math.random()*nouns.length)];
+        const num = Math.floor(Math.random()*9999).toString().padStart(2,'0');
+        let candidate = `${a}${n}${num}`;
+        if (candidate.length > 20) candidate = candidate.slice(0, 20);
+        return candidate;
+    }
+
+    async function checkAvailability() {
+        const value = (usernameInput.value || '').trim();
+        if (!usernamePattern.test(value)) {
+            usernameError.textContent = 'Use 3–20 letters, numbers, or underscores';
+            return false;
         }
-    });
-
-    // Initialize Selectize for games
-    $('#games-select').selectize({
-        plugins: ['remove_button'],
-        onChange: function(value) {
-            $('#id_games').val(JSON.stringify(this.items));
-            validateField('games', value.length > 0);
+        try {
+            const res = await fetch('{% url "users:check_username" %}?username=' + encodeURIComponent(value));
+            const data = await res.json();
+            if (!data.available) {
+                usernameError.textContent = data.reason === 'invalid_format' ? 'Invalid username format' : 'This username is already taken';
+                return false;
+            }
+            usernameError.textContent = '';
+            return true;
+        } catch (e) {
+            console.error(e);
+            return false;
         }
-    });
+    }
 
-    // Set initial values if they exist
-    {% if form.platforms.value %}
-        const platforms = JSON.parse('{{ form.platforms.value|escapejs }}');
-        const platformsSelect = $('#platforms-select')[0].selectize;
-        platformsSelect.setValue(platforms);
-    {% endif %}
+    let usernameTimer;
+    function debouncedCheck() {
+        clearTimeout(usernameTimer);
+        usernameTimer = setTimeout(checkAvailability, 400);
+    }
 
-    {% if form.games.value %}
-        const games = JSON.parse('{{ form.games.value|escapejs }}');
-        const gamesSelect = $('#games-select')[0].selectize;
-        gamesSelect.setValue(games);
-    {% endif %}
-
-    // Profile picture preview
-    const profilePicInput = document.getElementById('id_profile_picture');
-    const avatarPreview = document.getElementById('avatarPreview');
-
-    if (profilePicInput && avatarPreview) {
-        profilePicInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    avatarPreview.style.backgroundImage = `url(${event.target.result})`;
-                };
-                reader.readAsDataURL(file);
+    if (usernameInput) {
+        usernameInput.addEventListener('input', debouncedCheck);
+        usernameInput.addEventListener('blur', checkAvailability);
+    }
+    if (generateBtn) {
+        generateBtn.addEventListener('click', async () => {
+            for (let i=0; i<5; i++) {
+                const candidate = generateUsernameCandidate();
+                usernameInput.value = candidate;
+                // eslint-disable-next-line no-await-in-loop
+                const ok = await checkAvailability();
+                if (ok) break;
             }
         });
     }
 
-    // Real-time validation
-    const form = document.getElementById('profileForm');
+    // Platforms chips
+    const platformsMap = [
+        {key:'pc', label:'PC'},
+        {key:'playstation', label:'PlayStation'},
+        {key:'xbox', label:'Xbox'},
+        {key:'nintendo', label:'Nintendo Switch'},
+        {key:'mobile', label:'Mobile'}
+    ];
+    const platformsContainer = document.getElementById('platformsTags');
+    const platformsHidden = document.getElementById('id_platforms');
+    const initialPlatforms = {% if form.platforms.value %}JSON.parse('{{ form.platforms.value|escapejs }}'){% else %}[]{% endif %};
+    let selectedPlatforms = Array.isArray(initialPlatforms) ? initialPlatforms : [];
+
+    function renderPlatforms() {
+        platformsContainer.innerHTML = '';
+        platformsMap.forEach(p => {
+            const chip = document.createElement('span');
+            chip.className = 'chip' + (selectedPlatforms.includes(p.key) ? ' active' : '');
+            chip.textContent = p.label;
+            chip.addEventListener('click', () => {
+                if (selectedPlatforms.includes(p.key)) {
+                    selectedPlatforms = selectedPlatforms.filter(k => k !== p.key);
+                } else {
+                    selectedPlatforms.push(p.key);
+                }
+                platformsHidden.value = JSON.stringify(selectedPlatforms);
+                renderPlatforms();
+                validateField('platforms', selectedPlatforms.length > 0);
+            });
+            platformsContainer.appendChild(chip);
+        });
+        platformsHidden.value = JSON.stringify(selectedPlatforms);
+    }
+    if (platformsContainer && platformsHidden) renderPlatforms();
+
+    // Games chips + input
+    const defaultGames = ['Valorant','FIFA','Call of Duty','Fortnite','League of Legends','Dota 2','CS:GO'];
+    const gamesContainer = document.getElementById('gamesTags');
+    const gamesHidden = document.getElementById('id_games');
+    const gameInput = document.getElementById('gameInput');
+    const initialGames = {% if form.games.value %}JSON.parse('{{ form.games.value|escapejs }}'){% else %}[]{% endif %};
+    let selectedGames = Array.isArray(initialGames) ? initialGames : [];
+
+    function addGame(name) {
+        const value = (name || '').trim();
+        if (!value) return;
+        if (!selectedGames.includes(value)) {
+            selectedGames.push(value);
+            updateGames();
+        }
+    }
+    function removeGame(name) {
+        selectedGames = selectedGames.filter(g => g !== name);
+        updateGames();
+    }
+    function updateGames() {
+        gamesHidden.value = JSON.stringify(selectedGames);
+        validateField('games', selectedGames.length > 0);
+        renderGames();
+    }
+    function renderGames() {
+        gamesContainer.innerHTML = '';
+        const all = Array.from(new Set([...defaultGames, ...selectedGames]));
+        all.forEach(g => {
+            const chip = document.createElement('span');
+            const active = selectedGames.includes(g);
+            chip.className = 'chip' + (active ? ' active' : '');
+            chip.textContent = g;
+            if (active) {
+                const remove = document.createElement('span');
+                remove.className = 'remove';
+                remove.textContent = '×';
+                remove.addEventListener('click', (e) => { e.stopPropagation(); removeGame(g); });
+                chip.appendChild(remove);
+            }
+            chip.addEventListener('click', () => {
+                if (active) removeGame(g); else addGame(g);
+            });
+            gamesContainer.appendChild(chip);
+        });
+    }
+    if (gamesContainer && gamesHidden) {
+        renderGames();
+        if (gameInput) {
+            gameInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addGame(gameInput.value);
+                    gameInput.value = '';
+                }
+            });
+        }
+    }
+
+    // Profile picture upload (no preview)
+    const profilePicInput = document.getElementById('id_profile_picture');
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', function(e) {
+            // File selected, but no preview shown
+            console.log('Profile picture selected:', e.target.files[0]?.name);
+        });
+    }
+
+    // Validation helpers
     const fields = {
-        'username': document.getElementById('id_username'),
+        'custom_username': document.getElementById('id_custom_username'),
         'bio': document.getElementById('id_bio'),
         'date_of_birth': document.getElementById('id_date_of_birth'),
         'location': document.getElementById('id_location'),
         'platforms': document.getElementById('id_platforms'),
         'games': document.getElementById('id_games')
     };
-
-    // Add event listeners for validation
-    Object.entries(fields).forEach(([fieldName, field]) => {
-        if (field) {
-            field.addEventListener('input', function() {
-                if (fieldName === 'platforms' || fieldName === 'games') {
-                    // Handled by Selectize onChange
-                    return;
-                }
-                validateField(fieldName, field.value.trim() !== '');
-            });
-
-            field.addEventListener('blur', function() {
-                if (fieldName === 'platforms' || fieldName === 'games') {
-                    return;
-                }
-                validateField(fieldName, field.value.trim() !== '');
-            });
-        }
-    });
-
-    // Validate a field and show error if needed
     function validateField(fieldName, isValid) {
         const errorElement = document.getElementById(`${fieldName}-error`);
-        if (errorElement) {
-            errorElement.textContent = isValid ? '' : `${fieldName.replace('_', ' ')} is required`;
-        }
+        if (errorElement) errorElement.textContent = isValid ? '' : `${fieldName.replace('_', ' ')} is required`;
         return isValid;
     }
 
-    // Form submission
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        let isValid = true;
-
-        // Validate all fields
-        Object.entries(fields).forEach(([fieldName, field]) => {
-            if (fieldName === 'platforms' || fieldName === 'games') {
-                const value = JSON.parse(field.value || '[]');
-                isValid = validateField(fieldName, value.length > 0) && isValid;
-            } else {
-                isValid = validateField(fieldName, field.value.trim() !== '') && isValid;
+    // Function to update dashboard UI dynamically
+    function updateDashboardUI(data) {
+        // Update profile picture
+        const profilePictures = document.querySelectorAll('.profile-avatar, .sidebar-avatar, .profile-main-avatar');
+        profilePictures.forEach(img => {
+            if (data.profile_picture_url) {
+                img.src = data.profile_picture_url;
             }
         });
 
-        if (!isValid) {
-            showToast('Please fill in all required fields', 'error');
-            return;
+        // Update username displays
+        const usernameElements = document.querySelectorAll('.profile-name, .username, .sidebar-profile-info h4');
+        usernameElements.forEach(el => {
+            el.textContent = data.username; // This is already the custom_username from the response
+        });
+
+        // Update bio/title
+        const bioElements = document.querySelectorAll('.profile-title');
+        bioElements.forEach(el => {
+            el.textContent = data.bio && data.bio !== 'Bio' ? data.bio : 'Gaming Enthusiast';
+        });
+
+        // Update about text
+        const aboutElements = document.querySelectorAll('.about-text');
+        aboutElements.forEach(el => {
+            el.textContent = data.about && data.about !== 'About' ? data.about : 'Gaming enthusiast passionate about competitive play and community building.';
+        });
+
+        // Update location
+        const locationElements = document.querySelectorAll('.profile-location span');
+        locationElements.forEach(el => {
+            el.textContent = data.location && data.location !== 'Nairobi' ? data.location : 'Location not set';
+        });
+
+        // Update games in about section
+        const gamesElements = document.querySelectorAll('.about-details .detail-item:has(i.fa-gamepad) strong');
+        gamesElements.forEach(el => {
+            if (data.games && data.games.length > 0) {
+                el.textContent = data.games.join(', ');
+            } else {
+                el.textContent = 'No games added';
+            }
+        });
+
+        // Update platforms in about section
+        const platformsElements = document.querySelectorAll('.about-details .detail-item:has(i.fa-desktop) strong');
+        platformsElements.forEach(el => {
+            if (data.platforms && data.platforms.length > 0) {
+                el.textContent = data.platforms.join(', ');
+            } else {
+                el.textContent = 'No platforms added';
+            }
+        });
+
+        // Update games count in stats
+        const gamesCountElements = document.querySelectorAll('.stats-grid-horizontal .communities .stat-value');
+        gamesCountElements.forEach(el => {
+            el.textContent = data.platforms ? data.platforms.length : 0;
+        });
+
+        // Update recent activity
+        const activityElements = document.querySelectorAll('.activity-description');
+        activityElements.forEach(el => {
+            if (el.textContent.includes('Added') && data.games && data.games.length > 0) {
+                el.textContent = `Added ${data.games.length} game${data.games.length > 1 ? 's' : ''} to your profile`;
+            }
+        });
+
+        // Update activity stats
+        const activityStatsElements = document.querySelectorAll('.activity-stats .activity-stat');
+        activityStatsElements.forEach(el => {
+            if (el.textContent.includes('Game')) {
+                el.innerHTML = `<i class="fas fa-gamepad"></i><span>${data.games ? data.games.length : 0} Game${data.games && data.games.length > 1 ? 's' : ''}</span>`;
+            } else if (el.textContent.includes('Platform')) {
+                el.innerHTML = `<i class="fas fa-desktop"></i><span>${data.platforms ? data.platforms.length : 0} Platform${data.platforms && data.platforms.length > 1 ? 's' : ''}</span>`;
+            }
+        });
+
+        // Update games tab content if it exists
+        const gamesTabContent = document.querySelector('#games .game-carousel');
+        if (gamesTabContent && data.games && data.games.length > 0) {
+            gamesTabContent.innerHTML = data.games.map(game => `
+                <div class="game-card">
+                    <img src="{% static 'core/images/games.jpeg' %}" alt="${game}">
+                    <div class="game-info">
+                        <h4>${game}</h4>
+                        <p>Game • Active</p>
+                        <div class="game-footer">
+                            <div class="match-percentage">100% Match</div>
+                            <button class="btn btn-sm btn-outline-primary">Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        const formData = new FormData(form);
+        // Update empty states
+        const emptyStates = document.querySelectorAll('.empty-state');
+        emptyStates.forEach(emptyState => {
+            if (emptyState.textContent.includes('No games added yet') && data.games && data.games.length > 0) {
+                emptyState.style.display = 'none';
+            }
+        });
+    }
 
+    // Function to prevent modal closing when mandatory
+    function preventClose(e) {
+        if (e.target === modal) {
+            e.stopPropagation();
+        }
+    }
+    
+    // Submit
+    const form = document.getElementById('profileForm');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        let ok = true;
+        ok = (await checkAvailability()) && ok;
+        const bio = (fields.bio.value || '').trim();
+        if (bio.length < 10 || bio.length > 160) { document.getElementById('bio-error').textContent = 'Bio must be 10–160 characters'; ok = false; } else { document.getElementById('bio-error').textContent = ''; }
+        const aboutVal = (about ? about.value : '').trim();
+        if (aboutVal && (aboutVal.length < 30 || aboutVal.length > 500)) { showToast('About must be 30–500 characters if provided', 'error'); ok = false; }
+        if (selectedPlatforms.length === 0) { validateField('platforms', false); ok = false; }
+        if (selectedGames.length === 0) { validateField('games', false); ok = false; }
+        if (!ok) return;
+
+        const formData = new FormData(form);
+        
         try {
             const response = await fetch('{% url "users:complete_profile" %}', {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [null, ''])[1],
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-
             const data = await response.json();
-
             if (response.ok && data.success) {
                 // Store updated profile data
                 localStorage.setItem('updatedProfile', JSON.stringify({
                     profile_picture_url: data.profile_picture_url || '{% static 'core/images/player.jpeg' %}',
-                    username: data.username
+                    username: data.username,
+                    custom_username: data.custom_username,
+                    bio: data.bio,
+                    about: data.about,
+                    location: data.location,
+                    platforms: data.platforms,
+                    games: data.games
                 }));
-
-                // Close the modal
+                
+                // Mark profile as completed in localStorage if it's actually complete
+                if (data.profile_completed) {
+                    localStorage.setItem('profileCompleted', 'true');
+                }
+                
+                // Hide the modal if profile is completed
                 const modal = document.getElementById('profileCompletionModal');
-                if (modal) modal.classList.remove('show', 'mandatory');
-
-                // Show success message
+                if (modal && data.profile_completed) {
+                    // Immediately hide the modal
+                    modal.classList.remove('show', 'mandatory');
+                    modal.style.display = 'none';
+                    modal.style.visibility = 'hidden';
+                    modal.style.opacity = '0';
+                    
+                    // Remove mandatory restrictions
+                    modal.removeEventListener('click', preventClose);
+                    
+                    console.log('Modal hidden successfully');
+                }
+                
+                // Update dashboard UI dynamically
+                updateDashboardUI(data);
+                
                 showToast('Profile updated successfully!', 'success');
-
-                // Refresh UI
-                window.location.reload();
+                
+                // Don't redirect - just hide the modal and update the dashboard dynamically
+                console.log('Profile completion successful, modal hidden, dashboard updated');
             } else {
-                // Handle form errors
                 if (data.errors) {
                     for (const field in data.errors) {
                         const errorElement = document.getElementById(`${field}-error`);
-                        if (errorElement) {
-                            errorElement.textContent = data.errors[field][0];
-                        }
+                        if (errorElement) errorElement.textContent = data.errors[field][0];
                     }
                     showToast('Please correct the errors in the form', 'error');
                 } else {
@@ -289,4 +469,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-{% endblock %}

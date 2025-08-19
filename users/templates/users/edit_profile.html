@@ -1,10 +1,183 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-<body>
+{% extends 'core/base_minimal.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %} Edit Profile | GameHub {% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Edit Profile Header -->
+<section class="settings-header">
+    <div class="settings-header-content">
+        <div class="settings-header-info">
+            <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+            <p>Update your profile information and gaming preferences</p>
+        </div>
+        <div class="settings-header-actions">
+            <a href="{% url 'users:user_settings' %}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Back to Settings
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Edit Profile Content -->
+<div class="settings-content">
+    <div class="settings-section">
+        <div class="settings-section-header">
+            <h2><i class="fas fa-user-edit"></i> Profile Information</h2>
+            <p>Update your profile information and gaming preferences</p>
+        </div>
+        
+        <div class="settings-section-body">
+            <form method="post" enctype="multipart/form-data" class="settings-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update_profile">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_profile_picture">Profile Picture</label>
+                        <div class="profile-picture-upload">
+                            <div class="current-picture">
+                                <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
+                                     alt="Current Profile Picture" id="currentProfilePic">
+                            </div>
+                            <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
+                            <label for="id_profile_picture" class="upload-btn">
+                                <i class="fas fa-camera"></i> Change Picture
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_custom_username">Username</label>
+                        <input type="text" name="custom_username" id="id_custom_username" 
+                               value="{{ profile_form.custom_username.value|default_if_none:'' }}" required>
+                        <small>This is your unique username on GameHub</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_bio">Bio</label>
+                        <input type="text" name="bio" id="id_bio" 
+                               value="{{ profile_form.bio.value|default_if_none:'' }}" required>
+                        <small>A short description about yourself</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_location">Location</label>
+                        <input type="text" name="location" id="id_location" 
+                               value="{{ profile_form.location.value|default_if_none:'' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_date_of_birth">Date of Birth</label>
+                        <input type="date" name="date_of_birth" id="id_date_of_birth" 
+                               value="{{ profile_form.date_of_birth.value|date:'Y-m-d' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_about">About</label>
+                    <textarea name="about" id="id_about" rows="4">{{ profile_form.about.value|default_if_none:'' }}</textarea>
+                    <small>Tell us more about yourself (optional)</small>
+                </div>
+
+                <!-- About Preview Section -->
+                <div class="about-preview-section">
+                    <h3><i class="fas fa-eye"></i> About Preview</h3>
+                    <div class="about-preview-content">
+                        <p class="about-preview-text" id="aboutPreviewText">
+                            {% if user.about and user.about != "About" and user.about != "" %}
+                                {{ user.about }}
+                            {% else %}
+                                Gaming enthusiast passionate about competitive play and community building.
+                            {% endif %}
+                        </p>
+                        <div class="about-preview-details">
+                            <div class="preview-detail-item">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span>Joined GameHub: <strong>{{ user_stats.join_date }}</strong></span>
+                            </div>
+                            {% if user_stats.age %}
+                            <div class="preview-detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Age: <strong>{{ user_stats.age }} years old</strong></span>
+                            </div>
+                            {% endif %}
+                            <div class="preview-detail-item">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Main Games: <strong>{% if user.games and user.games|length > 0 %}{{ user.games|join:", " }}{% else %}No games added{% endif %}</strong></span>
+                            </div>
+                            <div class="preview-detail-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>Platforms: <strong>{% if user.platforms and user.platforms|length > 0 %}{{ user.platforms|join:", " }}{% else %}No platforms added{% endif %}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Platforms</label>
+                    <div class="platforms-grid">
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="pc" 
+                                   {% if 'pc' in user.platforms %}checked{% endif %}>
+                            <span class="platform-label">PC</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="playstation" 
+                                   {% if 'playstation' in user.platforms %}checked{% endif %}>
+                            <span class="platform-label">PlayStation</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="xbox" 
+                                   {% if 'xbox' in user.platforms %}checked{% endif %}>
+                            <span class="platform-label">Xbox</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="nintendo" 
+                                   {% if 'nintendo' in user.platforms %}checked{% endif %}>
+                            <span class="platform-label">Nintendo Switch</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="mobile" 
+                                   {% if 'mobile' in user.platforms %}checked{% endif %}>
+                            <span class="platform-label">Mobile</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="games_input">Games</label>
+                    <div class="games-input-container">
+                        <input type="text" id="games_input" placeholder="Type a game and press Enter">
+                        <div class="selected-games" id="selectedGames">
+                            {% for game in user.games %}
+                                <span class="game-tag">{{ game }} <i class="fas fa-times remove-game" data-game="{{ game }}"></i></span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <input type="hidden" name="games" id="id_games" value="{{ user.games|join:',' }}">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a href="{% url 'users:user_settings' %}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dashboard_js %}
+    <script src="{% static 'users/js/settings.js' %}"></script>
+{% endblock %}

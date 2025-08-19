@@ -1,20 +1,24 @@
 {% extends 'core/base_minimal.html' %}
 {% load static %}
 
-{% block title %} User Dashboard | GuildSpace {% endblock %}
+{% block title %} User Dashboard | GameHub {% endblock %}
 
 {% block dashboard_css %}
     <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
 	<link rel="stylesheet" href="{% static 'users/css/modal.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
 {% endblock %}
 
 {% block content %}
-<div id="profileCompletionModal" class="modal {% if not user.bio or not user.profile_picture %}show{% endif %}">
+<div id="profileCompletionModal" class="modal {% if not user.is_profile_complete %}show mandatory{% endif %}">
     <div class="modal-content">
         <div class="modal-header">
             <h3>Complete Your Profile</h3>
-            <p>Please fill in your profile details to continue using GuildSpace</p>
+            <p>Please fill in your profile details to continue using GameHub</p>
+            <button class="modal-close" onclick="closeProfileModal()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             {% include 'users/profile_completion.html' %}
@@ -28,26 +32,27 @@
         <div class="profile-cover-overlay"></div>
         <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
         <div class="profile-avatar-wrapper">
-            img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
+            <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
                  alt="Profile Avatar" class="profile-main-avatar">
-            <button class="edit-avatar-btn" aria-label="Edit profile picture">
+            <button class="edit-avatar-btn" aria-label="Edit profile picture" onclick="document.getElementById('profileCompletionModal').classList.add('show')">
                 <i class="fas fa-camera"></i>
             </button>
+            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
         </div>
     </div>
 
     <div class="profile-header-content">
         <div class="profile-header-info">
             <div class="profile-name-wrapper">
-                <h1 class="profile-name">{{ user.username }}</h1>
+                <h1 class="profile-name">{{ display_username }}</h1>
                 <span class="verified-badge" title="Verified Account">
                     <i class="fas fa-check-circle"></i>
                 </span>
             </div>
-            <p class="profile-title">Pro Gamer | Valorant Specialist</p>
+            <p class="profile-title">{% if user.bio and user.bio != "Bio" and user.bio != "" %}{{ user.bio }}{% else %}Gaming Enthusiast{% endif %}</p>
             <div class="profile-location">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>Los Angeles, CA</span>
+                <span>{% if user.location and user.location != "Nairobi" and user.location != "" %}{{ user.location }}{% else %}Location not set{% endif %}</span>
             </div>
         </div>
 
@@ -71,7 +76,7 @@
         </button>
         <button class="profile-tab" data-tab="games">
             <i class="fas fa-gamepad"></i>
-            <span>My Games <span class="badge">3</span></span>
+            <span>My Games <span class="badge">{{ user_stats.games_count }}</span></span>
         </button>
         <button class="profile-tab" data-tab="competitions">
             <i class="fas fa-trophy"></i>
@@ -183,8 +188,8 @@
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="stat-text">
-                            <div class="stat-value">5</div>
-                            <div class="stat-label">Communities</div>
+                            <div class="stat-value">{{ user_stats.platforms_count }}</div>
+                            <div class="stat-label">Platforms</div>
                         </div>
                     </div>
                 </div>
@@ -195,40 +200,7 @@
     <div class="dashboard-grid">
         <!-- Left Column -->
         <div class="main-column">
-            <!-- About Section -->
-            <section class="profile-card">
-                <div class="card-header">
-                    <h2>
-                        <i class="fas fa-info-circle"></i>
-                        <span>About</span>
-                    </h2>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                </div>
-                <div class="card-body">
-                    <div class="about-content">
-                        <p class="about-text">Professional gamer specializing in FPS and sports games. Currently competing in Valorant Champions Tour and FIFA eWorld Cup qualifiers.</p>
 
-                        <div class="about-details">
-                            <div class="detail-item">
-                                <i class="fas fa-birthday-cake"></i>
-                                <span>Joined GuildSpace: <strong>March 2021</strong></span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-globe"></i>
-                                <span><a href="#" class="text-link">twitch.tv/marcking</a></span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-gamepad"></i>
-                                <span>Main Games: <strong>Valorant, FIFA 23, CS:GO</strong></span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-trophy"></i>
-                                <span>Highest Rank: <strong>Radiant (Valorant)</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- Recent Activity -->
             <section class="profile-card">
@@ -243,53 +215,55 @@
                     <div class="activity-feed">
                         <div class="activity-item">
                             <div class="activity-icon">
-                                <img src="{% static 'core/images/valorant-icon.png' %}" alt="Valorant">
+                                <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
                             </div>
                             <div class="activity-content">
-                                <h3 class="activity-title">Won Valorant Weekly Competition</h3>
-                                <p class="activity-meta">Yesterday at 9:42 PM</p>
-                                <p class="activity-description">Finished first place in the weekly Valorant competition with a 5-0 record!</p>
+                                <h3 class="activity-title">Profile Updated</h3>
+                                <p class="activity-meta">{{ user_stats.join_date }}</p>
+                                <p class="activity-description">{% if user.games and user.games|length > 0 %}Added {{ user.games|length }} game{{ user.games|length|pluralize }} to your profile{% else %}Started your gaming journey{% endif %}</p>
                                 <div class="activity-stats">
                                     <span class="activity-stat">
-                                        <i class="fas fa-trophy"></i>
-                                        <span>1st Place</span>
+                                        <i class="fas fa-gamepad"></i>
+                                        <span>{% if user.games and user.games|length > 0 %}{{ user.games|length }} Game{{ user.games|length|pluralize }}{% else %}No Games{% endif %}</span>
                                     </span>
                                     <span class="activity-stat">
-                                        <i class="fas fa-coins"></i>
-                                        <span>$1,200 Prize</span>
+                                        <i class="fas fa-desktop"></i>
+                                        <span>{% if user.platforms and user.platforms|length > 0 %}{{ user.platforms|length }} Platform{{ user.platforms|length|pluralize }}{% else %}No Platforms{% endif %}</span>
                                     </span>
                                 </div>
                                 <div class="activity-actions">
-                                    <button class="btn-like"><i class="far fa-heart"></i> 24</button>
-                                    <button class="btn-comment"><i class="far fa-comment"></i> 8</button>
+                                    <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                                    <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
                                 </div>
                             </div>
                         </div>
 
+                        {% if user.games and user.games|length > 0 %}
                         <div class="activity-item">
                             <div class="activity-icon">
-                                <img src="{% static 'core/images/fifa-icon.png' %}" alt="FIFA">
+                                <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
                             </div>
                             <div class="activity-content">
-                                <h3 class="activity-title">Posted in FIFA Pros Community</h3>
-                                <p class="activity-meta">2 days ago</p>
-                                <p class="activity-description">"Looking for teammates for the upcoming FIFA 23 Global Series qualifiers. Must be Division 1 or Elite."</p>
+                                <h3 class="activity-title">Games Added to Profile</h3>
+                                <p class="activity-meta">{{ user_stats.join_date }}</p>
+                                <p class="activity-description">"{% for game in user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}"</p>
                                 <div class="activity-stats">
                                     <span class="activity-stat">
-                                        <i class="fas fa-comment"></i>
-                                        <span>12 Comments</span>
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Profile Complete</span>
                                     </span>
                                     <span class="activity-stat">
-                                        <i class="fas fa-heart"></i>
-                                        <span>24 Likes</span>
+                                        <i class="fas fa-star"></i>
+                                        <span>Ready to Play</span>
                                     </span>
                                 </div>
                                 <div class="activity-actions">
-                                    <button class="btn-like"><i class="far fa-heart"></i> 24</button>
-                                    <button class="btn-comment"><i class="far fa-comment"></i> 12</button>
+                                    <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                                    <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </section>
@@ -306,37 +280,46 @@
                     </h2>
                 </div>
                 <div class="card-body">
+                    {% if featured_game and featured_game.name %}
                     <div class="featured-game-card">
                         <div class="game-banner-container">
-                            <img src="{% static 'core/images/valorant-banner.jpg' %}" alt="Valorant" class="game-banner">
+                            <img src="{% static 'core/images/games.jpeg' %}" alt="{{ featured_game.name }}" class="game-banner">
                         </div>
                         <div class="game-info-container">
-                            <h3 class="game-title">Valorant</h3>
+                            <h3 class="game-title">{{ featured_game.name }}</h3>
                             <div class="game-stats-grid">
                                 <div class="game-stat">
-                                    <span class="stat-value">1,250</span>
+                                    <span class="stat-value">{{ featured_game.hours_played|floatformat:0 }}</span>
                                     <span class="stat-label">Hours Played</span>
                                 </div>
                                 <div class="game-stat">
-                                    <span class="stat-value">87%</span>
+                                    <span class="stat-value">{{ featured_game.win_rate }}%</span>
                                     <span class="stat-label">Win Rate</span>
                                 </div>
                                 <div class="game-stat">
-                                    <span class="stat-value">24</span>
+                                    <span class="stat-value">{{ featured_game.competitions }}</span>
                                     <span class="stat-label">Competitions</span>
                                 </div>
                             </div>
                             <div class="game-rank-card">
                                 <div class="rank-icon-container">
-                                    <img src="{% static 'core/images/valorant-radiant.png' %}" alt="Radiant Rank" class="rank-icon">
+                                    <img src="{% static 'core/images/trophy.jpeg' %}" alt="{{ featured_game.rank }} Rank" class="rank-icon">
                                 </div>
                                 <div class="rank-info">
-                                    <span class="rank-name">Radiant</span>
-                                    <span class="rank-position">Top 0.1%</span>
+                                    <span class="rank-name">{{ featured_game.rank }}</span>
+                                    <span class="rank-position">Top Player</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>No games added yet</h3>
+                        <p>Add your favorite games to see them featured here</p>
+                        <button class="btn btn-primary mt-3" onclick="document.getElementById('profileCompletionModal').classList.add('show')">Add Games</button>
+                    </div>
+                    {% endif %}
                 </div>
             </section>
 
@@ -353,28 +336,44 @@
                     <div class="achievements-list">
                         <div class="achievement-item">
                             <div class="achievement-badge gold">
-                                <i class="fas fa-trophy"></i>
+                                <i class="fas fa-user-check"></i>
                             </div>
                             <div class="achievement-details">
-                                <h4 class="achievement-title">Valorant Weekly Champion</h4>
-                                <p class="achievement-date">Yesterday</p>
+                                <h4 class="achievement-title">Profile Completion</h4>
+                                <p class="achievement-date">{{ user_stats.join_date }}</p>
                                 <div class="achievement-game">
-                                    <img src="{% static 'core/images/valorant-icon.png' %}" alt="Valorant">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
                                 </div>
                             </div>
                         </div>
+                        {% if user.games and user.games|length > 0 %}
                         <div class="achievement-item">
                             <div class="achievement-badge silver">
-                                <i class="fas fa-medal"></i>
+                                <i class="fas fa-gamepad"></i>
                             </div>
                             <div class="achievement-details">
-                                <h4 class="achievement-title">FIFA Regional Runner-Up</h4>
-                                <p class="achievement-date">1 week ago</p>
+                                <h4 class="achievement-title">Game Collector</h4>
+                                <p class="achievement-date">{{ user_stats.join_date }}</p>
                                 <div class="achievement-game">
-                                    <img src="{% static 'core/images/fifa-icon.png' %}" alt="FIFA">
+                                    <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if user.platforms and user.platforms|length > 0 %}
+                        <div class="achievement-item">
+                            <div class="achievement-badge bronze">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div class="achievement-details">
+                                <h4 class="achievement-title">Multi-Platform Gamer</h4>
+                                <p class="achievement-date">{{ user_stats.join_date }}</p>
+                                <div class="achievement-game">
+                                    <img src="{% static 'core/images/ps5.jpeg' %}" alt="Platforms">
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </section>
@@ -392,41 +391,30 @@
             </h2>
         </div>
         <div class="card-body">
+            {% if user.games and user.games|length > 0 and user.games.0 %}
             <div class="game-carousel">
+                {% for game in user.games %}
                 <div class="game-card">
-                    <img src="{% static 'core/images/valorant-banner.jpg' %}" alt="Valorant">
+                    <img src="{% static 'core/images/games.jpeg' %}" alt="{{ game }}">
                     <div class="game-info">
-                        <h4>Valorant</h4>
-                        <p>FPS • 5v5</p>
+                        <h4>{{ game }}</h4>
+                        <p>Game • Active</p>
                         <div class="game-footer">
-                            <div class="match-percentage">92% Match</div>
+                            <div class="match-percentage">100% Match</div>
                             <button class="btn btn-sm btn-outline-primary">Details</button>
                         </div>
                     </div>
                 </div>
-                <div class="game-card">
-                    <img src="{% static 'core/images/tekken-banner.jpg' %}" alt="Tekken">
-                    <div class="game-info">
-                        <h4>Tekken 8</h4>
-                        <p>Fighting • 1v1</p>
-                        <div class="game-footer">
-                            <div class="match-percentage">85% Match</div>
-                            <button class="btn btn-sm btn-outline-primary">Details</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="game-card">
-                    <img src="{% static 'core/images/fifa-banner.jpg' %}" alt="FIFA">
-                    <div class="game-info">
-                        <h4>FIFA 23</h4>
-                        <p>Sports • 1v1/2v2</p>
-                        <div class="game-footer">
-                            <div class="match-percentage">78% Match</div>
-                            <button class="btn btn-sm btn-outline-primary">Details</button>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-gamepad"></i>
+                <h3>No games added yet</h3>
+                <p>Add your favorite games to see them here</p>
+                <button class="btn btn-primary mt-3" onclick="document.getElementById('profileCompletionModal').classList.add('show')">Add Games</button>
+            </div>
+            {% endif %}
         </div>
     </section>
 </div>
@@ -522,6 +510,35 @@
 {% endblock %}
 
 {% block dashboard_js %}
-    <script src="{% static 'users/js/dashboard.js' %}"></script>
+    <script src="{% static 'users/js/modal.js' %}"></script>
     <script src="{% static 'users/js/profile.js' %}"></script>
+    <script src="{% static 'users/js/dashboard.js' %}"></script>
+    <script>
+        function closeProfileModal() {
+            const modal = document.getElementById('profileCompletionModal');
+            if (modal && !modal.classList.contains('mandatory')) {
+                modal.classList.remove('show');
+            }
+        }
+        
+        // Prevent closing mandatory modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('profileCompletionModal');
+            if (modal && modal.classList.contains('mandatory')) {
+                // Prevent closing by clicking outside
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        e.stopPropagation();
+                    }
+                });
+                
+                // Prevent closing with ESC key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modal.classList.contains('mandatory')) {
+                        e.preventDefault();
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

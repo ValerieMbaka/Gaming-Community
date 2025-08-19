@@ -23,3 +23,5 @@ def initialize_firebase():
 
 # Initialize immediately
 default_app = initialize_firebase()
+if not default_app:
+    print("🔥 Critical: Firebase initialization failed!")

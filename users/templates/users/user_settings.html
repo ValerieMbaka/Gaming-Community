@@ -1,0 +1,309 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %} Settings | GameHub {% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Settings Header -->
+<section class="settings-header">
+    <div class="settings-header-content">
+        <div class="settings-header-info">
+            <h1><i class="fas fa-cog"></i> Settings</h1>
+            <p>Manage your account, profile, and preferences</p>
+        </div>
+        <div class="settings-header-actions">
+            <a href="{% url 'users:user_dashboard' %}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Settings Navigation -->
+<nav class="settings-nav">
+    <div class="settings-nav-inner">
+        <button class="settings-nav-item active" data-tab="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </button>
+        <button class="settings-nav-item" data-tab="security">
+            <i class="fas fa-shield-alt"></i>
+            <span>Security</span>
+        </button>
+        <button class="settings-nav-item" data-tab="preferences">
+            <i class="fas fa-sliders-h"></i>
+            <span>Preferences</span>
+        </button>
+        <button class="settings-nav-item" data-tab="danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Danger Zone</span>
+        </button>
+    </div>
+</nav>
+
+<!-- Profile Summary Section -->
+<section class="profile-summary">
+    <div class="profile-summary-content">
+        <div class="profile-summary-header">
+            <div class="profile-summary-avatar">
+                <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
+                     alt="Profile Picture">
+            </div>
+            <div class="profile-summary-info">
+                <h2>{{ user.display_name }}</h2>
+                <p class="profile-summary-email">{{ user.email }}</p>
+                <div class="profile-summary-stats">
+                    <span class="stat-item">
+                        <i class="fas fa-gamepad"></i>
+                        {{ user_stats.games_count }} Games
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-desktop"></i>
+                        {{ user_stats.platforms_count }} Platforms
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        Joined {{ user_stats.join_date }}
+                    </span>
+                </div>
+            </div>
+                         <div class="profile-summary-actions">
+                 <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">
+                     <i class="fas fa-edit"></i>
+                     Edit Profile
+                 </a>
+             </div>
+        </div>
+        <div class="profile-summary-details">
+            <div class="summary-detail-item">
+                <i class="fas fa-user"></i>
+                <span><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</span>
+            </div>
+            <div class="summary-detail-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span><strong>Location:</strong> {{ user.location|default:"Not set" }}</span>
+            </div>
+            <div class="summary-detail-item">
+                <i class="fas fa-info-circle"></i>
+                <span><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</span>
+            </div>
+            {% if user.games %}
+            <div class="summary-detail-item">
+                <i class="fas fa-gamepad"></i>
+                <span><strong>Games:</strong> {{ user.games|join:", " }}</span>
+            </div>
+            {% endif %}
+            {% if user.platforms %}
+            <div class="summary-detail-item">
+                <i class="fas fa-desktop"></i>
+                <span><strong>Platforms:</strong> {{ user.platforms|join:", " }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Settings Content -->
+<div class="settings-content">
+    <!-- Profile Settings Tab -->
+    <div class="settings-tab-content active" id="profile">
+        <div class="settings-section">
+            <div class="settings-section-header">
+                <h2><i class="fas fa-user"></i> Profile Overview</h2>
+                <p>View your profile information and manage your account</p>
+            </div>
+            
+            <div class="settings-section-body">
+                <div class="profile-overview">
+                    <div class="profile-overview-content">
+                        <div class="profile-overview-item">
+                            <h3><i class="fas fa-info-circle"></i> Profile Status</h3>
+                            <p>Your profile is {% if user.profile_completed %}complete{% else %}incomplete{% endif %}. 
+                            {% if not user.profile_completed %}Complete your profile to unlock all features.{% endif %}</p>
+                        </div>
+                        
+                        <div class="profile-overview-item">
+                            <h3><i class="fas fa-edit"></i> Edit Profile</h3>
+                            <p>Update your profile information, gaming preferences, and personal details.</p>
+                            <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Go to Edit Profile
+                            </a>
+                        </div>
+                        
+                        <div class="profile-overview-item">
+                            <h3><i class="fas fa-eye"></i> Profile Preview</h3>
+                            <div class="profile-preview-card">
+                                <div class="preview-header">
+                                    <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
+                                         alt="Profile Picture" class="preview-avatar">
+                                    <div class="preview-info">
+                                        <h4>{{ user.display_name }}</h4>
+                                        <p>{{ user.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="preview-details">
+                                    <p><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</p>
+                                    <p><strong>Location:</strong> {{ user.location|default:"Not set" }}</p>
+                                    <p><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</p>
+                                    {% if user.games %}
+                                    <p><strong>Games:</strong> {{ user.games|join:", " }}</p>
+                                    {% endif %}
+                                    {% if user.platforms %}
+                                    <p><strong>Platforms:</strong> {{ user.platforms|join:", " }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Settings Tab -->
+    <div class="settings-tab-content" id="security">
+        <div class="settings-section">
+            <div class="settings-section-header">
+                <h2><i class="fas fa-shield-alt"></i> Security Settings</h2>
+                <p>Manage your password and account security</p>
+            </div>
+            
+            <div class="settings-section-body">
+                <form method="post" class="settings-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="change_password">
+                    
+                    <div class="form-group">
+                        <label for="current_password">Current Password</label>
+                        <div class="password-input-group">
+                            <input type="password" name="current_password" id="current_password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('current_password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <div class="password-input-group">
+                            <input type="password" name="new_password" id="new_password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('new_password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small>Password must be at least 6 characters long</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <div class="password-input-group">
+                            <input type="password" name="confirm_password" id="confirm_password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preferences Settings Tab -->
+    <div class="settings-tab-content" id="preferences">
+        <div class="settings-section">
+            <div class="settings-section-header">
+                <h2><i class="fas fa-sliders-h"></i> Preferences</h2>
+                <p>Customize your GameHub experience</p>
+            </div>
+            
+            <div class="settings-section-body">
+                <div class="preferences-grid">
+                    <div class="preference-item">
+                        <div class="preference-info">
+                            <h3>Dark Mode</h3>
+                            <p>Use dark theme for better gaming experience</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="settingsDarkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danger Zone Tab -->
+    <div class="settings-tab-content" id="danger">
+        <div class="settings-section danger-zone">
+            <div class="settings-section-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+                <p>Irreversible and destructive actions</p>
+            </div>
+            
+            <div class="settings-section-body">
+                <div class="danger-actions">
+                    <div class="danger-action">
+                        <div class="danger-action-info">
+                            <h3>Delete Account</h3>
+                            <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="showDeleteModal()">
+                            <i class="fas fa-trash"></i> Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div id="deleteAccountModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
+        </div>
+        <div class="modal-body">
+            <p><strong>Warning:</strong> This action cannot be undone. All your data will be permanently deleted.</p>
+            <form method="post" class="delete-account-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete_account">
+                <div class="form-group">
+                    <label for="delete_password">Enter your password to confirm</label>
+                    <div class="password-input-group">
+                        <input type="password" name="password" id="delete_password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('delete_password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Permanently Delete Account
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="hideDeleteModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dashboard_js %}
+    <script src="{% static 'users/js/settings.js' %}"></script>
+{% endblock %}

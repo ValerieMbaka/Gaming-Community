@@ -56,109 +56,14 @@
 {% endblock %}
 
 {% block extra_scripts %}
-    <script src="{% static 'users/js/auth_scripts.js' %}"></script>
+    <script src="{% static 'users/js/auth_script.js' %}"></script>
     <script src="{% static 'users/js/toast.js' %}"></script>
 
-	<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import {
-        getAuth,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const remember = document.querySelector('input[name="remember"]').checked;
-
-        try {
-            showToast('Authenticating...', 'info');
-
-            // 1. Sign in with Firebase client SDK
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            // 2. Get ID token
-            const idToken = await user.getIdToken();
-
-            // 3. Verify with Django backend
-            const response = await fetch('{% url "users:login" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({
-                    id_token: idToken,
-                    remember: remember
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Authentication failed');
-            }
-
-            showToast('Login successful!', 'success');
-
-            // Redirect based on profile completion
-            setTimeout(() => {
-                window.location.href = data.profile_complete ?
-                    data.redirect_url :
-                    '{% url "users:complete_profile" %}';
-            }, 1500);
-
-        } catch (error) {
-            console.error('Login error:', error);
-
-            let errorMessage = 'Login failed. Please try again.';
-
-            // Handle specific Firebase errors
-            switch(error.code) {
-                case 'auth/invalid-credential':
-                    errorMessage = 'Invalid email or password';
-                    break;
-                case 'auth/user-not-found':
-                    errorMessage = 'No account found with this email';
-                    break;
-                case 'auth/wrong-password':
-                    errorMessage = 'Incorrect password';
-                    break;
-                case 'auth/too-many-requests':
-                    errorMessage = 'Account temporarily locked due to too many attempts';
-                    break;
-            }
-
-            showToast(errorMessage, 'error');
-        }
-    });
-</script>
-
-    <!-- <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-        // In both login.html and register.html
-const firebaseConfig = {
-    apiKey: "AIzaSyDvhr0sUXXVlt8inK-i9JttepuCX59Y9LE",
-    authDomain: "django-4c5e9.firebaseapp.com",
-    projectId: "django-4c5e9",
-    storageBucket: "django-4c5e9.appspot.com",  // Changed from firebasestorage.app
-    messagingSenderId: "748834554329",
-    appId: "1:748834554329:web:a5cb30ea9e7583e5cd99c8",
-    measurementId: "G-JSHRP5E2GB"
-};
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    <script type="module">
+        import {
+            auth,
+            signInWithEmailAndPassword
+        } from "{% static 'users/js/firebase-init.js' %}";
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -170,18 +75,20 @@ const firebaseConfig = {
             try {
                 showToast('Authenticating...', 'info');
 
+                // 1. Sign in with Firebase client SDK
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+        const user = userCredential.user;
+        console.log("Firebase user signed in:", user);
 
-                // Get the ID token
+                // 2. Get ID token
                 const idToken = await user.getIdToken();
 
-                // Submit to Django backend
+                // 3. Verify with Django backend
                 const response = await fetch('{% url "users:login" %}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
+                        'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [null, ''])[1]
                     },
                     body: JSON.stringify({
                         id_token: idToken,
@@ -189,26 +96,48 @@ const firebaseConfig = {
                     })
                 });
 
-                const data = await response.json();
+				console.log("Response status:", response.status);
 
-                if (data.success) {
-                    showToast('Login successful!', 'success');
 
-                    // Redirect after a short delay
-                    setTimeout(() => {
-                        if (data.profile_complete) {
-                            window.location.href = data.redirect_url;
-                        } else {
-                            window.location.href = '{% url "users:complete_profile" %}';
-                        }
-                    }, 1500);
-                } else {
-                    throw new Error(data.message || 'Login failed');
+                if (!response.ok) {
+					const errorData = await response.json();
+            console.error("Backend error details:", errorData);
+            throw new Error(errorData.message || 'Authentication failed');
                 }
+
+				const data = await response.json();
+				console.log("Login successful, response data:", data);
+
+                showToast('Login successful!', 'success');
+
+                // Always go to dashboard; dashboard will show the profile completion modal if needed
+                setTimeout(() => {
+                    window.location.href = data.redirect_url;
+                }, 800);
+
             } catch (error) {
-                console.error(error);
-                showToast(error.message, 'error');
+                console.error('Full Login error:', error);
+
+                let errorMessage = 'Login failed. Please try again.';
+
+                // Handle specific Firebase errors
+                switch(error.code) {
+                    case 'auth/invalid-credential':
+                        errorMessage = 'Invalid email or password';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'No account found with this email';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Incorrect password';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'Account temporarily locked due to too many attempts';
+                        break;
+                }
+
+                showToast(errorMessage, 'error');
             }
         });
-    </script> -->
+    </script>
 {% endblock %}
