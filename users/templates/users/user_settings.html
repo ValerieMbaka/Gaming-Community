@@ -47,123 +47,73 @@
     </div>
 </nav>
 
-<!-- Profile Summary Section -->
-<section class="profile-summary">
-    <div class="profile-summary-content">
-        <div class="profile-summary-header">
-            <div class="profile-summary-avatar">
-                <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
-                     alt="Profile Picture">
-            </div>
-            <div class="profile-summary-info">
-                <h2>{{ user.display_name }}</h2>
-                <p class="profile-summary-email">{{ user.email }}</p>
-                <div class="profile-summary-stats">
-                    <span class="stat-item">
-                        <i class="fas fa-gamepad"></i>
-                        {{ user_stats.games_count }} Games
-                    </span>
-                    <span class="stat-item">
-                        <i class="fas fa-desktop"></i>
-                        {{ user_stats.platforms_count }} Platforms
-                    </span>
-                    <span class="stat-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        Joined {{ user_stats.join_date }}
-                    </span>
-                </div>
-            </div>
-                         <div class="profile-summary-actions">
-                 <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">
-                     <i class="fas fa-edit"></i>
-                     Edit Profile
-                 </a>
-             </div>
-        </div>
-        <div class="profile-summary-details">
-            <div class="summary-detail-item">
-                <i class="fas fa-user"></i>
-                <span><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</span>
-            </div>
-            <div class="summary-detail-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span><strong>Location:</strong> {{ user.location|default:"Not set" }}</span>
-            </div>
-            <div class="summary-detail-item">
-                <i class="fas fa-info-circle"></i>
-                <span><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</span>
-            </div>
-            {% if user.games %}
-            <div class="summary-detail-item">
-                <i class="fas fa-gamepad"></i>
-                <span><strong>Games:</strong> {{ user.games|join:", " }}</span>
-            </div>
-            {% endif %}
-            {% if user.platforms %}
-            <div class="summary-detail-item">
-                <i class="fas fa-desktop"></i>
-                <span><strong>Platforms:</strong> {{ user.platforms|join:", " }}</span>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</section>
+
 
 <!-- Settings Content -->
 <div class="settings-content">
     <!-- Profile Settings Tab -->
     <div class="settings-tab-content active" id="profile">
-        <div class="settings-section">
-            <div class="settings-section-header">
-                <h2><i class="fas fa-user"></i> Profile Overview</h2>
-                <p>View your profile information and manage your account</p>
-            </div>
-            
-            <div class="settings-section-body">
-                <div class="profile-overview">
-                    <div class="profile-overview-content">
-                        <div class="profile-overview-item">
-                            <h3><i class="fas fa-info-circle"></i> Profile Status</h3>
-                            <p>Your profile is {% if user.profile_completed %}complete{% else %}incomplete{% endif %}. 
-                            {% if not user.profile_completed %}Complete your profile to unlock all features.{% endif %}</p>
-                        </div>
-                        
-                        <div class="profile-overview-item">
-                            <h3><i class="fas fa-edit"></i> Edit Profile</h3>
-                            <p>Update your profile information, gaming preferences, and personal details.</p>
-                            <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">
-                                <i class="fas fa-edit"></i> Go to Edit Profile
-                            </a>
-                        </div>
-                        
-                        <div class="profile-overview-item">
-                            <h3><i class="fas fa-eye"></i> Profile Preview</h3>
-                            <div class="profile-preview-card">
-                                <div class="preview-header">
-                                    <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
-                                         alt="Profile Picture" class="preview-avatar">
-                                    <div class="preview-info">
-                                        <h4>{{ user.display_name }}</h4>
-                                        <p>{{ user.email }}</p>
-                                    </div>
-                                </div>
-                                <div class="preview-details">
-                                    <p><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</p>
-                                    <p><strong>Location:</strong> {{ user.location|default:"Not set" }}</p>
-                                    <p><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</p>
-                                    {% if user.games %}
-                                    <p><strong>Games:</strong> {{ user.games|join:", " }}</p>
-                                    {% endif %}
-                                    {% if user.platforms %}
-                                    <p><strong>Platforms:</strong> {{ user.platforms|join:", " }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
+        <!-- Profile Summary Section -->
+        <section class="profile-summary">
+            <div class="profile-summary-content">
+                <div class="profile-summary-header">
+                    <div class="profile-summary-avatar">
+                        <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
+                             alt="Profile Picture">
+                    </div>
+                    <div class="profile-summary-info">
+                        <h2>{{ user.display_name }}</h2>
+                        <p class="profile-summary-email">{{ user.email }}</p>
+                        <div class="profile-summary-stats">
+                            <span class="stat-item">
+                                <i class="fas fa-gamepad"></i>
+                                {{ user_stats.games_count }} Games
+                            </span>
+                            <span class="stat-item">
+                                <i class="fas fa-desktop"></i>
+                                {{ user_stats.platforms_count }} Platforms
+                            </span>
+                            <span class="stat-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                Joined {{ user_stats.join_date }}
+                            </span>
                         </div>
                     </div>
+                    <div class="profile-summary-actions">
+                        <a href="{% url 'users:edit_profile' %}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="profile-summary-details">
+                    <div class="summary-detail-item">
+                        <i class="fas fa-user"></i>
+                        <span><strong>Username:</strong> {{ user.custom_username|default:"Not set" }}</span>
+                    </div>
+                    <div class="summary-detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span><strong>Location:</strong> {{ user.location|default:"Not set" }}</span>
+                    </div>
+                    <div class="summary-detail-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span><strong>Bio:</strong> {{ user.bio|default:"Not set" }}</span>
+                    </div>
+                    {% if user.games %}
+                    <div class="summary-detail-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span><strong>Games:</strong> {{ user.games|join:", " }}</span>
+                    </div>
+                    {% endif %}
+                    {% if user.platforms %}
+                    <div class="summary-detail-item">
+                        <i class="fas fa-desktop"></i>
+                        <span><strong>Platforms:</strong> {{ user.platforms|join:", " }}</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <!-- Security Settings Tab -->

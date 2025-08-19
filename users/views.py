@@ -354,13 +354,11 @@ def user_settings(request):
             # Handle account deletion
             password = request.POST.get('password')
             if password:
-                # Verify password before deletion
                 try:
-                    # For Firebase users, we'd need to verify with Firebase
-                    # For now, we'll just delete the Django user
+                    # Delete the user from Django database
                     user.delete()
                     logout(request)
-                    messages.success(request, "Your account has been permanently deleted.")
+                    messages.success(request, "Account deleted successfully")
                     return redirect('core:home')
                 except Exception as e:
                     messages.error(request, f"Error deleting account: {str(e)}")
@@ -418,10 +416,43 @@ def edit_profile(request):
             form = ProfileCompletionForm(request.POST, request.FILES, instance=user)
             if form.is_valid():
                 user = form.save()
-                messages.success(request, "Profile updated successfully!")
-                return redirect('users:edit_profile')
+                
+                # Check if it's an AJAX request
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    # Calculate updated user stats
+                    user_stats = {
+                        'games_count': len(user.games) if user.games else 0,
+                        'platforms_count': len(user.platforms) if user.platforms else 0,
+                        'join_date': user.date_joined.strftime("%B %Y") if user.date_joined else "Unknown",
+                    }
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Profile updated successfully!',
+                        'user': {
+                            'display_name': user.display_name,
+                            'custom_username': user.custom_username,
+                            'email': user.email,
+                            'bio': user.bio,
+                            'location': user.location,
+                            'about': user.about,
+                            'games': user.games,
+                            'platforms': user.platforms,
+                            'profile_picture_url': user.profile_picture.url if user.profile_picture else None,
+                        },
+                        'user_stats': user_stats
+                    })
+                else:
+                    messages.success(request, "Profile updated successfully!")
+                    return redirect('users:edit_profile')
             else:
-                messages.error(request, "Please correct the errors below.")
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': False,
+                        'errors': form.errors
+                    }, status=400)
+                else:
+                    messages.error(request, "Please correct the errors below.")
     
     # Prepare forms
     profile_form = ProfileCompletionForm(instance=user)
