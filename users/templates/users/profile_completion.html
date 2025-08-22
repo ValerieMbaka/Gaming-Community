@@ -13,6 +13,7 @@
                 <!-- Profile Picture Section -->
                 <div class="form-section">
                     <label>Avatar <small class="text-muted">(optional)</small></label>
+                    <small class="form-text">Upload a profile picture (JPG, PNG, GIF up to 5MB)</small>
                     <div class="avatar-upload">
                         <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
                         <label for="id_profile_picture" class="avatar-upload-label">
@@ -20,12 +21,12 @@
                             <span>Choose Avatar</span>
                         </label>
                     </div>
-                    <small class="form-text">Upload a profile picture (JPG, PNG, GIF up to 5MB)</small>
                 </div>
 
             <!-- Username Section -->
             <div class="form-section">
                 <label for="id_custom_username">Custom Username <span class="required">*</span></label>
+                <small class="form-text">3-20 characters(letters, numbers, and underscores only)</small>
                 <div class="username-input-group">
                     <input type="text" name="custom_username" id="id_custom_username" 
                            value="{{ form.custom_username.value|default:'' }}" 
@@ -35,7 +36,6 @@
                     </button>
                 </div>
                 <div id="custom_username-error" class="error-message"></div>
-                <small class="form-text">3-20 characters, letters, numbers, and underscores only</small>
             </div>
 
             <!-- Bio Section -->
@@ -45,7 +45,6 @@
                        value="{{ form.bio.value|default:'' }}" 
                        placeholder="Tell us about yourself in one line" required>
                 <div id="bio-error" class="error-message"></div>
-                <small class="form-text">10-160 characters, single line</small>
             </div>
 
             <!-- About Section -->
@@ -56,7 +55,6 @@
                 <div class="char-counter">
                     <span id="aboutCounter">0</span>/500
                 </div>
-                <small class="form-text">30-500 characters, supports emojis and line breaks</small>
             </div>
 
             <!-- Date of Birth Section -->
@@ -65,7 +63,6 @@
                 <input type="date" name="date_of_birth" id="id_date_of_birth"
                        value="{{ form.date_of_birth.value|date:'Y-m-d'|default:'' }}" required>
                 <div id="date_of_birth-error" class="error-message"></div>
-                <small class="form-text">Required for age verification and community features</small>
             </div>
 
             <!-- Location Section -->
@@ -75,21 +72,21 @@
                        value="{{ form.location.value|default:'' }}" 
                        placeholder="City, Country" required>
                 <div id="location-error" class="error-message"></div>
-                <small class="form-text">Help us connect you with local gamers</small>
             </div>
 
             <!-- Platforms Section -->
             <div class="form-section">
                 <label>Gaming Platforms <span class="required">*</span></label>
+                <small class="form-text">Select the platforms you game on</small>
                 <div class="chips" id="platformsTags"></div>
                 <input type="hidden" name="platforms" id="id_platforms" value="{{ form.platforms.value|default:'[]' }}">
                 <div id="platforms-error" class="error-message"></div>
-                <small class="form-text">Select the platforms you game on</small>
             </div>
 
             <!-- Games Section -->
             <div class="form-section">
                 <label>Favorite Games <span class="required">*</span></label>
+                <small class="form-text">Select your favorite games or add custom ones</small>
                 <div class="chips" id="gamesTags"></div>
                 <div class="game-input-container">
                     <input type="text" id="gameInput" placeholder="Add a game..." class="game-input">
@@ -97,7 +94,6 @@
                 </div>
                 <input type="hidden" name="games" id="id_games" value="{{ form.games.value|default:'[]' }}">
                 <div id="games-error" class="error-message"></div>
-                <small class="form-text">Select your favorite games or add custom ones</small>
             </div>
 
             <!-- Submit Button -->
