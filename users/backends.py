@@ -85,4 +85,4 @@ class FirebaseSessionBackend(BaseBackend):
         """
         Get user by ID. This is not used for Firebase users.
         """
-            return None
+        return None

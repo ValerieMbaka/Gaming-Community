@@ -6,7 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // About counter
     const aboutCounter = document.getElementById('aboutCounter');
     const updateAboutCounter = () => { 
-        if (aboutCounter) aboutCounter.textContent = `${(about.value||'').length}/500`; 
+        if (aboutCounter) {
+            const length = (about.value||'').length;
+            aboutCounter.textContent = `${length}/500`;
+            console.log('About counter updated:', length);
+        }
     };
     if (about) { 
         about.addEventListener('input', updateAboutCounter); 
@@ -125,15 +129,134 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Avatar upload (no preview functionality)
-    const profilePicInput = document.getElementById('id_profile_picture');
-    if (profilePicInput) {
-        profilePicInput.addEventListener('change', function(e) {
-            // File selected, but no preview shown as requested
-            console.log('Avatar selected:', e.target.files[0]?.name);
-        });
+    // Custom Date Picker functionality
+    const dobDay = document.getElementById('dobDay');
+    const dobMonth = document.getElementById('dobMonth');
+    const dobYear = document.getElementById('dobYear');
+    const dateOfBirthHidden = document.getElementById('id_date_of_birth');
+    
+    // Populate year dropdown (from 1970 to current year)
+    function populateYearDropdown() {
+        const currentYear = new Date().getFullYear();
+        const minYear = 1970;
+        const maxYear = currentYear; // Allow current year selection
+        
+        for (let year = maxYear; year >= minYear; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            dobYear.appendChild(option);
+        }
     }
     
+    // Populate day dropdown based on selected month and year
+    function populateDayDropdown() {
+        const selectedMonth = parseInt(dobMonth.value);
+        const selectedYear = parseInt(dobYear.value);
+        
+        // Clear existing days
+        dobDay.innerHTML = '<option value="">Day</option>';
+        
+        // If month and year are selected, show exact days for that month
+        if (selectedMonth && selectedYear) {
+            const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day;
+                dobDay.appendChild(option);
+            }
+        } else {
+            // If month or year not selected, show all 31 days
+            for (let day = 1; day <= 31; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day;
+                dobDay.appendChild(option);
+            }
+        }
+    }
+    
+    // Update hidden date input when selections change
+    function updateHiddenDate() {
+        const day = dobDay.value;
+        const month = dobMonth.value;
+        const year = dobYear.value;
+        
+        if (day && month && year) {
+            const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            dateOfBirthHidden.value = formattedDate;
+        } else {
+            dateOfBirthHidden.value = '';
+        }
+    }
+    
+    // Initialize date picker
+    if (dobDay && dobMonth && dobYear) {
+        populateYearDropdown();
+        populateDayDropdown(); // Populate days immediately
+        
+        // Set event listeners
+        dobMonth.addEventListener('change', () => {
+            populateDayDropdown();
+            updateHiddenDate();
+        });
+        
+        dobYear.addEventListener('change', () => {
+            populateDayDropdown();
+            updateHiddenDate();
+        });
+        
+        dobDay.addEventListener('change', updateHiddenDate);
+        
+        // Pre-fill if there's an existing value
+        if (dateOfBirthHidden.value) {
+            const dateParts = dateOfBirthHidden.value.split('-');
+            if (dateParts.length === 3) {
+                const [year, month, day] = dateParts;
+                dobYear.value = year;
+                dobMonth.value = parseInt(month);
+                populateDayDropdown();
+                dobDay.value = parseInt(day);
+            }
+        }
+    }
+    
+    // Avatar upload with preview functionality
+    const profilePicInput = document.getElementById('id_profile_picture');
+    const avatarPreview = document.getElementById('avatarPreview');
+    const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+    
+    if (profilePicInput) {
+        profilePicInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+                
+                // Validate file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB.');
+                    return;
+                }
+                
+                // Create preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                    avatarPreview.classList.add('show');
+                    avatarPlaceholder.classList.add('hide');
+                };
+                reader.readAsDataURL(file);
+                console.log('Avatar selected:', file.name);
+            }
+        });
+    }
+
     // Username availability check
     async function checkAvailability() {
         const value = (usernameInput.value || '').trim();
@@ -363,6 +486,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (aboutVal && (aboutVal.length < 30 || aboutVal.length > 500)) { showToast('About must be 30–500 characters if provided', 'error'); ok = false; }
         if (selectedPlatforms.length === 0) { validateField('platforms', false); ok = false; }
         if (selectedGames.length === 0) { validateField('games', false); ok = false; }
+        
+        // Check if location is provided
+        const location = (fields.location.value || '').trim();
+        if (!location || location === '') {
+            const locationError = document.getElementById('location-error');
+            if (locationError) {
+                locationError.textContent = 'Please enter your location';
+            }
+            ok = false;
+        } else {
+            const locationError = document.getElementById('location-error');
+            if (locationError) {
+                locationError.textContent = '';
+            }
+        }
+        
         if (!ok) return;
         
         const formData = new FormData(form);
@@ -372,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [null, ''])[1],
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
@@ -416,13 +555,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Repopulate form fields with saved data
                 repopulateFormFields(data);
                 
-                showToast('Profile updated successfully!', 'success');
+                // Show appropriate message based on profile completion status
+                const message = data.profile_message || 'Profile updated successfully!';
+                const messageType = data.is_profile_complete ? 'success' : 'warning';
+                showToast(message, messageType);
                 
-                // Refresh the page to show updated dashboard
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-                console.log('Profile completion successful, page will refresh in 1 second');
+                // Refresh the page to show updated dashboard only if profile is complete
+                if (data.is_profile_complete) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                    console.log('Profile completion successful, page will refresh in 1 second');
+                } else {
+                    console.log('Profile updated but not complete yet');
+                }
             } else {
                 if (data.errors) {
                     for (const field in data.errors) {

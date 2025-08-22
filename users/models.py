@@ -20,7 +20,7 @@ class Gamer(models.Model):
     bio = models.TextField(blank=False, default="Bio")
     about = models.TextField(blank=True, default="About")
     date_of_birth = models.DateField(null=False, default=datetime.date(2025, 1, 1))
-    location = models.CharField(max_length=255, blank=False, default="Nairobi")
+    location = models.CharField(max_length=255, blank=False, default="")
     platforms = models.JSONField(default=list)
     games = models.JSONField(default=list)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -45,7 +45,7 @@ class Gamer(models.Model):
         """Check if the user's profile is complete"""
         # Check individual conditions first
         bio_ok = self.bio and self.bio != 'Bio' and self.bio != '' and len(self.bio.strip()) > 0
-        location_ok = self.location and self.location != 'Nairobi' and self.location != '' and len(self.location.strip()) > 0
+        location_ok = self.location and self.location != '' and len(self.location.strip()) > 0
         games_ok = self.games and len(self.games) > 0
         platforms_ok = self.platforms and len(self.platforms) > 0
         # Make custom username optional - not required for profile completion

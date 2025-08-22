@@ -15,22 +15,7 @@
     overflow: hidden;
 }
 
-.card-header {
-    padding: 2rem;
-    background: linear-gradient(135deg, #6c5ce7, #5649c0);
-    color: white;
-    text-align: center;
-}
 
-.card-header h2 {
-    margin: 0.5rem 0;
-    font-weight: 600;
-}
-
-.card-header p {
-    margin: 0;
-    opacity: 0.9;
-}
 
 .profile-form {
     padding: 2rem;
@@ -121,6 +106,45 @@
     margin: 1rem 0;
 }
 
+.avatar-preview-holder {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #e9ecef;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.avatar-preview-image.show {
+    display: block;
+}
+
+.avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #6c757d;
+    font-size: 3rem;
+}
+
+.avatar-placeholder.hide {
+    display: none;
+}
+
 .avatar-preview {
     display: none; /* Hide the image preview */
 }
@@ -186,6 +210,82 @@
 
 .error-message.show {
     display: block;
+}
+
+/* Games Container Layout */
+.games-container {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+
+.games-tags-section {
+    flex: 1;
+    min-width: 0;
+}
+
+.game-input-section {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Custom Date Picker */
+.date-picker-container {
+    margin-top: 0.5rem;
+}
+
+.date-input-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.date-select {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.date-select:focus {
+    outline: none;
+    border-color: #6c5ce7;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.date-select:hover {
+    border-color: #6c5ce7;
+}
+
+/* Responsive design for date picker */
+@media (max-width: 768px) {
+    .date-input-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .date-select {
+        width: 100%;
+    }
+}
+
+/* Responsive design for games container */
+@media (max-width: 768px) {
+    .games-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .games-tags-section,
+    .game-input-section {
+        flex: none;
+        width: 100%;
+    }
 }
 
 /* Game Input Container */

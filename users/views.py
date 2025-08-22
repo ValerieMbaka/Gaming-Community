@@ -134,16 +134,36 @@ def login_view(request):
                 
                 # If still no user found, create a new one
                 if not user:
+                    # Extract first and last name from Firebase display name
+                    firebase_name = decoded_token.get('name', '')
+                    first_name = ''
+                    last_name = ''
+                    if firebase_name:
+                        name_parts = firebase_name.split(' ')
+                        first_name = name_parts[0] if name_parts else ''
+                        last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
+                    
                     user = Gamer.objects.create(
                         uid=firebase_uid,
                         email=firebase_email,
-                        first_name=decoded_token.get('name', '').split(' ')[0] if decoded_token.get('name') else '',
+                        first_name=first_name,
+                        last_name=last_name
                     )
                     created = True
                     print("Created new user:", user.uid)
                 
-                # Update last login
+                # Update last login and ensure first/last name are set
                 user.last_login = timezone.now()
+                
+                # Update first and last name if they're missing and we have them from Firebase
+                firebase_name = decoded_token.get('name', '')
+                if firebase_name and (not user.first_name or not user.last_name):
+                    name_parts = firebase_name.split(' ')
+                    if not user.first_name and name_parts:
+                        user.first_name = name_parts[0]
+                    if not user.last_name and len(name_parts) > 1:
+                        user.last_name = ' '.join(name_parts[1:])
+                
                 user.save()
                 
                 # For Firebase users, we don't create Django User objects
@@ -154,6 +174,11 @@ def login_view(request):
                     'email': firebase_email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
+                    'custom_username': user.custom_username,
+                    'bio': user.bio,
+                    'location': user.location,
+                    'profile_completed': user.profile_completed,
+                    'profile_picture_url': user.profile_picture.url if user.profile_picture else None
                 }
                 request.session['firebase_authenticated'] = True
                 print("Firebase user logged in successfully")
@@ -346,6 +371,17 @@ def profile_completion(request):
             # The save method will automatically update profile_completed based on is_profile_complete()
             # Just ensure we save to trigger the automatic update
             gamer.save()
+            
+            # Update session data with latest user information
+            if 'firebase_user' in request.session:
+                request.session['firebase_user'].update({
+                    'custom_username': gamer.custom_username,
+                    'bio': gamer.bio,
+                    'location': gamer.location,
+                    'profile_completed': gamer.profile_completed,
+                    'profile_picture_url': gamer.profile_picture.url if gamer.profile_picture else None
+                })
+                request.session.modified = True
             print(f"Profile completion status for gamer {gamer.uid}: {gamer.profile_completed}")
             print(f"Is profile complete: {gamer.is_profile_complete()}")
             print(f"Bio: '{gamer.bio}' (valid: {gamer.bio and gamer.bio != 'Bio' and gamer.bio != '' and len(gamer.bio.strip()) > 0})")
@@ -356,6 +392,25 @@ def profile_completion(request):
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 # Determine display username for response
                 display_username = gamer.custom_username or gamer.first_name or gamer.email.split('@')[0].capitalize()
+                
+                # Check if profile is complete and provide specific feedback
+                is_complete = gamer.is_profile_complete()
+                profile_message = "Profile updated successfully!"
+                
+                if not is_complete:
+                    # Provide specific feedback about what's missing
+                    missing_fields = []
+                    if not gamer.bio or gamer.bio == 'Bio' or gamer.bio.strip() == '':
+                        missing_fields.append('bio')
+                    if not gamer.location or gamer.location == 'Nairobi' or gamer.location.strip() == '':
+                        missing_fields.append('location')
+                    if not gamer.games or len(gamer.games) == 0:
+                        missing_fields.append('games')
+                    if not gamer.platforms or len(gamer.platforms) == 0:
+                        missing_fields.append('platforms')
+                    
+                    if missing_fields:
+                        profile_message = f"Profile updated, but still incomplete. Please check: {', '.join(missing_fields)}"
                 
                 return JsonResponse({
                     'success': True,
@@ -369,8 +424,9 @@ def profile_completion(request):
                     'platforms': gamer.platforms,
                     'games': gamer.games,
                     'profile_completed': gamer.profile_completed,
-                    'is_profile_complete': gamer.is_profile_complete(),
-                    'redirect_url': reverse('users:gamer_dashboard') if gamer.is_profile_complete() else None
+                    'is_profile_complete': is_complete,
+                    'profile_message': profile_message,
+                    'redirect_url': reverse('users:gamer_dashboard') if is_complete else None
                 })
             
             messages.success(request, "Profile updated successfully!")
