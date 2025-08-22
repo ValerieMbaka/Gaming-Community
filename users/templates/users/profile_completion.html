@@ -45,7 +45,7 @@
             <div class="form-section">
                 <label for="id_bio">Bio <span class="required">*</span></label>
                 <input type="text" name="bio" id="id_bio" 
-                       value="{{ form.bio.value|default:'' }}" 
+                       value="{% if form.bio.value and form.bio.value != 'Bio' %}{{ form.bio.value }}{% endif %}" 
                        placeholder="Tell us about yourself in one line" required>
                 <div id="bio-error" class="error-message"></div>
             </div>
@@ -54,7 +54,7 @@
             <div class="form-section">
                 <label for="id_about">About <small class="text-muted">(optional)</small></label>
                 <textarea name="about" id="id_about" rows="4" 
-                          placeholder="Tell us more about yourself, your gaming experience, and what you're looking for in the community">{{ form.about.value|default:'' }}</textarea>
+                          placeholder="Tell us more about yourself, your gaming experience, and what you're looking for in the community">{% if form.about.value and form.about.value != 'About' %}{{ form.about.value }}{% endif %}</textarea>
                 <div class="char-counter">
                     <span id="aboutCounter">0</span>
                 </div>
@@ -89,6 +89,7 @@
                     </div>
                     <input type="hidden" name="date_of_birth" id="id_date_of_birth" value="{{ form.date_of_birth.value|date:'Y-m-d'|default:'' }}" required>
                 </div>
+                <small class="form-text">Please select day, month, and year</small>
                 <div id="date_of_birth-error" class="error-message"></div>
             </div>
 
@@ -96,7 +97,7 @@
             <div class="form-section">
                 <label for="id_location">Location <span class="required">*</span></label>
                 <input type="text" name="location" id="id_location"
-                       value="{{ form.location.value|default:'' }}" 
+                       value="{% if form.location.value and form.location.value != '' %}{{ form.location.value }}{% endif %}" 
                        placeholder="Enter your location (e.g., London, UK)" required>
                 <div id="location-error" class="error-message"></div>
             </div>

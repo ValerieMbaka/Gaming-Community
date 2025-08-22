@@ -29,29 +29,56 @@ def register_view(request):
             password = request.POST.get('password')
             first_name = request.POST.get('first_name', '').strip()
             last_name = request.POST.get('last_name', '').strip()
+            firebase_uid = request.POST.get('firebase_uid')
             
             # Check if user already exists with this email
             if Gamer.objects.filter(email=email).exists():
-                messages.error(request, "An account with this email already exists. Please login instead.")
+                return JsonResponse({
+                    'success': False,
+                    'message': 'An account with this email already exists. Please login instead.'
+                }, status=400)
+            
+            # If Firebase UID is provided, use it (user was created by frontend)
+            if firebase_uid:
+                try:
+                    # Verify the Firebase user exists
+                    firebase_user = auth.get_user(firebase_uid)
+                    
+                    # Create Gamer object for gaming data
+                    gamer = Gamer.objects.create(
+                        uid=firebase_uid,
+                        email=email,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Registration successful! Please login.'
+                    })
+                except Exception as e:
+                    return JsonResponse({
+                        'success': False,
+                        'message': f'Error creating user: {str(e)}'
+                    }, status=400)
+            else:
+                # Fallback: Create Firebase user from backend (for non-JS submissions)
+                firebase_user = auth.create_user(
+                    email=email,
+                    password=password,
+                    display_name=f"{first_name} {last_name}".strip() or None
+                )
+                
+                # Create Gamer object for gaming data
+                gamer = Gamer.objects.create(
+                    uid=firebase_user.uid,
+                    email=firebase_user.email,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+                
+                messages.success(request, "Registration successful! Please login.")
                 return redirect('users:login')
-            
-            # Create Firebase user
-            firebase_user = auth.create_user(
-                email=email,
-                password=password,
-                display_name=f"{first_name} {last_name}".strip() or None
-            )
-            
-            # Create Gamer object for gaming data (NO Django User creation)
-            gamer = Gamer.objects.create(
-                uid=firebase_user.uid,
-                email=firebase_user.email,
-                first_name=first_name,
-                last_name=last_name
-            )
-            
-            messages.success(request, "Registration successful! Please login.")
-            return redirect('users:login')
         
         except exceptions.FirebaseError as e:
             error_message = str(e)
@@ -385,7 +412,7 @@ def profile_completion(request):
             print(f"Profile completion status for gamer {gamer.uid}: {gamer.profile_completed}")
             print(f"Is profile complete: {gamer.is_profile_complete()}")
             print(f"Bio: '{gamer.bio}' (valid: {gamer.bio and gamer.bio != 'Bio' and gamer.bio != '' and len(gamer.bio.strip()) > 0})")
-            print(f"Location: '{gamer.location}' (valid: {gamer.location and gamer.location != 'Nairobi' and gamer.location != '' and len(gamer.location.strip()) > 0})")
+            print(f"Location: '{gamer.location}' (valid: {gamer.location and gamer.location != '' and len(gamer.location.strip()) > 0})")
             print(f"Games: {gamer.games} (valid: {gamer.games and len(gamer.games) > 0})")
             print(f"Platforms: {gamer.platforms} (valid: {gamer.platforms and len(gamer.platforms) > 0})")
             
@@ -402,7 +429,7 @@ def profile_completion(request):
                     missing_fields = []
                     if not gamer.bio or gamer.bio == 'Bio' or gamer.bio.strip() == '':
                         missing_fields.append('bio')
-                    if not gamer.location or gamer.location == 'Nairobi' or gamer.location.strip() == '':
+                    if not gamer.location or gamer.location.strip() == '':
                         missing_fields.append('location')
                     if not gamer.games or len(gamer.games) == 0:
                         missing_fields.append('games')
@@ -436,6 +463,9 @@ def profile_completion(request):
                 return redirect('users:complete_profile')
         else:
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                print("Form validation failed:")
+                print("Form errors:", form.errors)
+                print("Form data:", request.POST)
                 return JsonResponse({
                     'success': False,
                     'errors': form.errors
@@ -444,6 +474,12 @@ def profile_completion(request):
             messages.error(request, "Please correct the errors below.")
     else:
         form = ProfileCompletionForm(instance=gamer)
+        print("Form instance created with gamer data:")
+        print(f"Gamer bio: '{gamer.bio}'")
+        print(f"Gamer location: '{gamer.location}'")
+        print(f"Gamer platforms: {gamer.platforms}")
+        print(f"Gamer games: {gamer.games}")
+        print(f"Form initial data: {form.initial}")
     
     return render(request, 'users/profile_completion.html', {
         'form': form,

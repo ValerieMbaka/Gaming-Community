@@ -66,7 +66,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         platformsHidden.value = JSON.stringify(selectedPlatforms);
     }
-    if (platformsContainer && platformsHidden) renderPlatforms();
+    if (platformsContainer && platformsHidden) {
+        // Initialize with existing platforms data
+        try {
+            const existingPlatforms = JSON.parse(platformsHidden.value || '[]');
+            selectedPlatforms = existingPlatforms;
+        } catch (e) {
+            console.log('No existing platforms data or invalid JSON');
+        }
+        renderPlatforms();
+    }
     
     // Game selection
     const defaultGames = ['Valorant','FIFA','Call of Duty','Fortnite','League of Legends','Dota 2','CS:GO'];
@@ -117,6 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (gamesContainer && gamesHidden) {
+        // Initialize with existing games data
+        try {
+            const existingGames = JSON.parse(gamesHidden.value || '[]');
+            selectedGames = existingGames;
+        } catch (e) {
+            console.log('No existing games data or invalid JSON');
+        }
         renderGames();
         if (gameInput) {
             gameInput.addEventListener('keydown', (e) => {
@@ -154,12 +170,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedMonth = parseInt(dobMonth.value);
         const selectedYear = parseInt(dobYear.value);
         
+        console.log('Populating day dropdown - Month:', selectedMonth, 'Year:', selectedYear);
+        
         // Clear existing days
         dobDay.innerHTML = '<option value="">Day</option>';
         
         // If month and year are selected, show exact days for that month
         if (selectedMonth && selectedYear) {
             const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+            console.log('Days in month:', daysInMonth);
             
             for (let day = 1; day <= daysInMonth; day++) {
                 const option = document.createElement('option');
@@ -184,11 +203,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = dobMonth.value;
         const year = dobYear.value;
         
+        console.log('Updating hidden date - Day:', day, 'Month:', month, 'Year:', year);
+        
         if (day && month && year) {
             const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
             dateOfBirthHidden.value = formattedDate;
+            console.log('Set hidden date to:', formattedDate);
+            
+            // Remove error styling
+            dobDay.classList.remove('error');
+            dobMonth.classList.remove('error');
+            dobYear.classList.remove('error');
         } else {
             dateOfBirthHidden.value = '';
+            console.log('Cleared hidden date - missing day, month, or year');
+            
+            // Add error styling to incomplete fields
+            if (!day) dobDay.classList.add('error');
+            if (!month) dobMonth.classList.add('error');
+            if (!year) dobYear.classList.add('error');
         }
     }
     
@@ -260,21 +293,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Username availability check
     async function checkAvailability() {
         const value = (usernameInput.value || '').trim();
+        console.log('Checking username availability for:', value);
+        
         if (!usernamePattern.test(value)) {
             usernameError.textContent = 'Use 3–20 letters, numbers, or underscores';
+            usernameError.classList.add('show');
+            console.log('Username format invalid');
             return false;
         }
         try {
             const res = await fetch('/users/check-username/?username=' + encodeURIComponent(value));
             const data = await res.json();
+            console.log('Username check response:', data);
+            
             if (!data.available) {
-                usernameError.textContent = data.reason === 'invalid_format' ? 'Invalid username format' : 'This username is already taken';
+                const errorMessage = data.reason === 'invalid_format' ? 'Invalid username format' : 'This username is already taken';
+                usernameError.textContent = errorMessage;
+                usernameError.classList.add('show');
+                console.log('Username not available, error message:', errorMessage);
                 return false;
             }
             usernameError.textContent = '';
+            usernameError.classList.remove('show');
+            console.log('Username is available');
             return true;
         } catch (e) {
-            console.error(e);
+            console.error('Error checking username availability:', e);
             return false;
         }
     }
@@ -313,7 +357,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function validateField(fieldName, isValid) {
         const errorElement = document.getElementById(`${fieldName}-error`);
-        if (errorElement) errorElement.textContent = isValid ? '' : `${fieldName.replace('_', ' ')} is required`;
+        if (errorElement) {
+            if (isValid) {
+                errorElement.textContent = '';
+                errorElement.classList.remove('show');
+            } else {
+                errorElement.textContent = `${fieldName.replace('_', ' ')} is required`;
+                errorElement.classList.add('show');
+            }
+        }
         return isValid;
     }
     
@@ -481,7 +533,15 @@ document.addEventListener('DOMContentLoaded', function() {
         let ok = true;
         ok = (await checkAvailability()) && ok;
         const bio = (fields.bio.value || '').trim();
-        if (bio.length < 10 || bio.length > 160) { document.getElementById('bio-error').textContent = 'Bio must be 10–160 characters'; ok = false; } else { document.getElementById('bio-error').textContent = ''; }
+        const bioError = document.getElementById('bio-error');
+        if (bio.length < 10 || bio.length > 160) { 
+            bioError.textContent = 'Bio must be 10–160 characters'; 
+            bioError.classList.add('show');
+            ok = false; 
+        } else { 
+            bioError.textContent = ''; 
+            bioError.classList.remove('show');
+        }
         const aboutVal = (about ? about.value : '').trim();
         if (aboutVal && (aboutVal.length < 30 || aboutVal.length > 500)) { showToast('About must be 30–500 characters if provided', 'error'); ok = false; }
         if (selectedPlatforms.length === 0) { validateField('platforms', false); ok = false; }
@@ -489,22 +549,48 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Check if location is provided
         const location = (fields.location.value || '').trim();
+        const locationError = document.getElementById('location-error');
         if (!location || location === '') {
-            const locationError = document.getElementById('location-error');
             if (locationError) {
                 locationError.textContent = 'Please enter your location';
+                locationError.classList.add('show');
             }
             ok = false;
         } else {
-            const locationError = document.getElementById('location-error');
             if (locationError) {
                 locationError.textContent = '';
+                locationError.classList.remove('show');
             }
         }
         
-        if (!ok) return;
+        // Check if date of birth is properly set
+        const day = dobDay.value;
+        const month = dobMonth.value;
+        const year = dobYear.value;
+        
+        if (!day || !month || !year || !dateOfBirthHidden.value || dateOfBirthHidden.value === '') {
+            showToast('Please select a complete date of birth (day, month, and year).', 'error');
+            
+            // Highlight incomplete fields
+            if (!day) dobDay.classList.add('error');
+            if (!month) dobMonth.classList.add('error');
+            if (!year) dobYear.classList.add('error');
+            
+            return;
+        }
+        
+        if (!ok) {
+            showToast('Please correct the errors in the form before submitting.', 'error');
+            return;
+        }
         
         const formData = new FormData(form);
+        
+        // Debug: Log form data being sent
+        console.log('Form data being sent:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
         
         try {
             const response = await fetch('/users/complete-profile/', {
@@ -571,11 +657,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 if (data.errors) {
+                    let errorMessages = [];
                     for (const field in data.errors) {
                         const errorElement = document.getElementById(`${field}-error`);
-                        if (errorElement) errorElement.textContent = data.errors[field][0];
+                        if (errorElement) {
+                            errorElement.textContent = data.errors[field][0];
+                            errorElement.classList.add('show');
+                            errorMessages.push(`${field}: ${data.errors[field][0]}`);
+                        }
                     }
-                    showToast('Please correct the errors in the form', 'error');
+                    showToast(`Please correct the following errors: ${errorMessages.join(', ')}`, 'error');
                 } else {
                     showToast('Error updating profile. Please try again.', 'error');
                 }
