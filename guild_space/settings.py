@@ -51,12 +51,9 @@ INSTALLED_APPS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'users.backends.FirebaseBackend',
+    'users.backends.FirebaseSessionBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-# Custom User Model
-AUTH_USER_MODEL = 'users.CustomUser'
 
 # Session settings
 SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
@@ -66,7 +63,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'users:user_dashboard'
+LOGIN_REDIRECT_URL = 'users:gamer_dashboard'
 LOGOUT_REDIRECT_URL = 'core:home'
 
 MIDDLEWARE = [
@@ -156,7 +153,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Media files for profile pictures
+# Media files for avatars
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

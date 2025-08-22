@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser
+from .models import Gamer
 import json
 import re
 from django.core.exceptions import ValidationError
@@ -18,7 +18,7 @@ class ProfileCompletionForm(forms.ModelForm):
     )
     
     class Meta:
-        model = CustomUser
+        model = Gamer
         fields = [
             'profile_picture',
             'custom_username',
@@ -53,7 +53,7 @@ class ProfileCompletionForm(forms.ModelForm):
             }),
         }
         error_messages = {
-            'username': {'required': "Username is required"},
+            'custom_username': {'required': "Username is required"},
             'bio': {'required': "Bio is required"},
             'date_of_birth': {'required': "Date of birth is required"},
             'location': {'required': "Location is required"},
@@ -84,7 +84,7 @@ class ProfileCompletionForm(forms.ModelForm):
         if not re.fullmatch(r'^[A-Za-z0-9_]{3,20}$', custom_username or ''):
             raise ValidationError('Username must be 3–20 characters and contain only letters, numbers, and underscores')
         # Case-insensitive uniqueness check preserving original casing
-        existing = CustomUser.objects.filter(custom_username__iexact=custom_username)
+        existing = Gamer.objects.filter(custom_username__iexact=custom_username)
         if self.instance and self.instance.pk:
             existing = existing.exclude(pk=self.instance.pk)
         if existing.exists():

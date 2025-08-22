@@ -1,5 +1,5 @@
 function updateUserProfileUI(data) {
-    // Update profile picture
+    // Update avatar
     const profilePictures = document.querySelectorAll('.profile-avatar, .sidebar-avatar, .profile-main-avatar');
     profilePictures.forEach(img => {
         if (data.profile_picture_url) {
@@ -217,14 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         updateUserProfileUI(data);
                         // Show success message
                         if (typeof showToast === 'function') {
-                            showToast('Profile picture updated successfully!', 'success');
+                            showToast('Avatar updated successfully!', 'success');
                         }
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     if (typeof showToast === 'function') {
-                        showToast('Error updating profile picture. Please try again.', 'error');
+                        showToast('Error updating avatar. Please try again.', 'error');
                     }
                 });
             }
@@ -233,13 +233,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Function to update user info in the UI
     function updateUserInfo(data) {
-        // Update profile picture in sidebar
+        // Update avatar in sidebar
         const sidebarAvatar = document.querySelector('.sidebar-avatar');
         if (sidebarAvatar && data.profile_picture_url) {
             sidebarAvatar.src = data.profile_picture_url;
         }
         
-        // Update profile picture in top nav
+        // Update avatar in top nav
         const navAvatar = document.querySelector('.profile-avatar');
         if (navAvatar && data.profile_picture_url) {
             navAvatar.src = data.profile_picture_url;

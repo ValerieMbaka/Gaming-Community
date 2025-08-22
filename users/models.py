@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.auth.models import AbstractUser
+
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
@@ -9,10 +9,14 @@ from django.utils import timezone
 import json
 
 
-class CustomUser(AbstractUser):
+class Gamer(models.Model):
+    # Profile information
+    uid = models.CharField(max_length=30, unique=True, verbose_name="Firebase UID") # Firebase UID field
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    custom_username = models.CharField(max_length=30, blank=True, null=True, verbose_name="Custom Username")
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    username = models.CharField(max_length=30, unique=True)  # This will store Firebase UID
-    custom_username = models.CharField(max_length=30, blank=True, null=True)  # User's chosen username
     bio = models.TextField(blank=False, default="Bio")
     about = models.TextField(blank=True, default="About")
     date_of_birth = models.DateField(null=False, default=datetime.date(2025, 1, 1))
@@ -22,6 +26,7 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(blank=True, null=True)
     profile_completed = models.BooleanField(default=False)
+
     
     def clean(self):
         super().clean()
@@ -43,7 +48,8 @@ class CustomUser(AbstractUser):
         location_ok = self.location and self.location != 'Nairobi' and self.location != '' and len(self.location.strip()) > 0
         games_ok = self.games and len(self.games) > 0
         platforms_ok = self.platforms and len(self.platforms) > 0
-        username_ok = self.custom_username and self.custom_username != '' and len(self.custom_username.strip()) > 0
+        # Make custom username optional - not required for profile completion
+        username_ok = True  # Always true since custom username is optional
         
         # All conditions must be met
         is_complete = bio_ok and location_ok and games_ok and platforms_ok and username_ok
@@ -77,9 +83,9 @@ class CustomUser(AbstractUser):
         return self.display_name
     
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = 'Gamer'
+        verbose_name_plural = 'Gamers'
         constraints = [
-            UniqueConstraint(Lower('username'), name='unique_lower_username'),
+            UniqueConstraint(Lower('uid'), name='unique_lower_uid'),
             UniqueConstraint('email', name='unique_email')
         ]

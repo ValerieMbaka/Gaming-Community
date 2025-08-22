@@ -1,0 +1,218 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Gaming Communities - Connect with Fellow Gamers{% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'communities/css/communities.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="communities-hero">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Gaming Communities</h1>
+                <p class="lead mb-4">Connect with fellow gamers, share strategies, and dominate your favourite games together!</p>
+                <div class="hero-actions">
+                    <a href="#" class="btn btn-outline-light btn-lg me-3">
+                        <i class="fas fa-dollar-sign me-2"></i>View Pricing Plans
+                    </a>
+                    <a href="#" class="btn btn-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="filter-section">
+    <div class="container">
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Communities</button>
+            <button class="filter-btn" data-filter="sports">Sports</button>
+            <button class="filter-btn" data-filter="racing">Racing</button>
+            <button class="filter-btn" data-filter="action">Action</button>
+            <button class="filter-btn" data-filter="adventure">Adventure</button>
+            <button class="filter-btn" data-filter="strategy">Strategy</button>
+            <button class="filter-btn" data-filter="battle-royale">Battle Royale</button>
+        </div>
+    </div>
+</section>
+
+<!-- Communities Grid -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4" id="communitiesGrid">
+            <!-- Sports Community -->
+            <div class="col-lg-3 col-md-6" data-category="sports">
+                <div class="community-card" data-community="sports">
+                    <div class="community-card-top">
+                        <div class="community-icon sports text-white">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <h3 class="community-title">Sports</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">The ultimate destination for sports gaming enthusiasts. From football to basketball, cricket to tennis - compete with the best!</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>2,847 members</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join sports text-white">Join Community</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Racing Community -->
+            <div class="col-lg-3 col-md-6" data-category="racing">
+                <div class="community-card" data-community="racing">
+                    <div class="community-card-top">
+                        <div class="community-icon racing text-white">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3 class="community-title">Racing</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Speed demons unite! From realistic simulators to arcade racing, experience the thrill of high-speed competition.</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>1,923 members</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join racing text-white">Join Community</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Community -->
+            <div class="col-lg-3 col-md-6" data-category="action">
+                <div class="community-card" data-community="action">
+                    <div class="community-card-top">
+                        <div class="community-icon action text-white">
+                            <i class="fas fa-fist-raised"></i>
+                        </div>
+                        <h3 class="community-title">Action</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Fighting & Combat games at their finest. Master combos, perfect your timing, and become the ultimate warrior!</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>3,156 members</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join action text-white">Join Community</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adventure Community -->
+            <div class="col-lg-3 col-md-6" data-category="adventure">
+                <div class="community-card coming-soon" data-community="adventure">
+                    <div class="community-card-top">
+                        <div class="community-icon adventure text-white">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3 class="community-title">Adventure</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Explore vast open worlds, embark on epic quests, and discover hidden treasures in immersive adventure games.</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>Coming Soon</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join adventure text-white">Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- Strategy & RPG Community -->
+            <div class="col-lg-3 col-md-6" data-category="strategy">
+                <div class="community-card coming-soon" data-community="strategy">
+                    <div class="community-card-top">
+                        <div class="community-icon strategy text-white">
+                            <i class="fas fa-chess"></i>
+                        </div>
+                        <h3 class="community-title">Strategy & RPG</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Master complex strategies, build powerful characters, and lead your team to victory in tactical gameplay.</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>Coming Soon</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join strategy text-white">Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        
+            <!-- Battle Royale Community -->
+            <div class="col-lg-3 col-md-6" data-category="battle-royale">
+                <div class="community-card coming-soon" data-community="battle-royale">
+                    <div class="community-card-top">
+                        <div class="community-icon battle-royale text-white">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3 class="community-title">Battle Royale</h3>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Survive, outplay, and be the last one standing! Join intense battles with players from around the world.</div>
+                        
+                        <div class="community-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span>Coming Soon</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <button class="btn btn-join battle-royale text-white">Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'communities/js/communities.js' %}"></script>
+{% endblock %}

@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Add to the existing base_minimal.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Profile picture preview
+            // Avatar preview
     const profilePicInput = document.querySelector('input[name="profile_picture"]');
     if (profilePicInput) {
         profilePicInput.addEventListener('change', function(e) {

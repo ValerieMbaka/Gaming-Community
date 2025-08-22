@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib import messages
+from .models import Gamer
 
 
 class ProfileCompletionMiddleware:
@@ -26,8 +27,21 @@ class ProfileCompletionMiddleware:
         if (request.user.is_authenticated and 
             not any(request.path.startswith(url) for url in exempt_urls)):
             
+            # Skip profile completion check for admin users
+            if request.user.is_superuser or request.user.is_staff:
+                response = self.get_response(request)
+                return response
+            
+            # Get the associated Gamer object to check profile completion
+            try:
+                gamer = Gamer.objects.get(email=request.user.email)
+                profile_complete = gamer.is_profile_complete()
+            except Gamer.DoesNotExist:
+                # If no Gamer object exists, consider profile incomplete
+                profile_complete = False
+            
             # Check if profile is complete
-            if not request.user.is_profile_complete():
+            if not profile_complete:
                 # Allow access to dashboard but the modal will show
                 # Only redirect if trying to access profile completion page directly
                 if request.path == reverse('users:complete_profile'):
@@ -35,7 +49,7 @@ class ProfileCompletionMiddleware:
                         request, 
                         "Please complete your profile through the dashboard."
                     )
-                    return redirect('users:user_dashboard')
+                    return redirect('users:gamer_dashboard')
         
         response = self.get_response(request)
         return response

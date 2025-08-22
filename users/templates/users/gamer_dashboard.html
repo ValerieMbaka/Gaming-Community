@@ -5,7 +5,7 @@
 
 {% block dashboard_css %}
     <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
-    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile_completion.css' %}">
 	<link rel="stylesheet" href="{% static 'users/css/modal.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
 {% endblock %}
@@ -25,16 +25,6 @@
         </div>
     </div>
 </div>
-
-<!-- Welcome Message -->
-<!-- <div class="welcome-message">
-    <div class="welcome-content">
-        <i class="fas fa-gamepad welcome-icon"></i>
-        <div class="welcome-text">
-            <h2>Welcome back, {{ display_username }}! 👋</h2>
-        </div>
-    </div>
-</div> -->
 
 <!-- Profile Header Section -->
 <section class="profile-header-wrapper">
@@ -523,7 +513,7 @@
 
 {% block dashboard_js %}
     <script src="{% static 'users/js/modal.js' %}"></script>
-    <script src="{% static 'users/js/profile.js' %}"></script>
+    <script src="{% static 'users/js/profile_completion.js' %}"></script>
     <script src="{% static 'users/js/dashboard.js' %}"></script>
     <script>
         function closeProfileModal() {

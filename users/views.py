@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+
 from django.http import JsonResponse
 from firebase_admin import auth, exceptions
 from django.conf import settings
 from .forms import ProfileCompletionForm
-from .models import CustomUser
+from .models import Gamer
 import json
 from django.urls import reverse
 from firebase_admin.auth import (
@@ -19,31 +19,35 @@ from django.views.decorators.http import require_GET
 from django.utils import timezone
 
 
+
+
+
 def register_view(request):
     if request.method == 'POST':
         try:
             email = request.POST.get('email')
             password = request.POST.get('password')
-            full_name = request.POST.get('full_name', '').strip()
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
             
             # Check if user already exists with this email
-            if CustomUser.objects.filter(email=email).exists():
+            if Gamer.objects.filter(email=email).exists():
                 messages.error(request, "An account with this email already exists. Please login instead.")
                 return redirect('users:login')
             
             # Create Firebase user
-            user = auth.create_user(
+            firebase_user = auth.create_user(
                 email=email,
                 password=password,
-                display_name=full_name or None
+                display_name=f"{first_name} {last_name}".strip() or None
             )
             
-            # Create Django user
-            django_user = CustomUser.objects.create(
-                username=user.uid,
-                email=user.email,
-                first_name=full_name.split(' ')[0] if full_name else '',
-                last_name=' '.join(full_name.split(' ')[1:]) if len(full_name.split(' ')) > 1 else ''
+            # Create Gamer object for gaming data (NO Django User creation)
+            gamer = Gamer.objects.create(
+                uid=firebase_user.uid,
+                email=firebase_user.email,
+                first_name=first_name,
+                last_name=last_name
             )
             
             messages.success(request, "Registration successful! Please login.")
@@ -65,7 +69,7 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('users:user_dashboard')
+        return redirect('users:gamer_dashboard')
     
     if request.method == 'POST':
         try:
@@ -101,56 +105,68 @@ def login_view(request):
                 
                 if firebase_email:
                     try:
-                        user = CustomUser.objects.get(email=firebase_email)
-                        print("Found existing user by email:", user.username)
+                        user = Gamer.objects.get(email=firebase_email)
+                        print("Found existing user by email:", user.uid)
                         
                         # Update Firebase UID if it has changed
-                        if user.username != firebase_uid:
-                            print(f"Updating Firebase UID from {user.username} to {firebase_uid}")
-                            user.username = firebase_uid
+                        if user.uid != firebase_uid:
+                            print(f"Updating Firebase UID from {user.uid} to {firebase_uid}")
+                            user.uid = firebase_uid
                             user.save()
-                    except CustomUser.DoesNotExist:
+                    except Gamer.DoesNotExist:
                         print("No user found by email, creating new user")
                         pass
                 
                 # If no user found by email, try by Firebase UID
                 if not user:
                     try:
-                        user = CustomUser.objects.get(username=firebase_uid)
-                        print("Found existing user by Firebase UID:", user.username)
+                        user = Gamer.objects.get(uid=firebase_uid)
+                        print("Found existing user by Firebase UID:", user.uid)
                         
                         # Update email if it has changed
                         if user.email != firebase_email:
                             print(f"Updating email from {user.email} to {firebase_email}")
                             user.email = firebase_email
                             user.save()
-                    except CustomUser.DoesNotExist:
+                    except Gamer.DoesNotExist:
                         print("No user found by Firebase UID, creating new user")
                         pass
                 
                 # If still no user found, create a new one
                 if not user:
-                    user = CustomUser.objects.create(
-                        username=firebase_uid,
+                    user = Gamer.objects.create(
+                        uid=firebase_uid,
                         email=firebase_email,
                         first_name=decoded_token.get('name', '').split(' ')[0] if decoded_token.get('name') else '',
                     )
                     created = True
-                    print("Created new user:", user.username)
+                    print("Created new user:", user.uid)
                 
                 # Update last login
                 user.last_login = timezone.now()
                 user.save()
                 
-                # Log the user in, specifying backend since multiple backends are configured
-                login(request, user, backend='users.backends.FirebaseBackend')
-                print("User logged in successfully")
+                # For Firebase users, we don't create Django User objects
+                # Instead, we'll use a custom authentication approach
+                # Store Firebase user info in session for authentication
+                request.session['firebase_user'] = {
+                    'uid': firebase_uid,
+                    'email': firebase_email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                }
+                request.session['firebase_authenticated'] = True
+                print("Firebase user logged in successfully")
+                print(f"Firebase UID: {firebase_uid}")
+                print(f"Firebase Email: {firebase_email}")
+                print(f"Gamer UID: {user.uid}")
+                print(f"Session authenticated: {request.session.get('firebase_authenticated', False)}")
                 
                 if not data.get('remember', False):
                     request.session.set_expiry(0)
                 
                 # Always redirect to dashboard - the modal will show if profile is incomplete
-                redirect_url = reverse('users:user_dashboard')
+                redirect_url = reverse('users:gamer_dashboard')
                 
                 return JsonResponse({
                     'success': True,
@@ -195,124 +211,171 @@ def login_view(request):
 
 
 def logout_view(request):
-    # Clear any profile completion data from session and localStorage
+    # Clear Firebase session data
+    if 'firebase_authenticated' in request.session:
+        del request.session['firebase_authenticated']
+    if 'firebase_user' in request.session:
+        del request.session['firebase_user']
     if 'profile_completed' in request.session:
         del request.session['profile_completed']
     
-    # Logout the user
-    logout(request)
+    # Also logout Django user if they were logged in
+    if request.user.is_authenticated:
+        logout(request)
     
     messages.success(request, "You have been successfully logged out. Please login again to access your dashboard.")
     return redirect('core:home')
 
 
-@login_required
-def user_dashboard(request):
-    user = request.user
+def gamer_dashboard(request):
+    # Check if user is authenticated via Firebase session
+    if not request.session.get('firebase_authenticated'):
+        messages.error(request, "Please login to access your dashboard.")
+        return redirect('users:login')
+    
+    # Get Firebase user data from session
+    firebase_user_data = request.session.get('firebase_user')
+    if not firebase_user_data:
+        messages.error(request, "Session expired. Please login again.")
+        return redirect('users:login')
+    
+    print("=== DASHBOARD ACCESSED ===")
+    print(f"Firebase user: {firebase_user_data}")
+    print(f"Session authenticated: {request.session.get('firebase_authenticated')}")
+    print(f"Firebase email: {firebase_user_data.get('email')}")
+    
+    # Get the associated Gamer object
+    try:
+        gamer = Gamer.objects.get(uid=firebase_user_data['uid'])
+    except Gamer.DoesNotExist:
+        messages.error(request, "User profile not found. Please contact support.")
+        return redirect('users:login')
     
     # Debug logging
-    print(f"Dashboard accessed for user: {user.username}")
-    print(f"Profile completed flag: {user.profile_completed}")
-    print(f"Is profile complete: {user.is_profile_complete()}")
-    print(f"Bio: '{user.bio}'")
-    print(f"Location: '{user.location}'")
-    print(f"Platforms: {user.platforms}")
-    print(f"Games: {user.games}")
+    print(f"Dashboard accessed for gamer: {gamer.uid}")
+    print(f"Profile completed flag: {gamer.profile_completed}")
+    print(f"Is profile complete: {gamer.is_profile_complete()}")
+    print(f"Bio: '{gamer.bio}'")
+    print(f"Location: '{gamer.location}'")
+    print(f"Platforms: {gamer.platforms}")
+    print(f"Games: {gamer.games}")
     
     # If profile is marked as completed but doesn't actually meet requirements, reset it
-    if user.profile_completed and not user.is_profile_complete():
+    if gamer.profile_completed and not gamer.is_profile_complete():
         print("Profile was marked as completed but doesn't meet requirements. Resetting...")
-        user.profile_completed = False
-        user.save()
+        gamer.profile_completed = False
+        gamer.save()
     
     # Calculate user stats based on profile data
     user_stats = {
-        'games_count': len(user.games) if user.games and len(user.games) > 0 else 0,
-        'platforms_count': len(user.platforms) if user.platforms and len(user.platforms) > 0 else 0,
-        'join_date': user.date_joined.strftime("%B %Y") if user.date_joined else "Unknown",
+        'games_count': len(gamer.games) if gamer.games and len(gamer.games) > 0 else 0,
+        'platforms_count': len(gamer.platforms) if gamer.platforms and len(gamer.platforms) > 0 else 0,
+        'join_date': gamer.date_joined.strftime("%B %Y") if gamer.date_joined else "Unknown",
         'age': None,
-        'location': user.location if user.location and user.location != "Nairobi" and user.location != "" else "Location not set",
+        'location': gamer.location if gamer.location and gamer.location != "Nairobi" and gamer.location != "" else "Location not set",
     }
     
     # Calculate age if date of birth is available
-    if user.date_of_birth:
+    if gamer.date_of_birth:
         from datetime import date
         today = date.today()
-        age = today.year - user.date_of_birth.year - ((today.month, today.day) < (user.date_of_birth.month, user.date_of_birth.day))
+        age = today.year - gamer.date_of_birth.year - ((today.month, today.day) < (gamer.date_of_birth.month, gamer.date_of_birth.day))
         user_stats['age'] = age
     
     # Generate dynamic content based on user's games and platforms
     featured_game = None
-    if user.games and len(user.games) > 0 and user.games[0]:
+    if gamer.games and len(gamer.games) > 0 and gamer.games[0]:
         featured_game = {
-            'name': user.games[0],
+            'name': gamer.games[0],
             'hours_played': 1250,  # This would come from actual game data in a real app
             'win_rate': 87,
             'competitions': 24,
-            'rank': 'Radiant' if 'Valorant' in user.games[0] else 'Elite' if 'FIFA' in user.games[0] else 'Master'
+            'rank': 'Radiant' if 'Valorant' in gamer.games[0] else 'Elite' if 'FIFA' in gamer.games[0] else 'Master'
         }
     
     # Determine display username - prioritize custom username over Firebase UID
-    display_username = user.username
+    display_username = gamer.uid
     
-    # If username looks like a Firebase UID (long alphanumeric string), use better fallback
-    if len(user.username) > 28 or (len(user.username) > 20 and user.username.replace('_', '').replace('-', '').isalnum()):
-        # Check if user has a custom username set (not Firebase UID)
-        if hasattr(user, 'custom_username') and user.custom_username:
-            display_username = user.custom_username
-        elif user.first_name:
-            display_username = user.first_name
-        elif user.email:
+    # If uid looks like a Firebase UID (long alphanumeric string), use better fallback
+    if len(gamer.uid) > 28 or (len(gamer.uid) > 20 and gamer.uid.replace('_', '').replace('-', '').isalnum()):
+        # Check if user has a custom username set (not the Firebase UID)
+        if hasattr(gamer, 'custom_username') and gamer.custom_username:
+            display_username = gamer.custom_username
+        elif gamer.first_name:
+            display_username = gamer.first_name
+        elif gamer.email:
             # Use email prefix but capitalize it nicely
-            email_prefix = user.email.split('@')[0]
+            email_prefix = gamer.email.split('@')[0]
             display_username = email_prefix.capitalize()
         else:
             display_username = "User"
     
-    return render(request, 'users/user_dashboard.html', {
-        'user': user,
+    return render(request, 'users/gamer_dashboard.html', {
+        'user': gamer,  # Pass the gamer object as user for templates
         'user_stats': user_stats,
         'featured_game': featured_game,
         'display_username': display_username
     })
 
 
-@login_required
 def profile_completion(request):
+    # Check if user is authenticated via Firebase session
+    if not request.session.get('firebase_authenticated'):
+        messages.error(request, "Please login to access profile completion.")
+        return redirect('users:login')
+    
+    # Get Firebase user data from session
+    firebase_user_data = request.session.get('firebase_user')
+    if not firebase_user_data:
+        messages.error(request, "Session expired. Please login again.")
+        return redirect('users:login')
+    
+    # Get the associated Gamer object
+    try:
+        gamer = Gamer.objects.get(uid=firebase_user_data['uid'])
+    except Gamer.DoesNotExist:
+        messages.error(request, "User profile not found. Please contact support.")
+        return redirect('users:login')
+    
     if request.method == 'POST':
-        form = ProfileCompletionForm(request.POST, request.FILES, instance=request.user)
+        form = ProfileCompletionForm(request.POST, request.FILES, instance=gamer)
         
         if form.is_valid():
-            user = form.save()
+            gamer = form.save()
             
             # The save method will automatically update profile_completed based on is_profile_complete()
             # Just ensure we save to trigger the automatic update
-            user.save()
-            print(f"Profile completion status for user {user.username}: {user.profile_completed}")
-            print(f"Is profile complete: {user.is_profile_complete()}")
+            gamer.save()
+            print(f"Profile completion status for gamer {gamer.uid}: {gamer.profile_completed}")
+            print(f"Is profile complete: {gamer.is_profile_complete()}")
+            print(f"Bio: '{gamer.bio}' (valid: {gamer.bio and gamer.bio != 'Bio' and gamer.bio != '' and len(gamer.bio.strip()) > 0})")
+            print(f"Location: '{gamer.location}' (valid: {gamer.location and gamer.location != 'Nairobi' and gamer.location != '' and len(gamer.location.strip()) > 0})")
+            print(f"Games: {gamer.games} (valid: {gamer.games and len(gamer.games) > 0})")
+            print(f"Platforms: {gamer.platforms} (valid: {gamer.platforms and len(gamer.platforms) > 0})")
             
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 # Determine display username for response
-                display_username = user.custom_username or user.first_name or user.email.split('@')[0].capitalize()
+                display_username = gamer.custom_username or gamer.first_name or gamer.email.split('@')[0].capitalize()
                 
                 return JsonResponse({
                     'success': True,
-                    'profile_picture_url': user.profile_picture.url if user.profile_picture else '',
-                    'username': user.custom_username or user.username,  # Return custom username if available
+                    'profile_picture_url': gamer.profile_picture.url if gamer.profile_picture else '',
+                    'username': gamer.custom_username or gamer.uid,  # Return custom username if available
                     'display_username': display_username,
-                    'bio': user.bio,
-                    'about': user.about,
-                    'location': user.location,
-                    'platforms': user.platforms,
-                    'games': user.games,
-                    'profile_completed': user.profile_completed,
-                    'is_profile_complete': user.is_profile_complete(),
-                    'redirect_url': reverse('users:user_dashboard') if user.is_profile_complete() else None
+                    'bio': gamer.bio,
+                    'about': gamer.about,
+                    'location': gamer.location,
+                    'date_of_birth': gamer.date_of_birth.strftime('%Y-%m-%d') if gamer.date_of_birth else None,
+                    'platforms': gamer.platforms,
+                    'games': gamer.games,
+                    'profile_completed': gamer.profile_completed,
+                    'is_profile_complete': gamer.is_profile_complete(),
+                    'redirect_url': reverse('users:gamer_dashboard') if gamer.is_profile_complete() else None
                 })
             
             messages.success(request, "Profile updated successfully!")
-            if user.is_profile_complete():
-                return redirect('users:user_dashboard')
+            if gamer.is_profile_complete():
+                return redirect('users:gamer_dashboard')
             else:
                 return redirect('users:complete_profile')
         else:
@@ -324,27 +387,42 @@ def profile_completion(request):
             
             messages.error(request, "Please correct the errors below.")
     else:
-        form = ProfileCompletionForm(instance=request.user)
+        form = ProfileCompletionForm(instance=gamer)
     
     return render(request, 'users/profile_completion.html', {
         'form': form,
-        'user': request.user
+        'user': gamer  # Pass the gamer object as user for templates
     })
 
 
-@login_required
 def user_settings(request):
     """User settings page with profile editing and account management"""
-    user = request.user
+    # Check if user is authenticated via Firebase session
+    if not request.session.get('firebase_authenticated'):
+        messages.error(request, "Please login to access settings.")
+        return redirect('users:login')
+    
+    # Get Firebase user data from session
+    firebase_user_data = request.session.get('firebase_user')
+    if not firebase_user_data:
+        messages.error(request, "Session expired. Please login again.")
+        return redirect('users:login')
+    
+    # Get the associated Gamer object
+    try:
+        gamer = Gamer.objects.get(uid=firebase_user_data['uid'])
+    except Gamer.DoesNotExist:
+        messages.error(request, "User profile not found. Please contact support.")
+        return redirect('users:login')
     
     if request.method == 'POST':
         action = request.POST.get('action')
         
         if action == 'update_profile':
             # Handle profile update
-            form = ProfileCompletionForm(request.POST, request.FILES, instance=user)
+            form = ProfileCompletionForm(request.POST, request.FILES, instance=gamer)
             if form.is_valid():
-                user = form.save()
+                gamer = form.save()
                 messages.success(request, "Profile updated successfully!")
                 return redirect('users:user_settings')
             else:
@@ -355,8 +433,8 @@ def user_settings(request):
             password = request.POST.get('password')
             if password:
                 try:
-                    # Delete the user from Django database
-                    user.delete()
+                    # Delete the gamer from Django database
+                    gamer.delete()
                     logout(request)
                     messages.success(request, "Account deleted successfully")
                     return redirect('core:home')
@@ -379,7 +457,7 @@ def user_settings(request):
                 try:
                     # Update Firebase password
                     auth.update_user(
-                        user.username,  # Firebase UID
+                        gamer.uid,  # Firebase UID
                         password=new_password
                     )
                     messages.success(request, "Password updated successfully!")
@@ -387,88 +465,178 @@ def user_settings(request):
                     messages.error(request, f"Error updating password: {str(e)}")
     
     # Prepare forms
-    profile_form = ProfileCompletionForm(instance=user)
+    profile_form = ProfileCompletionForm(instance=gamer)
     
     # Calculate user stats
     user_stats = {
-        'games_count': len(user.games) if user.games else 0,
-        'platforms_count': len(user.platforms) if user.platforms else 0,
-        'join_date': user.date_joined.strftime("%B %Y") if user.date_joined else "Unknown",
-        'last_login': user.last_login.strftime("%B %d, %Y") if user.last_login else "Never",
+        'games_count': len(gamer.games) if gamer.games else 0,
+        'platforms_count': len(gamer.platforms) if gamer.platforms else 0,
+        'join_date': gamer.date_joined.strftime("%B %Y") if gamer.date_joined else "Unknown",
+        'last_login': gamer.last_login.strftime("%B %d, %Y") if gamer.last_login else "Never",
     }
     
-    return render(request, 'users/user_settings.html', {
-        'user': user,
+    return render(request, 'users/gamer_settings.html', {
+        'user': gamer,  # Pass the gamer object as user for templates
         'profile_form': profile_form,
         'user_stats': user_stats
     })
 
 
-@login_required
 def edit_profile(request):
-    """Edit profile page - moved from settings"""
-    user = request.user
+    """Edit profile page - only allows editing of specific fields"""
+    # Check if user is authenticated via Firebase session
+    if not request.session.get('firebase_authenticated'):
+        messages.error(request, "Please login to access profile editing.")
+        return redirect('users:login')
+    
+    # Get Firebase user data from session
+    firebase_user_data = request.session.get('firebase_user')
+    if not firebase_user_data:
+        messages.error(request, "Session expired. Please login again.")
+        return redirect('users:login')
+    
+    # Get the associated Gamer object
+    try:
+        gamer = Gamer.objects.get(uid=firebase_user_data['uid'])
+    except Gamer.DoesNotExist:
+        messages.error(request, "User profile not found. Please contact support.")
+        return redirect('users:login')
     
     if request.method == 'POST':
-        action = request.POST.get('action')
-        
-        if action == 'update_profile':
-            form = ProfileCompletionForm(request.POST, request.FILES, instance=user)
-            if form.is_valid():
-                user = form.save()
+        # Only handle editable fields: custom_username, bio, about, platforms, games, profile_picture
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            try:
+                # Validate required fields
+                custom_username = request.POST.get('custom_username', '').strip()
+                bio = request.POST.get('bio', '').strip()
+                about = request.POST.get('about', '').strip()
+                platforms = request.POST.get('platforms', '[]')
+                games = request.POST.get('games', '[]')
                 
-                # Check if it's an AJAX request
-                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                    # Calculate updated user stats
-                    user_stats = {
-                        'games_count': len(user.games) if user.games else 0,
-                        'platforms_count': len(user.platforms) if user.platforms else 0,
-                        'join_date': user.date_joined.strftime("%B %Y") if user.date_joined else "Unknown",
-                    }
-                    
-                    return JsonResponse({
-                        'success': True,
-                        'message': 'Profile updated successfully!',
-                        'user': {
-                            'display_name': user.display_name,
-                            'custom_username': user.custom_username,
-                            'email': user.email,
-                            'bio': user.bio,
-                            'location': user.location,
-                            'about': user.about,
-                            'games': user.games,
-                            'platforms': user.platforms,
-                            'profile_picture_url': user.profile_picture.url if user.profile_picture else None,
-                        },
-                        'user_stats': user_stats
-                    })
-                else:
-                    messages.success(request, "Profile updated successfully!")
-                    return redirect('users:edit_profile')
-            else:
-                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # Validate custom_username
+                if not custom_username:
                     return JsonResponse({
                         'success': False,
-                        'errors': form.errors
+                        'message': 'Username is required.'
                     }, status=400)
-                else:
-                    messages.error(request, "Please correct the errors below.")
+                
+                # Check username format
+                import re
+                if not re.fullmatch(r'^[A-Za-z0-9_]{3,20}$', custom_username):
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Username must be 3-20 characters, letters, numbers, and underscores only.'
+                    }, status=400)
+                
+                # Check username availability (excluding current user)
+                existing_gamer = Gamer.objects.filter(custom_username__iexact=custom_username).exclude(pk=gamer.pk)
+                if existing_gamer.exists():
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'This username is already taken.'
+                    }, status=400)
+                
+                # Validate bio
+                if not bio or len(bio) < 10 or len(bio) > 160:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Bio must be 10-160 characters.'
+                    }, status=400)
+                
+                # Validate about (optional)
+                if about and (len(about) < 30 or len(about) > 500):
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'About must be 30-500 characters if provided.'
+                    }, status=400)
+                
+                # Parse platforms and games
+                try:
+                    platforms_list = json.loads(platforms) if platforms else []
+                    games_list = json.loads(games) if games else []
+                except json.JSONDecodeError:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Invalid platforms or games data.'
+                    }, status=400)
+                
+                # Validate platforms and games
+                if not platforms_list:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'At least one platform must be selected.'
+                    }, status=400)
+                
+                if not games_list:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'At least one game must be selected.'
+                    }, status=400)
+                
+                # Update only editable fields
+                gamer.custom_username = custom_username
+                gamer.bio = bio
+                gamer.about = about
+                gamer.platforms = platforms_list
+                gamer.games = games_list
+                
+                # Handle profile picture upload
+                if 'profile_picture' in request.FILES:
+                    gamer.profile_picture = request.FILES['profile_picture']
+                
+                # Save the gamer object
+                gamer.save()
+                
+                # Calculate updated user stats
+                user_stats = {
+                    'games_count': len(gamer.games) if gamer.games else 0,
+                    'platforms_count': len(gamer.platforms) if gamer.platforms else 0,
+                    'join_date': gamer.date_joined.strftime("%B %Y") if gamer.date_joined else "Unknown",
+                }
+                
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Profile updated successfully!',
+                    'user': {
+                        'display_name': gamer.display_name,
+                        'custom_username': gamer.custom_username,
+                        'email': gamer.email,
+                        'bio': gamer.bio,
+                        'location': gamer.location,
+                        'about': gamer.about,
+                        'games': gamer.games,
+                        'platforms': gamer.platforms,
+                        'profile_picture_url': gamer.profile_picture.url if gamer.profile_picture else None,
+                    },
+                    'user_stats': user_stats
+                })
+                
+            except Exception as e:
+                print(f"Error updating profile: {e}")
+                return JsonResponse({
+                    'success': False,
+                    'message': 'An error occurred while updating your profile. Please try again.'
+                }, status=500)
+        else:
+            # Non-AJAX request - redirect to settings
+            messages.info(request, "Please use the form to update your profile.")
+            return redirect('users:gamer_settings')
     
-    # Prepare forms
-    profile_form = ProfileCompletionForm(instance=user)
+    # Prepare forms for display (read-only for non-editable fields)
+    profile_form = ProfileCompletionForm(instance=gamer)
     
-    # Calculate user stats
-    user_stats = {
-        'games_count': len(user.games) if user.games else 0,
-        'platforms_count': len(user.platforms) if user.platforms else 0,
-        'join_date': user.date_joined.strftime("%B %Y") if user.date_joined else "Unknown",
-        'last_login': user.last_login.strftime("%B %d, %Y") if user.last_login else "Never",
+    # Calculate user stats for display
+    display_user_stats = {
+        'games_count': len(gamer.games) if gamer.games else 0,
+        'platforms_count': len(gamer.platforms) if gamer.platforms else 0,
+        'join_date': gamer.date_joined.strftime("%B %Y") if gamer.date_joined else "Unknown",
+        'last_login': gamer.last_login.strftime("%B %d, %Y") if gamer.last_login else "Never",
     }
     
     return render(request, 'users/edit_profile.html', {
-        'user': user,
+        'user': gamer,  # Pass the gamer object as user for templates
         'profile_form': profile_form,
-        'user_stats': user_stats
+        'user_stats': display_user_stats
     })
 
 
@@ -479,8 +647,17 @@ def check_username(request):
     import re
     if not re.fullmatch(r'^[A-Za-z0-9_]{3,20}$', username):
         return JsonResponse({'available': False, 'reason': 'invalid_format'})
-    qs = CustomUser.objects.filter(custom_username__iexact=username)
-    if request.user.is_authenticated:
-        qs = qs.exclude(pk=request.user.pk)
+    qs = Gamer.objects.filter(custom_username__iexact=username)
+    
+    # Check if user is authenticated via Firebase session
+    if request.session.get('firebase_authenticated'):
+        firebase_user_data = request.session.get('firebase_user')
+        if firebase_user_data:
+            try:
+                current_gamer = Gamer.objects.get(uid=firebase_user_data['uid'])
+                qs = qs.exclude(pk=current_gamer.pk)
+            except Gamer.DoesNotExist:
+                pass
+    
     is_available = not qs.exists()
     return JsonResponse({'available': is_available})

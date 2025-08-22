@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('core.urls', 'core'), namespace='core')),
     path('users/', include(('users.urls', 'users'), namespace='users')),
+    path('communities/', include(('communities.urls', 'communities'), namespace='communities')),
 ]
 
 if settings.DEBUG:

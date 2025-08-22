@@ -5,7 +5,7 @@
 
 {% block profile_css %}
 	<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
-    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/profile_completion.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
@@ -20,7 +20,7 @@
                     <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
                     <div class="profile-avatar-wrapper">
                         <img src="{% static 'core/images/player.jpeg' %}" alt="Profile Avatar" class="profile-main-avatar">
-                        <button class="edit-avatar-btn" aria-label="Edit profile picture">
+                        <button class="edit-avatar-btn" aria-label="Edit avatar">
                             <i class="fas fa-camera"></i>
                         </button>
                     </div>
@@ -383,5 +383,5 @@
 
 {% block profile_js %}
 	<script src="{% static 'users/js/dashboard.js' %}"></script>
-    <script src="{% static 'users/js/profile.js' %}"></script>
+    <script src="{% static 'users/js/profile_completion.js' %}"></script>
 {% endblock %}

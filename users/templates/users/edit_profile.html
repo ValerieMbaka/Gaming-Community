@@ -1,11 +1,11 @@
-{% extends 'core/base_minimal.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %} Edit Profile | GameHub {% endblock %}
+{% block title %}Edit Profile - GameHub{% endblock %}
 
 {% block dashboard_css %}
     <link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
-    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/edit_profile.css' %}">
     <link rel="stylesheet" href="{% static 'users/css/settings.css' %}">
 {% endblock %}
 
@@ -13,12 +13,12 @@
 <!-- Edit Profile Header -->
 <section class="settings-header">
     <div class="settings-header-content">
-        <div class="settings-header-info">
+        <div class="settings-header-title">
             <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
             <p>Update your profile information and gaming preferences</p>
         </div>
         <div class="settings-header-actions">
-            <a href="{% url 'users:user_settings' %}" class="btn btn-outline-primary">
+            <a href="{% url 'users:gamer_settings' %}" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left"></i> Back to Settings
             </a>
         </div>
@@ -26,122 +26,140 @@
 </section>
 
 <!-- Edit Profile Content -->
-<div class="settings-content">
-    <div class="settings-section">
-        <div class="settings-section-header">
-            <h2><i class="fas fa-user-edit"></i> Profile Information</h2>
-            <p>Update your profile information and gaming preferences</p>
+<div class="edit-profile-container">
+    <div class="edit-profile-form">
+        <form method="post" enctype="multipart/form-data" id="editProfileForm">
+            {% csrf_token %}
+            
+            <!-- Read-only Personal Information Section -->
+            <div class="form-section">
+                <h3 class="section-title">Personal Information (Read-only)</h3>
+                
+                <div class="form-group">
+                    <label for="id_first_name" class="readonly-label">First Name</label>
+                    <input type="text" id="id_first_name" value="{{ user.first_name|default:'' }}" 
+                           class="readonly-field" readonly>
+                    <small class="form-text">First name cannot be changed</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_last_name" class="readonly-label">Last Name</label>
+                    <input type="text" id="id_last_name" value="{{ user.last_name|default:'' }}" 
+                           class="readonly-field" readonly>
+                    <small class="form-text">Last name cannot be changed</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_email" class="readonly-label">Email Address</label>
+                    <input type="email" id="id_email" value="{{ user.email|default:'' }}" 
+                           class="readonly-field" readonly>
+                    <small class="form-text">Email cannot be changed at this time</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_date_of_birth" class="readonly-label">Date of Birth</label>
+                    <input type="date" id="id_date_of_birth" 
+                           value="{{ user.date_of_birth|date:'Y-m-d'|default:'' }}" 
+                           class="readonly-field" readonly>
+                    <small class="form-text">Date of birth cannot be changed</small>
+                </div>
         </div>
         
-        <div class="settings-section-body">
-            <form method="post" enctype="multipart/form-data" class="settings-form" id="editProfileForm">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="update_profile">
+            <!-- Editable Profile Information Section -->
+            <div class="form-section">
+                <h3 class="section-title">Profile Information (Editable)</h3>
                 
-                <div class="form-row">
+                <!-- Avatar Upload -->
                     <div class="form-group">
-                        <label for="id_profile_picture">Profile Picture</label>
-                        <div class="profile-picture-upload">
-                            <div class="current-picture">
+                    <label for="id_profile_picture">Avatar</label>
+                    <div class="avatar-upload">
                                 <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" 
-                                     alt="Current Profile Picture" id="currentProfilePic">
-                            </div>
+                             alt="Current Avatar" class="current-avatar" id="currentProfilePic">
+                        <div>
                             <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
-                            <label for="id_profile_picture" class="upload-btn">
-                                <i class="fas fa-camera"></i> Change Picture
+                            <label for="id_profile_picture" class="avatar-upload-label">
+                                <i class="fas fa-camera"></i>
+                                <span>Change Avatar</span>
                             </label>
                         </div>
                     </div>
+                    <small class="form-text">Upload a new profile picture (JPG, PNG, GIF up to 5MB)</small>
                 </div>
 
-                <div class="form-row">
+                <!-- Username -->
                     <div class="form-group">
-                        <label for="id_custom_username">Username</label>
+                    <label for="id_custom_username">Custom Username <span class="required">*</span></label>
+                    <div class="username-input-group">
                         <input type="text" name="custom_username" id="id_custom_username" 
-                               value="{{ profile_form.custom_username.value|default_if_none:'' }}" required>
-                        <small>This is your unique username on GameHub</small>
+                               value="{{ profile_form.custom_username.value|default:'' }}" 
+                               placeholder="Enter your username" required>
+                        <button type="button" id="generateUsernameBtn" class="generate-btn">
+                            <i class="fas fa-dice"></i>
+                        </button>
                     </div>
+                    <div id="custom_username-error" class="error-message"></div>
+                    <small class="form-text">3-20 characters, letters, numbers, and underscores only</small>
+                    </div>
+                
+                <!-- Bio -->
                     <div class="form-group">
-                        <label for="id_bio">Bio</label>
+                    <label for="id_bio">Bio <span class="required">*</span></label>
                         <input type="text" name="bio" id="id_bio" 
-                               value="{{ profile_form.bio.value|default_if_none:'' }}" required>
-                        <small>A short description about yourself</small>
-                    </div>
+                           value="{{ profile_form.bio.value|default:'' }}" 
+                           placeholder="Tell us about yourself in one line" required>
+                    <div id="bio-error" class="error-message"></div>
+                    <small class="form-text">10-160 characters, single line</small>
                 </div>
 
-                <div class="form-row">
+                <!-- About -->
                     <div class="form-group">
-                        <label for="id_location">Location</label>
-                        <input type="text" name="location" id="id_location" 
-                               value="{{ profile_form.location.value|default_if_none:'' }}" required>
+                    <label for="id_about">About <small class="text-muted">(optional)</small></label>
+                    <textarea name="about" id="id_about" rows="4" 
+                              placeholder="Tell us more about yourself, your gaming experience, and what you're looking for in the community">{{ profile_form.about.value|default:'' }}</textarea>
+                    <div class="char-counter">
+                        <span id="aboutCounter">0</span>/500
                     </div>
-                    <div class="form-group">
-                        <label for="id_date_of_birth">Date of Birth</label>
-                        <input type="date" name="date_of_birth" id="id_date_of_birth" 
-                               value="{{ profile_form.date_of_birth.value|date:'Y-m-d' }}" required>
+                    <small class="form-text">30-500 characters, supports emojis and line breaks</small>
                     </div>
                 </div>
 
+            <!-- Gaming Preferences Section -->
+            <div class="form-section">
+                <h3 class="section-title">Gaming Preferences (Editable)</h3>
+                
+                <!-- Platforms -->
                 <div class="form-group">
-                    <label for="id_about">About</label>
-                    <textarea name="about" id="id_about" rows="4">{{ profile_form.about.value|default_if_none:'' }}</textarea>
-                    <small>Tell us more about yourself (optional)</small>
+                    <label>Gaming Platforms <span class="required">*</span></label>
+                    <div class="platforms-container" id="platformsTags"></div>
+                    <input type="hidden" name="platforms" id="id_platforms" value="{{ profile_form.platforms.value|default:'[]' }}">
+                    <div id="platforms-error" class="error-message"></div>
+                    <small class="form-text">Select the platforms you game on</small>
                 </div>
 
-
-
+                <!-- Games -->
                 <div class="form-group">
-                    <label>Platforms</label>
-                    <div class="platforms-grid">
-                        <label class="platform-checkbox">
-                            <input type="checkbox" name="platforms" value="pc" 
-                                   {% if 'pc' in user.platforms %}checked{% endif %}>
-                            <span class="platform-label">PC</span>
-                        </label>
-                        <label class="platform-checkbox">
-                            <input type="checkbox" name="platforms" value="playstation" 
-                                   {% if 'playstation' in user.platforms %}checked{% endif %}>
-                            <span class="platform-label">PlayStation</span>
-                        </label>
-                        <label class="platform-checkbox">
-                            <input type="checkbox" name="platforms" value="xbox" 
-                                   {% if 'xbox' in user.platforms %}checked{% endif %}>
-                            <span class="platform-label">Xbox</span>
-                        </label>
-                        <label class="platform-checkbox">
-                            <input type="checkbox" name="platforms" value="nintendo" 
-                                   {% if 'nintendo' in user.platforms %}checked{% endif %}>
-                            <span class="platform-label">Nintendo Switch</span>
-                        </label>
-                        <label class="platform-checkbox">
-                            <input type="checkbox" name="platforms" value="mobile" 
-                                   {% if 'mobile' in user.platforms %}checked{% endif %}>
-                            <span class="platform-label">Mobile</span>
-                        </label>
+                    <label>Favorite Games <span class="required">*</span></label>
+                    <div class="games-container" id="gamesTags"></div>
+                    <div class="game-input-container">
+                        <input type="text" id="gameInput" placeholder="Add a game..." class="game-input">
+                        <small class="form-text">Type and press Enter to add custom games</small>
+                    </div>
+                    <input type="hidden" name="games" id="id_games" value="{{ profile_form.games.value|default:'[]' }}">
+                    <div id="games-error" class="error-message"></div>
+                    <small class="form-text">Select your favorite games or add custom ones</small>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="games_input">Games</label>
-                    <div class="games-input-container">
-                        <input type="text" id="games_input" placeholder="Type a game and press Enter">
-                        <div class="selected-games" id="selectedGames">
-                            {% for game in user.games %}
-                                <span class="game-tag">{{ game }} <i class="fas fa-times remove-game" data-game="{{ game }}"></i></span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <input type="hidden" name="games" id="id_games" value="{{ user.games|join:',' }}">
-                </div>
-
+            <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Save Changes
                     </button>
-                    <a href="{% url 'users:user_settings' %}" class="btn btn-outline-secondary">Cancel</a>
+                <a href="{% url 'users:gamer_settings' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
                 </div>
             </form>
-        </div>
     </div>
 </div>
 {% endblock %}

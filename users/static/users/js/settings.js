@@ -111,7 +111,7 @@ function updateProfileDisplay(userData, userStats) {
     updateDetailItem('Games', userData.games ? userData.games.join(', ') : null);
     updateDetailItem('Platforms', userData.platforms ? userData.platforms.join(', ') : null);
     
-    // Update profile picture if changed
+            // Update avatar if changed
     if (userData.profile_picture_url) {
         const profilePictures = document.querySelectorAll('.profile-summary-avatar img');
         profilePictures.forEach(img => {

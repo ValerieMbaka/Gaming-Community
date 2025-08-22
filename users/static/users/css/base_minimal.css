@@ -358,6 +358,7 @@ img {
 .profile-info h4 {
     font-size: 1rem;
     margin-bottom: 2px;
+    color: #111827 !important;
 }
 
 .profile-info small {
