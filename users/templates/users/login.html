@@ -75,15 +75,15 @@
             try {
                 showToast('Authenticating...', 'info');
 
-                // 1. Sign in with Firebase client SDK
+                // Sign in with Firebase client SDK
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("Firebase user signed in:", user);
 
-                // 2. Get ID token
+                // Get ID token
                 const idToken = await user.getIdToken();
 
-                // 3. Verify with Django backend
+                // Verify with Django backend
                 const response = await fetch('{% url "users:login" %}', {
                     method: 'POST',
                     headers: {
@@ -110,7 +110,7 @@
 
                 showToast('Login successful!', 'success');
 
-                // Always go to dashboard; dashboard will show the profile completion modal if needed
+                // Redirect to the dashboard
                 setTimeout(() => {
                     window.location.href = data.redirect_url;
                 }, 800);

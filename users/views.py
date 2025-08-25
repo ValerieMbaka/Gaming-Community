@@ -19,9 +19,6 @@ from django.views.decorators.http import require_GET
 from django.utils import timezone
 
 
-
-
-
 def register_view(request):
     if request.method == 'POST':
         try:
@@ -30,30 +27,19 @@ def register_view(request):
             first_name = request.POST.get('first_name', '').strip()
             last_name = request.POST.get('last_name', '').strip()
             firebase_uid = request.POST.get('firebase_uid')
-            
-            # Debug logging
-            print("=== REGISTRATION DEBUG ===")
-            print(f"Email: {email}")
-            print(f"First Name: '{first_name}'")
-            print(f"Last Name: '{last_name}'")
-            print(f"Firebase UID: {firebase_uid}")
-            print(f"All POST data: {dict(request.POST)}")
-            print("==========================")
-            
-            # Check if user already exists with this email
+            # Check if the user already exists with this email
             if Gamer.objects.filter(email=email).exists():
                 return JsonResponse({
                     'success': False,
                     'message': 'An account with this email already exists. Please login instead.'
                 }, status=400)
             
-            # If Firebase UID is provided, use it (user was created by frontend)
             if firebase_uid:
                 try:
                     # Verify the Firebase user exists
                     firebase_user = auth.get_user(firebase_uid)
                     
-                    # Create Gamer object for gaming data
+                    # Create a Gamer object for gaming data
                     print(f"Creating Gamer with first_name='{first_name}', last_name='{last_name}'")
                     gamer = Gamer.objects.create(
                         uid=firebase_uid,
@@ -73,14 +59,15 @@ def register_view(request):
                         'message': f'Error creating user: {str(e)}'
                     }, status=400)
             else:
-                # Fallback: Create Firebase user from backend (for non-JS submissions)
+                # Fallback: Create Firebase user from backend
                 firebase_user = auth.create_user(
                     email=email,
                     password=password,
                     display_name=f"{first_name} {last_name}".strip() or None
                 )
                 
-                # Create Gamer object for gaming data
+
+                # Create a Gamer object for gaming data
                 print(f"Creating Gamer (fallback) with first_name='{first_name}', last_name='{last_name}'")
                 gamer = Gamer.objects.create(
                     uid=firebase_user.uid,
@@ -139,7 +126,7 @@ def login_view(request):
                 print("Firebase UID:", firebase_uid)
                 print("Firebase Email:", firebase_email)
                 
-                # First, try to find user by email (this ensures one email = one account)
+                # First, try to find the user by email
                 user = None
                 created = False
                 
@@ -195,7 +182,7 @@ def login_view(request):
                 # Update last login and ensure first/last name are set
                 user.last_login = timezone.now()
                 
-                # Update first and last name if they're missing and we have them from Firebase
+                # Update first and last name if they're missing
                 firebase_name = decoded_token.get('name', '')
                 print(f"Firebase name from token: '{firebase_name}'")
                 print(f"Current user first_name: '{user.first_name}', last_name: '{user.last_name}'")
