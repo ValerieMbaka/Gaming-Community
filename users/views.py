@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout
 
 from django.http import JsonResponse
 from firebase_admin import auth, exceptions
+import firebase_admin
 from django.conf import settings
 from .forms import ProfileCompletionForm
 from .models import Gamer
@@ -20,6 +21,17 @@ from django.utils import timezone
 
 
 def register_view(request):
+    # Check Firebase initialization
+    try:
+        firebase_app = firebase_admin.get_app()
+        print(f"Firebase app is available: {firebase_app}")
+    except ValueError as e:
+        print(f"Firebase app not available: {e}")
+        return JsonResponse({
+            'success': False,
+            'message': 'Firebase is not properly initialized. Please contact support.'
+        }, status=500)
+    
     if request.method == 'POST':
         try:
             email = request.POST.get('email')
@@ -37,7 +49,9 @@ def register_view(request):
             if firebase_uid:
                 try:
                     # Verify the Firebase user exists
+                    print(f"Attempting to verify Firebase user with UID: {firebase_uid}")
                     firebase_user = auth.get_user(firebase_uid)
+                    print(f"Firebase user verified successfully: {firebase_user.email}")
                     
                     # Create a Gamer object for gaming data
                     print(f"Creating Gamer with first_name='{first_name}', last_name='{last_name}'")
@@ -54,6 +68,7 @@ def register_view(request):
                         'message': 'Registration successful! Please login.'
                     })
                 except Exception as e:
+                    print(f"Error verifying Firebase user: {str(e)}")
                     return JsonResponse({
                         'success': False,
                         'message': f'Error creating user: {str(e)}'
