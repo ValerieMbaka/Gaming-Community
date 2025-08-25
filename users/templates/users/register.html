@@ -69,7 +69,8 @@
     <script type="module">
 	    import {
         auth,
-        createUserWithEmailAndPassword  // Import the function
+        createUserWithEmailAndPassword,  // Import the function
+        updateProfile
     } from "{% static 'users/js/firebase-init.js' %}";
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -91,10 +92,26 @@
 
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                
+                // Update the user's display name in Firebase
+                try {
+                    await updateProfile(user, {
+                        displayName: `${firstName} ${lastName}`.trim()
+                    });
+                    console.log('Updated Firebase display name');
+                } catch (error) {
+                    console.log('Could not update Firebase display name:', error);
+                }
 
                 // Submit to Django backend
                 document.getElementById('firebase_uid').value = user.uid;
                 const formData = new FormData(e.target);
+                
+                // Debug logging
+                console.log('Form data being sent:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
 
                 const response = await fetch('{% url "users:register" %}', {
                     method: 'POST',

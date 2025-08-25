@@ -188,10 +188,40 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Handle delete account form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteForm = document.querySelector('.delete-account-form');
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('delete_password').value;
+            if (!password) {
+                alert('Please enter your password to confirm account deletion.');
+                return;
+            }
+            
+            // Show confirmation dialog
+            const confirmed = confirm('Are you absolutely sure you want to delete your account? This action will:\n\n1. Delete your account from Django database\n2. Delete your account from Firebase\n3. Remove all your data permanently\n\nThis action CANNOT be undone!');
+            
+            if (confirmed) {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting Account...';
+                submitBtn.disabled = true;
+                
+                // Submit the form
+                this.submit();
+            }
+        });
+    }
+});
+
 // Password toggle function (for global access)
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
-    const toggle = input.nextElementSibling;
+    const toggle = input.parentElement.querySelector('.password-toggle');
     const icon = toggle.querySelector('i');
     
     if (input.type === 'password') {

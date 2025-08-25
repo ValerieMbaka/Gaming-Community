@@ -78,4 +78,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run animation on page load
     animateCards();
 });
-

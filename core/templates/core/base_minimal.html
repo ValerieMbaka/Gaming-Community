@@ -91,15 +91,69 @@
             <!-- User Profile Dropdown -->
             <div class="nav-dropdown profile-dropdown">
                 <button class="profile-btn" aria-label="User profile">
-                    <img src="{% if firebase_user and firebase_user.is_authenticated and firebase_user.profile_picture %}{{ firebase_user.profile_picture }}{% elif firebase_user and firebase_user.is_authenticated %}{% static 'core/images/player.jpeg' %}{% elif request.user.is_authenticated and request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" class="profile-avatar" alt="User Avatar">
-                    <span class="username">{% if firebase_user and firebase_user.is_authenticated %}{% if firebase_user.custom_username %}{{ firebase_user.custom_username }}{% elif firebase_user.first_name %}{{ firebase_user.first_name }}{% else %}{{ firebase_user.email|truncatechars:15 }}{% endif %}{% elif request.user.is_authenticated %}{% if request.user.custom_username %}{{ request.user.custom_username }}{% elif request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.email|truncatechars:15 }}{% endif %}{% else %}Guest{% endif %}</span>
+                    <img src="
+						{% if firebase_user and firebase_user.is_authenticated and firebase_user.profile_picture %}
+							{{ firebase_user.profile_picture }}
+						{% elif firebase_user and firebase_user.is_authenticated %}
+							{% static 'core/images/player.jpeg' %}
+						{% elif request.user.is_authenticated and request.user.profile_picture %}
+							{{ request.user.profile_picture.url }}
+						{% else %}
+							{% static 'core/images/player.jpeg' %}
+						{% endif %}" class="profile-avatar" alt="User Avatar">
+                    <span class="username">
+	                    {% if firebase_user and firebase_user.is_authenticated %}
+	                        {% if firebase_user.custom_username %}
+		                        {{ firebase_user.custom_username }}
+	                        {% elif firebase_user.first_name %}
+		                        {{ firebase_user.first_name }}
+	                        {% else %}
+		                        {{ firebase_user.email|truncatechars:15 }}
+	                        {% endif %}
+	                        {% elif request.user.is_authenticated %}
+	                            {% if request.user.custom_username %}
+		                            {{ request.user.custom_username }}
+	                            {% elif request.user.first_name %}
+		                            {{ request.user.first_name }}
+	                            {% else %}
+		                            {{ request.user.email|truncatechars:15 }}
+	                            {% endif %}
+                                {% else %}
+		                    Guest
+	                    {% endif %}
+                    </span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="nav-dropdown-content profile-dropdown-content">
                     <div class="profile-header">
-                        <img src="{% if firebase_user and firebase_user.is_authenticated and firebase_user.profile_picture %}{{ firebase_user.profile_picture }}{% elif firebase_user and firebase_user.is_authenticated %}{% static 'core/images/player.jpeg' %}{% elif request.user.is_authenticated and request.user.profile_picture %}{{ request.user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}" class="dropdown-avatar" alt="User Avatar">
+                        <img src="
+								{% if firebase_user and firebase_user.is_authenticated and firebase_user.profile_picture %}
+									{{ firebase_user.profile_picture }}
+								{% elif firebase_user and firebase_user.is_authenticated %}
+									{% static 'core/images/player.jpeg' %}
+								{% elif request.user.is_authenticated and request.user.profile_picture %}
+									{{ request.user.profile_picture.url }}
+								{% else %}
+									{% static 'core/images/player.jpeg' %}
+								{% endif %}" class="dropdown-avatar" alt="User Avatar">
                         <div class="profile-info">
-                            <h4>{% if firebase_user and firebase_user.is_authenticated %}{% if firebase_user.custom_username %}{{ firebase_user.custom_username }}{% elif firebase_user.first_name %}{{ firebase_user.first_name }}{% else %}{{ firebase_user.email|truncatechars:15 }}{% endif %}{% elif request.user.is_authenticated %}{% if request.user.custom_username %}{{ request.user.custom_username }}{% elif request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.email|truncatechars:15 }}{% endif %}{% else %}Guest{% endif %}</h4>
+                            <h4>{% if firebase_user and firebase_user.is_authenticated %}
+	                            {% if firebase_user.custom_username %}
+		                            {{ firebase_user.custom_username }}
+	                            {% elif firebase_user.first_name %}
+		                            {{ firebase_user.first_name }}
+	                            {% else %}
+		                            {{ firebase_user.email|truncatechars:15 }}
+	                            {% endif %}
+	                            {% elif request.user.is_authenticated %}
+	                            {% if request.user.custom_username %}
+		                            {{ request.user.custom_username }}
+	                            {% elif request.user.first_name %}
+		                            {{ request.user.first_name }}
+	                            {% else %}
+		                            {{ request.user.email|truncatechars:15 }}
+	                            {% endif %}{% else %}Guest{% endif %}
+                            </h4>
                             <small>{% if firebase_user and firebase_user.is_authenticated %}{% if firebase_user.bio %}{{ firebase_user.bio }}{% else %}Gamer{% endif %}{% elif request.user.is_authenticated %}{{ request.user.bio|default:'Gamer' }}{% else %}Welcome{% endif %}</small>
                         </div>
                     </div>
