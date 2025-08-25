@@ -1,3 +1,9 @@
+// Function to get random last played date
+function getRandomLastPlayed() {
+    const options = ['Today', 'Yesterday', '2d ago', '3d ago', '1w ago', '2w ago', '1m ago'];
+    return options[Math.floor(Math.random() * options.length)];
+}
+
 // Function to get appropriate image for a game
 function getGameImage(gameName) {
     const gameNameLower = gameName.toLowerCase();
@@ -108,6 +114,24 @@ function updateUserProfileUI(data) {
                 <img src="${getGameImage(game)}" alt="${game}">
                 <div class="game-info">
                     <h4>${game}</h4>
+                    <div class="game-stats">
+                        <div class="stat-item hours" title="Total hours played">
+                            <span class="stat-value">${Math.floor(Math.random() * 200) + 50}h</span>
+                            <span class="stat-label">Hours</span>
+                        </div>
+                        <div class="stat-item win-rate" title="Win rate percentage">
+                            <span class="stat-value">${Math.floor(Math.random() * 30) + 70}%</span>
+                            <span class="stat-label">Win Rate</span>
+                        </div>
+                        <div class="stat-item achievements" title="Achievements unlocked">
+                            <span class="stat-value">${Math.floor(Math.random() * 20) + 5}</span>
+                            <span class="stat-label">Achievements</span>
+                        </div>
+                        <div class="stat-item last-played" title="Last time played">
+                            <span class="stat-value">${getRandomLastPlayed()}</span>
+                            <span class="stat-label">Last Played</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -239,6 +263,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize game images on page load
     initializeGameImages();
     
+    // Initialize competition filters with multiple attempts
+    function attemptInitializeFilters() {
+        console.log('Attempting to initialize competition filters...');
+        const filterButtons = document.querySelectorAll('.competition-filters .filter-btn');
+        if (filterButtons.length > 0) {
+            console.log('Filter buttons found, initializing...');
+            initializeCompetitionFilters();
+        } else {
+            console.log('No filter buttons found, retrying in 200ms...');
+            setTimeout(attemptInitializeFilters, 200);
+        }
+    }
+    
+    // Start initialization attempts
+    setTimeout(attemptInitializeFilters, 100);
+    
     // Avatar upload
     const avatarUpload = document.getElementById('avatarUpload');
     if (avatarUpload) {
@@ -275,6 +315,151 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Function to initialize competition filters
+    function initializeCompetitionFilters() {
+        console.log('initializeCompetitionFilters function called');
+        const filterButtons = document.querySelectorAll('.competition-filters .filter-btn');
+        const competitionCards = document.querySelectorAll('.competition-card');
+        
+        console.log('Filter buttons found:', filterButtons.length);
+        console.log('Competition cards found:', competitionCards.length);
+        console.log('Filter buttons:', filterButtons);
+        
+        if (filterButtons.length === 0) {
+            console.warn('No filter buttons found. Retrying...');
+            setTimeout(initializeCompetitionFilters, 200);
+            return;
+        }
+        
+        filterButtons.forEach(button => {
+            console.log('Adding click listener to button:', button.textContent, 'with data-filter:', button.getAttribute('data-filter'));
+            
+            // Test if button is clickable
+            button.style.pointerEvents = 'auto';
+            button.style.zIndex = '1000';
+            
+            button.addEventListener('click', function(e) {
+                console.log('Button clicked!');
+                e.preventDefault();
+                e.stopPropagation();
+                const filter = this.getAttribute('data-filter');
+                console.log('Filter clicked:', filter);
+                
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter competition cards
+                competitionCards.forEach(card => {
+                    const status = card.getAttribute('data-status');
+                    console.log('Card status:', status, 'Filter:', filter);
+                    
+                    if (filter === 'all' || status === filter) {
+                        card.style.display = 'block';
+                        card.style.animation = 'cardFadeIn 0.6s ease-out';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Also add a mousedown event to test
+            button.addEventListener('mousedown', function(e) {
+                console.log('Button mousedown:', this.textContent);
+            });
+        });
+        
+        // Add click handlers for competition cards
+        competitionCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking on buttons or interactive elements
+                if (e.target.closest('.competition-btn') || e.target.closest('.filter-btn')) {
+                    return;
+                }
+                
+                // Add click effect
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Here you could add navigation to competition details
+                console.log('Competition card clicked:', this.querySelector('.competition-title').textContent);
+            });
+        });
+        
+        // Add hover effects for competition stats
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    }
+    
+    // Function to update competition countdown timers
+    function updateCompetitionCountdowns() {
+        const countdownTimers = document.querySelectorAll('.countdown-timer');
+        
+        countdownTimers.forEach(timer => {
+            const segments = timer.querySelectorAll('.countdown-segment');
+            let totalSeconds = 0;
+            
+            // Calculate total seconds from current display
+            segments.forEach(segment => {
+                const value = parseInt(segment.querySelector('.countdown-value').textContent);
+                const label = segment.querySelector('.countdown-label').textContent.toLowerCase();
+                
+                if (label.includes('day')) {
+                    totalSeconds += value * 24 * 60 * 60;
+                } else if (label.includes('hour')) {
+                    totalSeconds += value * 60 * 60;
+                } else if (label.includes('minute')) {
+                    totalSeconds += value * 60;
+                }
+            });
+            
+            // Update countdown
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                
+                const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                const seconds = totalSeconds % 60;
+                
+                // Update display
+                segments.forEach((segment, index) => {
+                    const valueElement = segment.querySelector('.countdown-value');
+                    const labelElement = segment.querySelector('.countdown-label');
+                    
+                    if (index === 0) {
+                        valueElement.textContent = days;
+                        labelElement.textContent = days === 1 ? 'Day' : 'Days';
+                    } else if (index === 1) {
+                        valueElement.textContent = hours;
+                        labelElement.textContent = hours === 1 ? 'Hour' : 'Hours';
+                    } else if (index === 2) {
+                        valueElement.textContent = minutes;
+                        labelElement.textContent = minutes === 1 ? 'Minute' : 'Minutes';
+                    }
+                });
+                
+                // Add urgent styling if less than 1 hour
+                if (totalSeconds < 3600) {
+                    timer.classList.add('urgent');
+                }
+            }
+        });
+    }
+    
+    // Update countdown timers every second
+    setInterval(updateCompetitionCountdowns, 1000);
     
         // Function to update user info in the UI
     function updateUserInfo(data) {

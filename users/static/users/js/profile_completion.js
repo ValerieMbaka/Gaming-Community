@@ -1,3 +1,9 @@
+// Function to get random last played date
+function getRandomLastPlayed() {
+    const options = ['Today', 'Yesterday', '2d ago', '3d ago', '1w ago', '2w ago', '1m ago'];
+    return options[Math.floor(Math.random() * options.length)];
+}
+
 // Function to get appropriate image for a game
 function getGameImage(gameName) {
     const gameNameLower = gameName.toLowerCase();
@@ -531,6 +537,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     <img src="${getGameImage(game)}" alt="${game}">
                     <div class="game-info">
                         <h4>${game}</h4>
+                                            <div class="game-stats">
+                        <div class="stat-item hours" title="Total hours played">
+                            <span class="stat-value">${Math.floor(Math.random() * 200) + 50}h</span>
+                            <span class="stat-label">Hours</span>
+                        </div>
+                        <div class="stat-item win-rate" title="Win rate percentage">
+                            <span class="stat-value">${Math.floor(Math.random() * 30) + 70}%</span>
+                            <span class="stat-label">Win Rate</span>
+                        </div>
+                        <div class="stat-item achievements" title="Achievements unlocked">
+                            <span class="stat-value">${Math.floor(Math.random() * 20) + 5}</span>
+                            <span class="stat-label">Achievements</span>
+                        </div>
+                        <div class="stat-item last-played" title="Last time played">
+                            <span class="stat-value">${getRandomLastPlayed()}</span>
+                            <span class="stat-label">Last Played</span>
+                        </div>
+                    </div>
                     </div>
                 </div>
             `).join('');
