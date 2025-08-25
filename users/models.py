@@ -32,8 +32,6 @@ class Gamer(models.Model):
         super().clean()
         if not self.bio:
             raise ValidationError({'bio': 'Bio is required'})
-        if not self.date_of_birth:
-            raise ValidationError({'date_of_birth': 'Date of birth is required'})
         if not self.location:
             raise ValidationError({'location': 'Location is required'})
         if not self.platforms:

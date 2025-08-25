@@ -18,6 +18,7 @@ from firebase_admin.auth import (
 )
 from django.views.decorators.http import require_GET
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 def register_view(request):
@@ -510,7 +511,7 @@ def profile_completion(request):
     })
 
 
-def user_settings(request):
+def gamer_settings(request):
     """User settings page with profile editing and account management"""
     # Check if user is authenticated via Firebase session
     if not request.session.get('firebase_authenticated'):
@@ -539,7 +540,7 @@ def user_settings(request):
             if form.is_valid():
                 gamer = form.save()
                 messages.success(request, "Profile updated successfully!")
-                return redirect('users:user_settings')
+                return redirect('users:gamer_settings')
             else:
                 messages.error(request, "Please correct the errors below.")
         
@@ -561,7 +562,7 @@ def user_settings(request):
                     except Exception as firebase_error:
                         print(f"Error verifying Firebase user {gamer.uid}: {firebase_error}")
                         messages.error(request, "Unable to verify account. Please try again.")
-                        return redirect('users:user_settings')
+                        return redirect('users:gamer_settings')
                     
                     # Store Firebase UID before deleting Django user
                     firebase_uid = gamer.uid
@@ -653,15 +654,28 @@ def edit_profile(request):
         return redirect('users:login')
     
     if request.method == 'POST':
-        # Only handle editable fields: custom_username, bio, about, platforms, games, profile_picture
+        # Only handle editable fields: custom_username, bio, about, location, platforms, games, profile_picture
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             try:
+                print("=== EDIT PROFILE DEBUG ===")
+                print(f"Request POST data: {dict(request.POST)}")
+                print(f"Request FILES: {dict(request.FILES)}")
+                
                 # Validate required fields
                 custom_username = request.POST.get('custom_username', '').strip()
                 bio = request.POST.get('bio', '').strip()
                 about = request.POST.get('about', '').strip()
+                location = request.POST.get('location', '').strip()
                 platforms = request.POST.get('platforms', '[]')
                 games = request.POST.get('games', '[]')
+                
+                print(f"Parsed data:")
+                print(f"  custom_username: {custom_username}")
+                print(f"  bio: {bio}")
+                print(f"  about: {about}")
+                print(f"  location: {location}")
+                print(f"  platforms: {platforms}")
+                print(f"  games: {games}")
                 
                 # Validate custom_username
                 if not custom_username:
@@ -693,6 +707,13 @@ def edit_profile(request):
                         'message': 'Bio must be 10-160 characters.'
                     }, status=400)
                 
+                # Validate location
+                if not location:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Location is required.'
+                    }, status=400)
+                
                 # Validate about (optional)
                 if about and (len(about) < 30 or len(about) > 500):
                     return JsonResponse({
@@ -704,7 +725,10 @@ def edit_profile(request):
                 try:
                     platforms_list = json.loads(platforms) if platforms else []
                     games_list = json.loads(games) if games else []
-                except json.JSONDecodeError:
+                    print(f"Parsed platforms_list: {platforms_list}")
+                    print(f"Parsed games_list: {games_list}")
+                except json.JSONDecodeError as e:
+                    print(f"JSON decode error: {e}")
                     return JsonResponse({
                         'success': False,
                         'message': 'Invalid platforms or games data.'
@@ -723,19 +747,37 @@ def edit_profile(request):
                         'message': 'At least one game must be selected.'
                     }, status=400)
                 
+                print("All validation passed, updating gamer object...")
+                
                 # Update only editable fields
                 gamer.custom_username = custom_username
                 gamer.bio = bio
                 gamer.about = about
+                gamer.location = location
                 gamer.platforms = platforms_list
                 gamer.games = games_list
                 
                 # Handle profile picture upload
                 if 'profile_picture' in request.FILES:
+                    print(f"Profile picture uploaded: {request.FILES['profile_picture']}")
                     gamer.profile_picture = request.FILES['profile_picture']
                 
+                print("Validating model...")
+                # Validate the model before saving
+                try:
+                    gamer.full_clean()
+                    print("Model validation passed")
+                except ValidationError as e:
+                    print(f"Validation error: {e}")
+                    return JsonResponse({
+                        'success': False,
+                        'message': f'Validation error: {", ".join(e.messages)}'
+                    }, status=400)
+                
+                print("Saving gamer object...")
                 # Save the gamer object
                 gamer.save()
+                print("Gamer object saved successfully")
                 
                 # Calculate updated user stats
                 user_stats = {
@@ -744,6 +786,7 @@ def edit_profile(request):
                     'join_date': gamer.date_joined.strftime("%B %Y") if gamer.date_joined else "Unknown",
                 }
                 
+                print("Returning success response")
                 return JsonResponse({
                     'success': True,
                     'message': 'Profile updated successfully!',
@@ -762,7 +805,11 @@ def edit_profile(request):
                 })
                 
             except Exception as e:
-                print(f"Error updating profile: {e}")
+                print(f"=== ERROR IN EDIT PROFILE ===")
+                print(f"Error type: {type(e)}")
+                print(f"Error message: {str(e)}")
+                import traceback
+                traceback.print_exc()
                 return JsonResponse({
                     'success': False,
                     'message': 'An error occurred while updating your profile. Please try again.'
@@ -783,10 +830,28 @@ def edit_profile(request):
         'last_login': gamer.last_login.strftime("%B %d, %Y") if gamer.last_login else "Never",
     }
     
+    # Convert platforms and games to proper JSON for the template
+    
+    # Debug logging
+    print(f"Gamer platforms: {gamer.platforms}")
+    print(f"Gamer games: {gamer.games}")
+    
+    # Ensure we have valid data
+    platforms_data = gamer.platforms if gamer.platforms and isinstance(gamer.platforms, list) else []
+    games_data = gamer.games if gamer.games and isinstance(gamer.games, list) else []
+    
+    platforms_json = json.dumps(platforms_data)
+    games_json = json.dumps(games_data)
+    
+    print(f"Platforms JSON: {platforms_json}")
+    print(f"Games JSON: {games_json}")
+    
     return render(request, 'users/edit_profile.html', {
         'user': gamer,  # Pass the gamer object as user for templates
         'profile_form': profile_form,
-        'user_stats': display_user_stats
+        'user_stats': display_user_stats,
+        'platforms_json': platforms_json,
+        'games_json': games_json
     })
 
 

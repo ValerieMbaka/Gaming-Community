@@ -210,7 +210,7 @@
                     {% if featured_game and featured_game.name %}
                     <div class="featured-game-card">
                         <div class="game-banner-container">
-                            <img src="{% static 'core/images/games.jpeg' %}" alt="{{ featured_game.name }}" class="game-banner">
+                            <img src="{% static 'core/images/cod.jpeg' %}" alt="{{ featured_game.name }}" class="game-banner">
                         </div>
                         <div class="game-info-container">
                             <h3 class="game-title">{{ featured_game.name }}</h3>
@@ -230,7 +230,7 @@
                             </div>
                             <div class="game-rank-card">
                                 <div class="rank-icon-container">
-                                    <img src="{% static 'core/images/games.jpeg' %}" alt="{{ featured_game.rank }} Rank" class="rank-icon">
+                                    <img src="{% static 'core/images/faze.jpeg' %}" alt="{{ featured_game.rank }} Rank" class="rank-icon">
                                 </div>
                                 <div class="rank-info">
                                     <span class="rank-name">{{ featured_game.rank }}</span>
@@ -284,7 +284,7 @@
                                 <h4 class="achievement-title">Game Collector</h4>
                                 <p class="achievement-date">{{ user_stats.join_date }}</p>
                                 <div class="achievement-game">
-                                    <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
+                                    <img src="{% static 'core/images/gamepad.jpeg' %}" alt="Games">
                                 </div>
                             </div>
                         </div>
@@ -348,7 +348,7 @@
                 {% if user.games and user.games|length > 0 %}
                 <div class="activity-item">
                     <div class="activity-icon">
-                        <img src="{% static 'core/images/games.jpeg' %}" alt="Games">
+                        <img src="" alt="Games" data-game="{% for game in user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}" class="activity-game-image">
                     </div>
                     <div class="activity-content">
                         <h3 class="activity-title">Games Added to Profile</h3>
@@ -390,14 +390,14 @@
             <div class="game-carousel">
                 {% for game in user.games %}
                 <div class="game-card">
-                    <img src="{% static 'core/images/games.jpeg' %}" alt="{{ game }}">
+                    <div class="game-status">Active</div>
+                    <div class="platform-badges">
+                        <span class="platform-badge">PC</span>
+                        <span class="platform-badge">PS5</span>
+                    </div>
+                    <img src="" alt="{{ game }}" data-game="{{ game }}" class="game-image">
                     <div class="game-info">
                         <h4>{{ game }}</h4>
-                        <p>Game • Active</p>
-                        <div class="game-footer">
-                            <div class="match-percentage">100% Match</div>
-                            <button class="btn btn-sm btn-outline-primary">Details</button>
-                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -427,7 +427,7 @@
             <div class="competition-grid">
                 <div class="competition-card">
                     <div class="competition-card-header">
-                        <img src="{% static 'core/images/valorant-tournament.jpg' %}"
+                        <img src="{% static 'core/images/cod.jpeg' %}"
                              class="competition-card-image" alt="Valorant">
                         <div class="competition-status active">Active</div>
                     </div>
@@ -457,7 +457,7 @@
                 
                 <div class="competition-card">
                     <div class="competition-card-header">
-                        <img src="{% static 'core/images/fifa-tournament.jpg' %}"
+                        <img src="{% static 'core/images/fc.jpeg' %}"
                              class="competition-card-image" alt="FIFA">
                         <div class="competition-status upcoming">Upcoming</div>
                     </div>
