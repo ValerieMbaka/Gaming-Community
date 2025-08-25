@@ -57,14 +57,11 @@
             <div class="profile-cover-section">
                 <div class="profile-cover-container">
                     <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
-        <div class="profile-actions-container">
-            <button class="btn btn-streaming">
-                <i class="fas fa-gamepad me-2"></i> Start Streaming
-            </button>
+                <div class="profile-actions-container">
             <button class="btn btn-icon btn-action" title="More options">
                 <i class="fas fa-ellipsis-h"></i>
             </button>
-                    </div>
+        </div>
                 </div>
             </div>
 
@@ -166,29 +163,29 @@
         </div>
         <div class="card-body">
             <div class="action-buttons">
-                <button class="action-btn" data-tooltip="Join a competition">
+                <button class="action-btn" data-tooltip="Join a competition" onclick="window.location.href='#'">
                     <div class="action-icon">
                         <i class="fas fa-trophy"></i>
                     </div>
                     <span>Join Competition</span>
                 </button>
-                <button class="action-btn" data-tooltip="Create a new team">
+                <a href="{% url 'communities:communities_list' %}" class="action-btn" data-tooltip="Join a gaming community">
                     <div class="action-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <span>Create Group</span>
-                </button>
-                <button class="action-btn" data-tooltip="Start a live stream">
-                    <div class="action-icon">
-                        <i class="fas fa-stream"></i>
-                    </div>
-                    <span>Go Live</span>
-                </button>
-                <button class="action-btn" data-tooltip="View activity feed">
+                    <span>Join Community</span>
+                </a>
+                <button class="action-btn" data-tooltip="View activity feeds and updates" onclick="window.location.href='#'">
                     <div class="action-icon">
                         <i class="fas fa-newspaper"></i>
                     </div>
                     <span>View Feeds</span>
+                </button>
+                <button class="action-btn" data-tooltip="Start a live stream" onclick="window.location.href='#'">
+                    <div class="action-icon">
+                        <i class="fas fa-stream"></i>
+                    </div>
+                    <span>Start Streaming</span>
                 </button>
             </div>
         </div>
@@ -398,6 +395,24 @@
                     <img src="" alt="{{ game }}" data-game="{{ game }}" class="game-image">
                     <div class="game-info">
                         <h4>{{ game }}</h4>
+                        <div class="game-stats">
+                            <div class="stat-item hours" title="Total hours played">
+                                <span class="stat-value">{{ forloop.counter|add:50|add:forloop.counter0|add:10 }}h</span>
+                                <span class="stat-label">Hours</span>
+                            </div>
+                            <div class="stat-item win-rate" title="Win rate percentage">
+                                <span class="stat-value">{{ forloop.counter|add:70|add:forloop.counter0|add:5 }}%</span>
+                                <span class="stat-label">Win Rate</span>
+                            </div>
+                            <div class="stat-item achievements" title="Achievements unlocked">
+                                <span class="stat-value">{{ forloop.counter|add:5|add:forloop.counter0|add:3 }}</span>
+                                <span class="stat-label">Achievements</span>
+                            </div>
+                            <div class="stat-item last-played" title="Last time played">
+                                <span class="stat-value">{% if forloop.counter == 1 %}Today{% elif forloop.counter == 2 %}Yesterday{% elif forloop.counter == 3 %}2d ago{% elif forloop.counter == 4 %}3d ago{% else %}1w ago{% endif %}</span>
+                                <span class="stat-label">Last Played</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -422,24 +437,89 @@
                 <i class="fas fa-trophy"></i>
                 <span>My Competitions</span>
             </h2>
+            <div class="competition-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
         </div>
         <div class="card-body">
+            <div class="competition-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value">12</span>
+                        <span class="stat-label">Total Competitions</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value">8</span>
+                        <span class="stat-label">Wins</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value">Kshs 2,850</span>
+                        <span class="stat-label">Total Winnings</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value">67%</span>
+                        <span class="stat-label">Win Rate</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="competition-grid">
-                <div class="competition-card">
+                <div class="competition-card" data-status="active">
                     <div class="competition-card-header">
                         <img src="{% static 'core/images/cod.jpeg' %}"
                              class="competition-card-image" alt="Valorant">
-                        <div class="competition-status active">Active</div>
+                        <div class="competition-status active">
+                            <i class="fas fa-play-circle"></i>
+                            Active
+                        </div>
+                        <div class="competition-participants">
+                            <i class="fas fa-users"></i>
+                            128/200
+                        </div>
                     </div>
                     <div class="competition-card-body">
-                        <h4 class="competition-title">Valorant Weekly</h4>
+                        <div class="competition-category">
+                            <span class="category-badge fps">FPS</span>
+                        </div>
+                        <h4 class="competition-title">Valorant Weekly Championship</h4>
                         <p class="competition-meta">
                             <i class="fas fa-calendar-alt"></i> Tomorrow, 8:00 PM
                         </p>
                         <div class="competition-prize">
-                            <i class="fas fa-gem"></i> $1,000 Prize Pool
+                            <i class="fas fa-gem"></i> Kshs 1,500 Prize Pool
                         </div>
-                        <div class="countdown-timer">
+                        <div class="competition-stats">
+                            <div class="stat">
+                                <i class="fas fa-clock"></i>
+                                <span>Best of 3</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="countdown-timer urgent">
                             <div class="countdown-segment">
                                 <span class="countdown-value">1</span>
                                 <span class="countdown-label">Day</span>
@@ -448,26 +528,51 @@
                                 <span class="countdown-value">8</span>
                                 <span class="countdown-label">Hours</span>
                             </div>
+                            <div class="countdown-segment">
+                                <span class="countdown-value">32</span>
+                                <span class="countdown-label">Minutes</span>
+                            </div>
                         </div>
                         <button class="competition-btn primary">
-                            Register Now
+                            <i class="fas fa-play"></i>
+                            Join Now
                         </button>
                     </div>
                 </div>
                 
-                <div class="competition-card">
+                <div class="competition-card" data-status="upcoming">
                     <div class="competition-card-header">
                         <img src="{% static 'core/images/fc.jpeg' %}"
                              class="competition-card-image" alt="FIFA">
-                        <div class="competition-status upcoming">Upcoming</div>
+                        <div class="competition-status upcoming">
+                            <i class="fas fa-clock"></i>
+                            Upcoming
+                        </div>
+                        <div class="competition-participants">
+                            <i class="fas fa-users"></i>
+                            64/100
+                        </div>
                     </div>
                     <div class="competition-card-body">
+                        <div class="competition-category">
+                            <span class="category-badge sports">Sports</span>
+                        </div>
                         <h4 class="competition-title">FIFA Weekend Cup</h4>
                         <p class="competition-meta">
                             <i class="fas fa-calendar-alt"></i> Saturday, 3:00 PM
                         </p>
                         <div class="competition-prize">
-                            <i class="fas fa-gem"></i> $500 Prize Pool
+                            <i class="fas fa-gem"></i> Kshs 800 Prize Pool
+                        </div>
+                        <div class="competition-stats">
+                            <div class="stat">
+                                <i class="fas fa-clock"></i>
+                                <span>Single Elimination</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Online</span>
+                            </div>
                         </div>
                         <div class="countdown-timer">
                             <div class="countdown-segment">
@@ -480,7 +585,49 @@
                             </div>
                         </div>
                         <button class="competition-btn secondary">
+                            <i class="fas fa-info-circle"></i>
                             View Details
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="competition-card" data-status="completed">
+                    <div class="competition-card-header">
+                        <img src="{% static 'core/images/tekken.jpeg' %}"
+                             class="competition-card-image" alt="Tekken">
+                        <div class="competition-status completed">
+                            <i class="fas fa-check-circle"></i>
+                            Completed
+                        </div>
+                        <div class="competition-result">
+                            <i class="fas fa-trophy"></i>
+                            1st Place
+                        </div>
+                    </div>
+                    <div class="competition-card-body">
+                        <div class="competition-category">
+                            <span class="category-badge fighting">Fighting</span>
+                        </div>
+                        <h4 class="competition-title">Tekken Masters Tournament</h4>
+                        <p class="competition-meta">
+                            <i class="fas fa-calendar-alt"></i> Last Week
+                        </p>
+                        <div class="competition-prize won">
+                            <i class="fas fa-gem"></i> Won Kshs 1,500
+                        </div>
+                        <div class="competition-performance">
+                            <div class="performance-stat">
+                                <span class="stat-label">Final Rank</span>
+                                <span class="stat-value">1st</span>
+                            </div>
+                            <div class="performance-stat">
+                                <span class="stat-label">Matches Won</span>
+                                <span class="stat-value">8/10</span>
+                            </div>
+                        </div>
+                        <button class="competition-btn completed">
+                            <i class="fas fa-eye"></i>
+                            View Results
                         </button>
                     </div>
                 </div>
