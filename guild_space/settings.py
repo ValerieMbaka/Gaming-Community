@@ -162,3 +162,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Initialize Firebase at Django startup
+try:
+    from firebase_config import default_app
+    FIREBASE_APP = default_app
+except Exception as e:
+    print(f"Warning: Firebase initialization failed: {e}")
+    FIREBASE_APP = None

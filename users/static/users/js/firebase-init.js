@@ -3,7 +3,8 @@ import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/12.1.0
 import {
     getAuth,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // Firebase config will be loaded from Django template context
@@ -38,5 +39,6 @@ export {
     app,
     auth,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    updateProfile
 };
