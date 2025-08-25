@@ -36,6 +36,37 @@
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Specific styling for the back button in settings header */
+.settings-header-actions .btn-outline-primary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header-actions .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.settings-header-actions .btn-outline-primary:active {
+    transform: translateY(0);
+}
+
+.settings-header-actions .btn-outline-primary i {
+    font-size: 0.9rem;
 }
 
 /* Settings Navigation */

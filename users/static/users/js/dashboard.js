@@ -1,93 +1,113 @@
+// Function to get appropriate image for a game
+function getGameImage(gameName) {
+    const gameNameLower = gameName.toLowerCase();
+    
+    // FPS Games
+    if (gameNameLower.includes('valorant') || gameNameLower.includes('csgo') || gameNameLower.includes('cs:go') || gameNameLower.includes('counter-strike')) {
+        return '/static/core/images/cod.jpeg';
+    }
+    if (gameNameLower.includes('cod') || gameNameLower.includes('call of duty') || gameNameLower.includes('warzone')) {
+        return '/static/core/images/codwarzone.jpeg';
+    }
+    if (gameNameLower.includes('cod mobile') || gameNameLower.includes('call of duty mobile')) {
+        return '/static/core/images/codmobile.jpeg';
+    }
+    if (gameNameLower.includes('black ops')) {
+        return '/static/core/images/codblackops.jpeg';
+    }
+    
+    // Sports Games
+    if (gameNameLower.includes('fifa') || gameNameLower.includes('football') || gameNameLower.includes('soccer')) {
+        return '/static/core/images/fc.jpeg';
+    }
+    if (gameNameLower.includes('pes') || gameNameLower.includes('efootball') || gameNameLower.includes('pro evolution soccer')) {
+        return '/static/core/images/pes.jpeg';
+    }
+    
+    // Racing Games
+    if (gameNameLower.includes('nfs') || gameNameLower.includes('need for speed')) {
+        return '/static/core/images/nfs.jpeg';
+    }
+    if (gameNameLower.includes('racing') || gameNameLower.includes('asphalt')) {
+        return '/static/core/images/racing.jpeg';
+    }
+    if (gameNameLower.includes('asphalt legends')) {
+        return '/static/core/images/asphaltlegends.jpeg';
+    }
+    
+    // Fighting Games
+    if (gameNameLower.includes('tekken') || gameNameLower.includes('fighting')) {
+        return '/static/core/images/tekken.jpeg';
+    }
+    
+    // Battle Royale Games
+    if (gameNameLower.includes('pubg') || gameNameLower.includes('playerunknown')) {
+        return '/static/core/images/pubg.jpeg';
+    }
+    if (gameNameLower.includes('fortnite')) {
+        return '/static/core/images/fortnite.jpeg';
+    }
+    if (gameNameLower.includes('freefire') || gameNameLower.includes('free fire')) {
+        return '/static/core/images/freefire.jpeg';
+    }
+    
+    // Mobile Games
+    if (gameNameLower.includes('roblox')) {
+        return '/static/core/images/roblox.jpeg';
+    }
+    if (gameNameLower.includes('dream league') || gameNameLower.includes('dream league soccer')) {
+        return '/static/core/images/fc.jpeg';
+    }
+    
+    // Action Games
+    if (gameNameLower.includes('action') || gameNameLower.includes('adventure')) {
+        return '/static/core/images/actiongame.jpeg';
+    }
+    
+    // Default fallback
+    return '/static/core/images/gamepad.jpeg';
+}
+
+// Function to update user profile UI with new data
 function updateUserProfileUI(data) {
-    // Update avatar
-    const profilePictures = document.querySelectorAll('.profile-avatar, .sidebar-avatar, .profile-main-avatar');
-    profilePictures.forEach(img => {
-        if (data.profile_picture_url) {
-            img.src = data.profile_picture_url;
-        }
-    });
-
-    // Update username
-    const usernameElements = document.querySelectorAll('.username, .profile-name, .sidebar-profile-info h4');
-    usernameElements.forEach(el => {
-        el.textContent = data.display_username || data.username;
-    });
-
-    // Update bio/title
-    const bioElements = document.querySelectorAll('.profile-title');
-    bioElements.forEach(el => {
-        el.textContent = data.bio && data.bio !== 'Bio' ? data.bio : 'Gaming Enthusiast';
-    });
-
-    // Update about text
-    const aboutElements = document.querySelectorAll('.about-text');
-    aboutElements.forEach(el => {
-        el.textContent = data.about && data.about !== 'About' ? data.about : 'Gaming enthusiast passionate about competitive play and community building.';
-    });
-
-    // Update location
-    const locationElements = document.querySelectorAll('.profile-location span');
-    locationElements.forEach(el => {
-        el.textContent = data.location && data.location !== 'Nairobi' ? data.location : 'Location not set';
-    });
-
-    // Update games in about section
-    const gamesElements = document.querySelectorAll('.about-details .detail-item:has(i.fa-gamepad) strong');
-    gamesElements.forEach(el => {
-        if (data.games && data.games.length > 0) {
-            el.textContent = data.games.join(', ');
-        } else {
-            el.textContent = 'No games added';
-        }
-    });
-
-    // Update platforms in about section
-    const platformsElements = document.querySelectorAll('.about-details .detail-item:has(i.fa-desktop) strong');
-    platformsElements.forEach(el => {
-        if (data.platforms && data.platforms.length > 0) {
-            el.textContent = data.platforms.join(', ');
-        } else {
-            el.textContent = 'No platforms added';
-        }
-    });
-
-    // Update games count in stats
-    const gamesCountElements = document.querySelectorAll('.stats-grid-horizontal .communities .stat-value');
-    gamesCountElements.forEach(el => {
-        el.textContent = data.platforms ? data.platforms.length : 0;
-    });
-
-    // Update recent activity
-    const activityElements = document.querySelectorAll('.activity-description');
-    activityElements.forEach(el => {
-        if (el.textContent.includes('Added') && data.games && data.games.length > 0) {
-            el.textContent = `Added ${data.games.length} game${data.games.length > 1 ? 's' : ''} to your profile`;
-        }
-    });
-
-    // Update activity stats
-    const activityStatsElements = document.querySelectorAll('.activity-stats .activity-stat');
-    activityStatsElements.forEach(el => {
-        if (el.textContent.includes('Game')) {
-            el.innerHTML = `<i class="fas fa-gamepad"></i><span>${data.games ? data.games.length : 0} Game${data.games && data.games.length > 1 ? 's' : ''}</span>`;
-        } else if (el.textContent.includes('Platform')) {
-            el.innerHTML = `<i class="fas fa-desktop"></i><span>${data.platforms ? data.platforms.length : 0} Platform${data.platforms && data.platforms.length > 1 ? 's' : ''}</span>`;
-        }
-    });
-
+    console.log('Updating user profile UI with data:', data);
+    
+    // Update profile information
+    if (data.username) {
+        const usernameElements = document.querySelectorAll('.profile-name');
+        usernameElements.forEach(element => {
+            element.textContent = data.username;
+        });
+    }
+    
+    if (data.bio) {
+        const bioElements = document.querySelectorAll('.profile-title');
+        bioElements.forEach(element => {
+            element.textContent = data.bio;
+        });
+    }
+    
+    if (data.location) {
+        const locationElements = document.querySelectorAll('.profile-location span');
+        locationElements.forEach(element => {
+            element.textContent = data.location;
+        });
+    }
+    
     // Update games tab content if it exists
     const gamesTabContent = document.querySelector('#games .game-carousel');
     if (gamesTabContent && data.games && data.games.length > 0) {
         gamesTabContent.innerHTML = data.games.map(game => `
             <div class="game-card">
-                <img src="/static/core/images/games.jpeg" alt="${game}">
+                <div class="game-status">Active</div>
+                <div class="platform-badges">
+                    ${data.platforms ? data.platforms.slice(0, 3).map(platform => 
+                        `<span class="platform-badge">${platform.toUpperCase()}</span>`
+                    ).join('') : '<span class="platform-badge">PC</span>'}
+                </div>
+                <img src="${getGameImage(game)}" alt="${game}">
                 <div class="game-info">
                     <h4>${game}</h4>
-                    <p>Game • Active</p>
-                    <div class="game-footer">
-                        <div class="match-percentage">100% Match</div>
-                        <button class="btn btn-sm btn-outline-primary">Details</button>
-                    </div>
                 </div>
             </div>
         `).join('');
@@ -194,7 +214,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initCountdownTimers();
     
-        // Avatar upload
+    // Initialize game images
+    function initializeGameImages() {
+        const gameImages = document.querySelectorAll('.game-image');
+        gameImages.forEach(img => {
+            const gameName = img.getAttribute('data-game');
+            if (gameName) {
+                img.src = getGameImage(gameName);
+            }
+        });
+        
+        // Initialize activity game images
+        const activityGameImages = document.querySelectorAll('.activity-game-image');
+        activityGameImages.forEach(img => {
+            const gameNames = img.getAttribute('data-game');
+            if (gameNames) {
+                // Get the first game from the comma-separated list
+                const firstGame = gameNames.split(',')[0].trim();
+                img.src = getGameImage(firstGame);
+            }
+        });
+    }
+    
+    // Initialize game images on page load
+    initializeGameImages();
+    
+    // Avatar upload
     const avatarUpload = document.getElementById('avatarUpload');
     if (avatarUpload) {
         avatarUpload.addEventListener('change', function(e) {

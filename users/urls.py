@@ -9,7 +9,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('gamer-dashboard/', views.gamer_dashboard, name='gamer_dashboard'),
     path('complete-profile/', views.profile_completion, name='complete_profile'),
-    path('settings/', views.user_settings, name='user_settings'),
+    path('gamer-settings/', views.gamer_settings, name='gamer_settings'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('check-username/', views.check_username, name='check_username'),
 ]

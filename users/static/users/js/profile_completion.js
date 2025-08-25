@@ -1,3 +1,73 @@
+// Function to get appropriate image for a game
+function getGameImage(gameName) {
+    const gameNameLower = gameName.toLowerCase();
+    
+    // FPS Games
+    if (gameNameLower.includes('valorant') || gameNameLower.includes('csgo') || gameNameLower.includes('cs:go') || gameNameLower.includes('counter-strike')) {
+        return '/static/core/images/cod.jpeg';
+    }
+    if (gameNameLower.includes('cod') || gameNameLower.includes('call of duty') || gameNameLower.includes('warzone')) {
+        return '/static/core/images/codwarzone.jpeg';
+    }
+    if (gameNameLower.includes('cod mobile') || gameNameLower.includes('call of duty mobile')) {
+        return '/static/core/images/codmobile.jpeg';
+    }
+    if (gameNameLower.includes('black ops')) {
+        return '/static/core/images/codblackops.jpeg';
+    }
+    
+    // Sports Games
+    if (gameNameLower.includes('fifa') || gameNameLower.includes('football') || gameNameLower.includes('soccer')) {
+        return '/static/core/images/fc.jpeg';
+    }
+    if (gameNameLower.includes('pes') || gameNameLower.includes('efootball') || gameNameLower.includes('pro evolution soccer')) {
+        return '/static/core/images/pes.jpeg';
+    }
+    
+    // Racing Games
+    if (gameNameLower.includes('nfs') || gameNameLower.includes('need for speed')) {
+        return '/static/core/images/nfs.jpeg';
+    }
+    if (gameNameLower.includes('racing') || gameNameLower.includes('asphalt')) {
+        return '/static/core/images/racing.jpeg';
+    }
+    if (gameNameLower.includes('asphalt legends')) {
+        return '/static/core/images/asphaltlegends.jpeg';
+    }
+    
+    // Fighting Games
+    if (gameNameLower.includes('tekken') || gameNameLower.includes('fighting')) {
+        return '/static/core/images/tekken.jpeg';
+    }
+    
+    // Battle Royale Games
+    if (gameNameLower.includes('pubg') || gameNameLower.includes('playerunknown')) {
+        return '/static/core/images/pubg.jpeg';
+    }
+    if (gameNameLower.includes('fortnite')) {
+        return '/static/core/images/fortnite.jpeg';
+    }
+    if (gameNameLower.includes('freefire') || gameNameLower.includes('free fire')) {
+        return '/static/core/images/freefire.jpeg';
+    }
+    
+    // Mobile Games
+    if (gameNameLower.includes('roblox')) {
+        return '/static/core/images/roblox.jpeg';
+    }
+    if (gameNameLower.includes('dream league') || gameNameLower.includes('dream league soccer')) {
+        return '/static/core/images/fc.jpeg';
+    }
+    
+    // Action Games
+    if (gameNameLower.includes('action') || gameNameLower.includes('adventure')) {
+        return '/static/core/images/actiongame.jpeg';
+    }
+    
+    // Default fallback
+    return '/static/core/images/gamepad.jpeg';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Profile completion form handling
     const modal = document.getElementById('profileCompletionModal');
@@ -452,14 +522,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (gamesTabContent && data.games && data.games.length > 0) {
             gamesTabContent.innerHTML = data.games.map(game => `
                 <div class="game-card">
-                    <img src="/static/core/images/games.jpeg" alt="${game}">
+                    <div class="game-status">Active</div>
+                    <div class="platform-badges">
+                        ${data.platforms ? data.platforms.slice(0, 3).map(platform => 
+                            `<span class="platform-badge">${platform.toUpperCase()}</span>`
+                        ).join('') : '<span class="platform-badge">PC</span>'}
+                    </div>
+                    <img src="${getGameImage(game)}" alt="${game}">
                     <div class="game-info">
                         <h4>${game}</h4>
-                        <p>Game • Active</p>
-                        <div class="game-footer">
-                            <div class="match-percentage">100% Match</div>
-                            <button class="btn btn-sm btn-outline-primary">Details</button>
-                        </div>
                     </div>
                 </div>
             `).join('');
