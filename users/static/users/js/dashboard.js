@@ -99,7 +99,7 @@ function updateUserProfileUI(data) {
             element.textContent = data.location;
         });
     }
-    
+
     // Update games tab content if it exists
     const gamesTabContent = document.querySelector('#games .game-carousel');
     if (gamesTabContent && data.games && data.games.length > 0) {
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start initialization attempts
     setTimeout(attemptInitializeFilters, 100);
     
-    // Avatar upload
+        // Avatar upload
     const avatarUpload = document.getElementById('avatarUpload');
     if (avatarUpload) {
         avatarUpload.addEventListener('change', function(e) {

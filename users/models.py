@@ -26,6 +26,7 @@ class Gamer(models.Model):
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(blank=True, null=True)
     profile_completed = models.BooleanField(default=False)
+    points = models.PositiveIntegerField(default=0, help_text="User's total points earned from gaming activities")
 
     
     def clean(self):
@@ -79,6 +80,26 @@ class Gamer(models.Model):
     
     def __str__(self):
         return self.display_name
+    
+    def add_points(self, amount):
+        """Add points to the user's total"""
+        if amount > 0:
+            self.points += amount
+            self.save(update_fields=['points'])
+            return True
+        return False
+    
+    def deduct_points(self, amount):
+        """Deduct points from the user's total"""
+        if amount > 0 and self.points >= amount:
+            self.points -= amount
+            self.save(update_fields=['points'])
+            return True
+        return False
+    
+    def get_points(self):
+        """Get the user's current points"""
+        return self.points
     
     class Meta:
         verbose_name = 'Gamer'

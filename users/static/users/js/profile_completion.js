@@ -554,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="stat-value">${getRandomLastPlayed()}</span>
                             <span class="stat-label">Last Played</span>
                         </div>
-                    </div>
+                        </div>
                     </div>
                 </div>
             `).join('');

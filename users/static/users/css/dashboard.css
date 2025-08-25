@@ -1077,11 +1077,11 @@
     }
     
     .game-info {
-        padding: 16px;
-    }
-    
-    .game-info h4 {
-        font-size: 1rem;
+    padding: 16px;
+}
+
+.game-info h4 {
+    font-size: 1rem;
     }
     
     .platform-badges {
@@ -1106,15 +1106,15 @@
     
     .game-info {
         padding: 12px;
-    }
-    
-    .game-footer {
+}
+
+.game-footer {
         flex-direction: column;
         gap: 8px;
         align-items: stretch;
-    }
-    
-    .match-percentage {
+}
+
+.match-percentage {
         text-align: center;
     }
 }

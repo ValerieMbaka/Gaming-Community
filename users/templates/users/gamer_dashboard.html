@@ -111,15 +111,15 @@
                         </div>
                     </div>
 
-                    <!-- Communities -->
-                    <div class="stat-item-horizontal communities">
+                    <!-- Points -->
+                    <div class="stat-item-horizontal points">
                         <div class="stat-content">
                             <div class="stat-icon">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-star"></i>
                             </div>
                             <div class="stat-text">
-                                <div class="stat-value">{{ user_stats.platforms_count }}</div>
-                                <div class="stat-label">Platforms</div>
+                                <div class="stat-value">{{ user_stats.points|default:0 }}</div>
+                                <div class="stat-label">Points</div>
                             </div>
                         </div>
                     </div>
@@ -181,12 +181,18 @@
                     </div>
                     <span>View Feeds</span>
                 </button>
-                <button class="action-btn" data-tooltip="Start a live stream" onclick="window.location.href='#'">
-                    <div class="action-icon">
-                        <i class="fas fa-stream"></i>
-                    </div>
-                    <span>Start Streaming</span>
-                </button>
+                                 <button class="action-btn" data-tooltip="Start a live stream" onclick="window.location.href='#'">
+                     <div class="action-icon">
+                         <i class="fas fa-stream"></i>
+                     </div>
+                     <span>Start Streaming</span>
+                 </button>
+                 <a href="{% url 'users:public_profile' username=user.custom_username %}" class="action-btn" data-tooltip="View your public profile">
+                     <div class="action-icon">
+                         <i class="fas fa-user"></i>
+                     </div>
+                     <span>View Profile</span>
+                 </a>
             </div>
         </div>
     </section>
