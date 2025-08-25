@@ -12,4 +12,5 @@ urlpatterns = [
     path('gamer-settings/', views.gamer_settings, name='gamer_settings'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('check-username/', views.check_username, name='check_username'),
+    path('profile/<str:username>/', views.public_profile, name='public_profile'),
 ]

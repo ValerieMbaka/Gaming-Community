@@ -1,0 +1,382 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.custom_username }}'s Profile | GameHub{% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'users/css/public_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Profile Header Section -->
+<section class="profile-header-wrapper">
+    <div class="profile-header-grid">
+        <!-- Left Column: Profile Avatar -->
+        <div class="profile-avatar-column">
+            <div class="profile-avatar-container">
+                <img src="{% if profile_user.profile_picture %}{{ profile_user.profile_picture.url }}{% else %}{% static 'core/images/player.jpeg' %}{% endif %}"
+                     alt="Profile Avatar" class="profile-main-avatar">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name-wrapper">
+                    <h1 class="profile-name">{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+                    <span class="verified-badge" title="Verified Account">
+                        <i class="fas fa-check-circle"></i>
+                    </span>
+                </div>
+                <p class="profile-username">@{{ profile_user.custom_username }}</p>
+                <p class="profile-title">{% if profile_user.bio and profile_user.bio != "Bio" and profile_user.bio != "" %}{{ profile_user.bio }}{% else %}Gaming Enthusiast{% endif %}</p>
+                <div class="profile-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{% if profile_user.location and profile_user.location != "" %}{{ profile_user.location }}{% else %}Location not set{% endif %}</span>
+                </div>
+                <div class="profile-join-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Member since {{ profile_user.date_joined|date:"M Y" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Cover Image + Stats -->
+        <div class="profile-content-column">
+            <!-- Top Section: Cover Image -->
+            <div class="profile-cover-section">
+                <div class="profile-cover-container">
+                    <img src="{% static 'core/images/gameroom1.jpeg' %}" alt="Profile Cover" class="profile-cover-image">
+                    <div class="profile-actions-container">
+                        <button class="btn btn-outline-primary btn-message" onclick="window.location.href='#'">
+                            <i class="fas fa-envelope"></i>
+                            Message
+                        </button>
+                        <button class="btn btn-icon btn-action" title="More options">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Performance Stats -->
+            <div class="performance-stats-section">
+                <h3 class="section-title">Performance Stats</h3>
+                <div class="stats-grid-horizontal">
+                    <!-- Win Rate with Progress -->
+                    <div class="stat-item-horizontal win-rate">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">{{ user_stats.win_rate|default:87 }}% <span class="stat-trend up">+2%</span></div>
+                                <div class="stat-label">Win Rate</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ user_stats.win_rate|default:87 }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Competitions -->
+                    <div class="stat-item-horizontal competitions">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">{{ user_stats.competitions_count|default:24 }}</div>
+                                <div class="stat-label">Competitions</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Play Time -->
+                    <div class="stat-item-horizontal play-time">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">{{ user_stats.total_hours|default:24 }}h</div>
+                                <div class="stat-label">Play Time</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Points -->
+                    <div class="stat-item-horizontal points">
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="stat-value">{{ user_stats.points|default:0 }}</div>
+                                <div class="stat-label">Points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="profile-content">
+    <!-- About Section -->
+    <section class="profile-card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-user"></i>
+                <span>About {{ profile_user.display_username }}</span>
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="user-details-grid">
+                <!-- About Section -->
+                <div class="user-detail-section">
+                    <h3 class="detail-title">
+                        <i class="fas fa-info-circle"></i>
+                        About
+                    </h3>
+                    <p class="detail-content">
+                        {% if profile_user.about and profile_user.about != "" %}
+                            {{ profile_user.about }}
+                        {% else %}
+                            This user hasn't added an about section yet.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Games Section -->
+                <div class="user-detail-section">
+                    <h3 class="detail-title">
+                        <i class="fas fa-gamepad"></i>
+                        Games ({{ user_stats.games_count|default:0 }})
+                    </h3>
+                    <div class="detail-content">
+                        {% if profile_user.games and profile_user.games|length > 0 %}
+                            <div class="games-list">
+                                {% for game in profile_user.games %}
+                                    <span class="game-tag">{{ game }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="no-content">No games added yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Platforms Section -->
+                <div class="user-detail-section">
+                    <h3 class="detail-title">
+                        <i class="fas fa-desktop"></i>
+                        Platforms ({{ user_stats.platforms_count|default:0 }})
+                    </h3>
+                    <div class="detail-content">
+                        {% if profile_user.platforms and profile_user.platforms|length > 0 %}
+                            <div class="platforms-list">
+                                {% for platform in profile_user.platforms %}
+                                    <span class="platform-tag">{{ platform|title }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="no-content">No platforms added yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Communities Section -->
+                <div class="user-detail-section">
+                    <h3 class="detail-title">
+                        <i class="fas fa-users"></i>
+                        Communities
+                    </h3>
+                    <div class="detail-content">
+                        <p class="no-content">No communities joined yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Two Column Layout: Featured Games + Recent Achievements -->
+    <div class="dashboard-two-column">
+        <!-- Left Column: Featured Games -->
+        <div class="featured-games-column">
+            <section class="profile-card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fas fa-crown"></i>
+                        <span>Featured Games</span>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    {% if profile_user.games and profile_user.games|length > 0 %}
+                    <div class="featured-game-card">
+                        <div class="game-banner-container">
+                            <img src="" alt="{{ profile_user.games.0 }}" data-game="{{ profile_user.games.0 }}" class="game-banner">
+                        </div>
+                        <div class="game-info-container">
+                            <h3 class="game-title">{{ profile_user.games.0 }}</h3>
+                            <div class="game-stats-grid">
+                                <div class="game-stat">
+                                    <span class="stat-value">156</span>
+                                    <span class="stat-label">Hours Played</span>
+                                </div>
+                                <div class="game-stat">
+                                    <span class="stat-value">87%</span>
+                                    <span class="stat-label">Win Rate</span>
+                                </div>
+                                <div class="game-stat">
+                                    <span class="stat-value">12</span>
+                                    <span class="stat-label">Competitions</span>
+                                </div>
+                            </div>
+                            <div class="game-rank-card">
+                                <div class="rank-icon-container">
+                                    <img src="{% static 'core/images/faze.jpeg' %}" alt="Elite Rank" class="rank-icon">
+                                </div>
+                                <div class="rank-info">
+                                    <span class="rank-name">Elite</span>
+                                    <span class="rank-position">Top Player</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>No games added yet</h3>
+                        <p>This user hasn't added any games to their profile</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column: Recent Achievements -->
+        <div class="recent-achievements-column">
+            <section class="profile-card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fas fa-trophy"></i>
+                        <span>Recent Achievements</span>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="achievements-list">
+                        <div class="achievement-item">
+                            <div class="achievement-badge gold">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="achievement-details">
+                                <h4 class="achievement-title">Profile Completion</h4>
+                                <p class="achievement-date">{{ profile_user.date_joined|date:"M d, Y" }}</p>
+                                <div class="achievement-game">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
+                                </div>
+                            </div>
+                        </div>
+                        {% if profile_user.games and profile_user.games|length > 0 %}
+                        <div class="achievement-item">
+                            <div class="achievement-badge silver">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="achievement-details">
+                                <h4 class="achievement-title">Game Collector</h4>
+                                <p class="achievement-date">{{ profile_user.date_joined|date:"M d, Y" }}</p>
+                                <div class="achievement-game">
+                                    <img src="{% static 'core/images/gamepad.jpeg' %}" alt="Games">
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if profile_user.platforms and profile_user.platforms|length > 0 %}
+                        <div class="achievement-item">
+                            <div class="achievement-badge bronze">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div class="achievement-details">
+                                <h4 class="achievement-title">Multi-Platform Gamer</h4>
+                                <p class="achievement-date">{{ profile_user.date_joined|date:"M d, Y" }}</p>
+                                <div class="achievement-game">
+                                    <img src="{% static 'core/images/ps5.jpeg' %}" alt="Platforms">
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Recent Activities Section -->
+    <section class="profile-card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-history"></i>
+                <span>Recent Activities</span>
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="activity-feed">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <img src="{% static 'core/images/player.jpeg' %}" alt="Profile">
+                    </div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Joined GameHub</h3>
+                        <p class="activity-meta">{{ profile_user.date_joined|date:"M d, Y" }}</p>
+                        <p class="activity-description">Started their gaming journey on GameHub</p>
+                        <div class="activity-stats">
+                            <span class="activity-stat">
+                                <i class="fas fa-gamepad"></i>
+                                <span>{% if profile_user.games and profile_user.games|length > 0 %}{{ profile_user.games|length }} Game{{ profile_user.games|length|pluralize }}{% else %}No Games{% endif %}</span>
+                            </span>
+                            <span class="activity-stat">
+                                <i class="fas fa-desktop"></i>
+                                <span>{% if profile_user.platforms and profile_user.platforms|length > 0 %}{{ profile_user.platforms|length }} Platform{{ profile_user.platforms|length|pluralize }}{% else %}No Platforms{% endif %}</span>
+                            </span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                            <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% if profile_user.games and profile_user.games|length > 0 %}
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <img src="" alt="Games" data-game="{% for game in profile_user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}" class="activity-game-image">
+                    </div>
+                    <div class="activity-content">
+                        <h3 class="activity-title">Added Games to Profile</h3>
+                        <p class="activity-meta">{{ profile_user.date_joined|date:"M d, Y" }}</p>
+                        <p class="activity-description">"{% for game in profile_user.games %}{{ game }}{% if not forloop.last %}, {% endif %}{% endfor %}"</p>
+                        <div class="activity-stats">
+                            <span class="activity-stat">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Profile Complete</span>
+                            </span>
+                            <span class="activity-stat">
+                                <i class="fas fa-star"></i>
+                                <span>Ready to Play</span>
+                            </span>
+                        </div>
+                        <div class="activity-actions">
+                            <button class="btn-like"><i class="far fa-heart"></i> 0</button>
+                            <button class="btn-comment"><i class="far fa-comment"></i> 0</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block dashboard_js %}
+    <script src="{% static 'users/js/public_profile.js' %}"></script>
+{% endblock %}

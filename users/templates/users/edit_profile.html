@@ -31,17 +31,17 @@
         <div class="settings-section-header">
             <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
             <p>Update your profile information and gaming preferences</p>
-        </div>
-        
+                </div>
+                
         <div class="settings-section-body">
             <form method="post" enctype="multipart/form-data" class="settings-form" id="editProfileForm">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="update_profile">
                 
                 <!-- Personal Information Section -->
-                <div class="form-section">
+            <div class="form-section">
                     <h3 class="section-title"><i class="fas fa-user"></i> Personal Information</h3>
-                    
+                
                     <!-- Profile Picture -->
                     <div class="form-group">
                         <label for="id_profile_picture">Profile Picture</label>
@@ -55,32 +55,32 @@
                                 <i class="fas fa-camera"></i> Change Picture
                             </label>
                         </div>
-                    </div>
+                </div>
 
-                    <!-- Username -->
+                <!-- Username -->
                     <div class="form-group">
                         <label for="id_custom_username">Username <span class="required">*</span></label>
-                        <div class="username-input-group">
-                            <input type="text" name="custom_username" id="id_custom_username" 
+                    <div class="username-input-group">
+                        <input type="text" name="custom_username" id="id_custom_username" 
                                    value="{{ profile_form.custom_username.value|default_if_none:'' }}" 
-                                   placeholder="Enter your username" required>
-                            <button type="button" id="generateUsernameBtn" class="generate-btn">
-                                <i class="fas fa-dice"></i>
+                               placeholder="Enter your username" required>
+                        <button type="button" id="generateUsernameBtn" class="generate-btn">
+                            <i class="fas fa-dice"></i>
                                 <span>Generate</span>
-                            </button>
-                        </div>
-                        <div id="custom_username-error" class="error-message"></div>
+                        </button>
+                    </div>
+                    <div id="custom_username-error" class="error-message"></div>
                         <small>This is your unique username on GameHub (3-20 characters)</small>
                     </div>
-
+                
                     <!-- Bio and Location Row -->
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="id_bio">Bio <span class="required">*</span></label>
-                            <input type="text" name="bio" id="id_bio" 
+                    <div class="form-group">
+                    <label for="id_bio">Bio <span class="required">*</span></label>
+                        <input type="text" name="bio" id="id_bio" 
                                    value="{{ profile_form.bio.value|default_if_none:'' }}" 
-                                   placeholder="Tell us about yourself in one line" required>
-                            <div id="bio-error" class="error-message"></div>
+                           placeholder="Tell us about yourself in one line" required>
+                    <div id="bio-error" class="error-message"></div>
                             <small>A short description about yourself (10-160 characters)</small>
                         </div>
                         <div class="form-group">
@@ -90,27 +90,27 @@
                                    placeholder="Your location" required>
                             <small>Where are you located?</small>
                         </div>
-                    </div>
+                </div>
 
-                    <!-- About -->
+                <!-- About -->
                     <div class="form-group">
-                        <label for="id_about">About <small class="text-muted">(optional)</small></label>
-                        <textarea name="about" id="id_about" rows="4" 
+                    <label for="id_about">About <small class="text-muted">(optional)</small></label>
+                    <textarea name="about" id="id_about" rows="4" 
                                   placeholder="Tell us more about yourself, your gaming experience, and what you're looking for in the community">{{ profile_form.about.value|default_if_none:'' }}</textarea>
-                        <div class="char-counter">
-                            <span id="aboutCounter">0</span>/500
-                        </div>
+                    <div class="char-counter">
+                        <span id="aboutCounter">0</span>/500
+                    </div>
                         <small>Tell us more about yourself (30-500 characters)</small>
                     </div>
                 </div>
 
-                <!-- Gaming Preferences Section -->
-                <div class="form-section">
+            <!-- Gaming Preferences Section -->
+            <div class="form-section">
                     <h3 class="section-title"><i class="fas fa-gamepad"></i> Gaming Preferences</h3>
-                    
-                    <!-- Platforms -->
-                    <div class="form-group">
-                        <label>Gaming Platforms <span class="required">*</span></label>
+                
+                <!-- Platforms -->
+                <div class="form-group">
+                    <label>Gaming Platforms <span class="required">*</span></label>
                         <div class="platforms-grid">
                             <label class="platform-checkbox">
                                 <input type="checkbox" name="platforms" value="pc" 
@@ -138,10 +138,10 @@
                                 <span class="platform-label">Mobile</span>
                             </label>
                         </div>
-                    </div>
+                </div>
 
-                    <!-- Games -->
-                    <div class="form-group">
+                <!-- Games -->
+                <div class="form-group">
                         <label for="games_input">Games <span class="required">*</span></label>
                         <div class="games-input-container">
                             <input type="text" id="games_input" placeholder="Type a game and press Enter">
@@ -150,19 +150,19 @@
                                     <span class="game-tag">{{ game }} <i class="fas fa-times remove-game" data-game="{{ game }}"></i></span>
                                 {% endfor %}
                             </div>
-                        </div>
+                    </div>
                         <input type="hidden" name="games" id="id_games" value="{{ user.games|join:',' }}">
                     </div>
                 </div>
 
-                <!-- Form Actions -->
+            <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Save Changes
                     </button>
-                    <a href="{% url 'users:gamer_settings' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-times"></i> Cancel
-                    </a>
+                <a href="{% url 'users:gamer_settings' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
                 </div>
             </form>
         </div>
