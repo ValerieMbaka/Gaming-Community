@@ -1,0 +1,543 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Action Gaming Community - Connect with Action Gamers{% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'communities/css/communities.css' %}">
+    <link rel="stylesheet" href="{% static 'communities/css/community_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Community Hero Section -->
+<section class="community-hero action-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="community-hero-content">
+                    <div class="community-badge action">
+                        <i class="fas fa-fist-raised"></i>
+                        <span>Action Community</span>
+                    </div>
+                    <h1 class="community-title">Action Gaming Community</h1>
+                    <p class="community-subtitle">Fighting & Combat games at their finest. Master combos, perfect your timing, and become the ultimate warrior!</p>
+                    <div class="community-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span>3,156 members</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-circle online"></i>
+                            <span>234 online</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>67 tournaments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="community-hero-image">
+                    <img src="{% static 'core/images/actiongame.jpeg' %}" alt="Action Gaming" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Community Navigation -->
+<section class="community-nav">
+    <div class="container">
+        <nav class="community-tabs">
+            <a href="#overview" class="tab-link active" data-tab="overview">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#discord" class="tab-link" data-tab="discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+            <a href="#tournaments" class="tab-link" data-tab="tournaments">
+                <i class="fas fa-trophy"></i>
+                <span>Tournaments</span>
+            </a>
+            <a href="#members" class="tab-link" data-tab="members">
+                <i class="fas fa-users"></i>
+                <span>Members</span>
+            </a>
+            <a href="#discussions" class="tab-link" data-tab="discussions">
+                <i class="fas fa-comments"></i>
+                <span>Discussions</span>
+            </a>
+        </nav>
+    </div>
+</section>
+
+<!-- Tab Content -->
+<div class="tab-content">
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-pane active">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <section class="community-section">
+                        <h3 class="section-title">About Action Community</h3>
+                        <p class="section-text">
+                            Welcome to the ultimate action and fighting game community! Whether you're a Tekken master, Street Fighter 
+                            champion, or Mortal Kombat warrior, you'll find your perfect arena here. Our community focuses on competitive 
+                            play, combo mastery, and building the strongest fighting game community.
+                        </p>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-fist-raised"></i>
+                                </div>
+                                <h4>Fighting Tournaments</h4>
+                                <p>Compete in daily fighting game tournaments</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4>Combo Training</h4>
+                                <p>Learn and master advanced combos with experts</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h4>Ranking System</h4>
+                                <p>Track your progress in our ranking system</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <h4>Championship Series</h4>
+                                <p>Participate in seasonal championship series</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="community-section">
+                        <h3 class="section-title">Popular Games</h3>
+                        <div class="games-showcase">
+                            <div class="game-card">
+                                <img src="{% static 'core/images/tekken.jpeg' %}" alt="Tekken 8" class="game-image">
+                                <div class="game-info">
+                                    <h4>Tekken 8</h4>
+                                    <p>1,567 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 123</span>
+                                        <span class="stat">Tournaments: 18</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/actiongame.jpeg' %}" alt="Street Fighter" class="game-image">
+                                <div class="game-info">
+                                    <h4>Street Fighter</h4>
+                                    <p>987 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 89</span>
+                                        <span class="stat">Tournaments: 12</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/games.jpeg' %}" alt="Mortal Kombat" class="game-image">
+                                <div class="game-info">
+                                    <h4>Mortal Kombat</h4>
+                                    <p>602 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 67</span>
+                                        <span class="stat">Tournaments: 9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="community-sidebar">
+                        <div class="sidebar-card">
+                            <h4>Quick Actions</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-block">
+                                    <i class="fas fa-plus"></i>
+                                    Join Community
+                                </button>
+                                <button class="btn btn-outline-primary btn-block">
+                                    <i class="fab fa-discord"></i>
+                                    Join Discord
+                                </button>
+                                <button class="btn btn-outline-secondary btn-block">
+                                    <i class="fas fa-share"></i>
+                                    Share Community
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Community Stats</h4>
+                            <div class="stats-list">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Members</span>
+                                    <span class="stat-value">3,156</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Online Now</span>
+                                    <span class="stat-value">234</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Active Tournaments</span>
+                                    <span class="stat-value">12</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Daily Matches</span>
+                                    <span class="stat-value">279</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Top Fighters</h4>
+                            <div class="top-players">
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player1.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>ComboMaster</h5>
+                                        <p>Tekken Champion</p>
+                                    </div>
+                                    <div class="player-rank">#1</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player2.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>HadoukenPro</h5>
+                                        <p>Street Fighter Pro</p>
+                                    </div>
+                                    <div class="player-rank">#2</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player3.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>FatalityKing</h5>
+                                        <p>Mortal Kombat Expert</p>
+                                    </div>
+                                    <div class="player-rank">#3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord Tab -->
+    <div id="discord" class="tab-pane">
+        <div class="container">
+            <div class="discord-section">
+                <div class="discord-header">
+                    <h3 class="section-title">Join Our Discord Community</h3>
+                    <p class="section-text">Connect with fellow fighting game enthusiasts in real-time, join voice channels, and participate in community events!</p>
+                </div>
+                
+                <div class="discord-embed-container">
+                    <div class="discord-preview">
+                        <div class="discord-preview-header">
+                            <div class="discord-server-info">
+                                <div class="discord-server-icon">
+                                    <i class="fas fa-fist-raised"></i>
+                                </div>
+                                <div class="discord-server-details">
+                                    <h4>Action Gaming Community</h4>
+                                    <p>3,156 members • 234 online</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-discord">
+                                <i class="fab fa-discord"></i>
+                                Join Server
+                            </button>
+                        </div>
+                        
+                        <div class="discord-channels">
+                            <div class="channel-category">
+                                <h5><i class="fas fa-hashtag"></i> General</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>general</span>
+                                        <span class="member-count">3.1k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>announcements</span>
+                                        <span class="member-count">3.1k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>rules</span>
+                                        <span class="member-count">3.1k</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-fist-raised"></i> Fighting Games</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>tekken-8</span>
+                                        <span class="member-count">1.5k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>street-fighter</span>
+                                        <span class="member-count">987</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>mortal-kombat</span>
+                                        <span class="member-count">602</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>combo-training</span>
+                                        <span class="member-count">456</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-microphone"></i> Voice Channels</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>General Chat</span>
+                                        <span class="member-count">34</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>Tekken Lobby</span>
+                                        <span class="member-count">23</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>Street Fighter Lobby</span>
+                                        <span class="member-count">18</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Placeholder for actual Discord embed -->
+                    <div class="discord-embed-placeholder">
+                        <div class="embed-content">
+                            <i class="fab fa-discord fa-3x"></i>
+                            <h4>Discord Community</h4>
+                            <p>Join our Discord server to connect with fellow fighting game enthusiasts!</p>
+                            <button class="btn btn-discord btn-lg">
+                                <i class="fab fa-discord"></i>
+                                Join Discord Server
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournaments Tab -->
+    <div id="tournaments" class="tab-pane">
+        <div class="container">
+            <div class="tournaments-section">
+                <div class="section-header">
+                    <h3 class="section-title">Active Tournaments</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Create Tournament
+                    </button>
+                </div>
+                
+                <div class="tournaments-grid">
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>Tekken 8 Championship</h4>
+                                <p>Monthly championship for Tekken 8 players</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 25, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>128 participants</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £800</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                    
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>Street Fighter 6 Cup</h4>
+                                <p>Weekly tournament for Street Fighter 6</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 28, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>64 participants</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £400</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Tab -->
+    <div id="members" class="tab-pane">
+        <div class="container">
+            <div class="members-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Members</h3>
+                    <div class="member-filters">
+                        <input type="text" placeholder="Search members..." class="form-control">
+                        <select class="form-control">
+                            <option>All Members</option>
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="members-grid">
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player1.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>ComboMaster</h5>
+                            <p>Tekken Champion</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 234</span>
+                                <span class="stat">Level: 78</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player2.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>HadoukenPro</h5>
+                            <p>Street Fighter Pro</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 189</span>
+                                <span class="stat">Level: 65</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player3.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>FatalityKing</h5>
+                            <p>Mortal Kombat Expert</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 156</span>
+                                <span class="stat">Level: 52</span>
+                            </div>
+                        </div>
+                        <div class="member-status offline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discussions Tab -->
+    <div id="discussions" class="tab-pane">
+        <div class="container">
+            <div class="discussions-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Discussions</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Discussion
+                    </button>
+                </div>
+                
+                <div class="discussions-list">
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player1.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>Tekken 8 Combo Guide</h5>
+                                <p>Started by ComboMaster • 1 hour ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 89</span>
+                                <span><i class="fas fa-heart"></i> 156</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">Here's my comprehensive guide for the best Tekken 8 combos for each character...</p>
+                    </div>
+                    
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player2.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>Street Fighter 6 Meta Discussion</h5>
+                                <p>Started by HadoukenPro • 4 hours ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 67</span>
+                                <span><i class="fas fa-heart"></i> 123</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">What's everyone's thoughts on the current Street Fighter 6 meta? I've been...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'communities/js/communities.js' %}"></script>
+    <script src="{% static 'communities/js/community_detail.js' %}"></script>
+{% endblock %}

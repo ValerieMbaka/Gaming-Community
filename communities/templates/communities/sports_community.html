@@ -1,0 +1,544 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Sports Gaming Community - Connect with Sports Gamers{% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'communities/css/communities.css' %}">
+    <link rel="stylesheet" href="{% static 'communities/css/community_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Community Hero Section -->
+<section class="community-hero sports-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="community-hero-content">
+                    <div class="community-badge sports">
+                        <i class="fas fa-futbol"></i>
+                        <span>Sports Community</span>
+                    </div>
+                    <h1 class="community-title">Sports Gaming Community</h1>
+                    <p class="community-subtitle">The ultimate destination for sports gaming enthusiasts. From FIFA to NBA 2K, compete with the best players worldwide!</p>
+                    <div class="community-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span>2,847 members</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-circle online"></i>
+                            <span>156 online</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>45 tournaments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="community-hero-image">
+                    <img src="{% static 'core/images/fc.jpeg' %}" alt="Sports Gaming" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Community Navigation -->
+<section class="community-nav">
+    <div class="container">
+        <nav class="community-tabs">
+            <a href="#overview" class="tab-link active" data-tab="overview">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#discord" class="tab-link" data-tab="discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+            <a href="#tournaments" class="tab-link" data-tab="tournaments">
+                <i class="fas fa-trophy"></i>
+                <span>Tournaments</span>
+            </a>
+            <a href="#members" class="tab-link" data-tab="members">
+                <i class="fas fa-users"></i>
+                <span>Members</span>
+            </a>
+            <a href="#discussions" class="tab-link" data-tab="discussions">
+                <i class="fas fa-comments"></i>
+                <span>Discussions</span>
+            </a>
+        </nav>
+    </div>
+</section>
+
+<!-- Tab Content -->
+<div class="tab-content">
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-pane active">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <section class="community-section">
+                        <h3 class="section-title">About Sports Community</h3>
+                        <p class="section-text">
+                            Welcome to the largest sports gaming community! Whether you're a FIFA pro, NBA 2K enthusiast, or PES master, 
+                            you'll find like-minded players here. Our community focuses on competitive play, strategy sharing, and building 
+                            lasting friendships through the love of sports gaming.
+                        </p>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <h4>Tournaments</h4>
+                                <p>Compete in tournaments across all major sports games</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4>Competitions</h4>
+                                <p>Find teammates for 2v2, 3v3, and team-based competitions</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h4>Skill Tracking</h4>
+                                <p>Track your progress and compare stats with other players</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <h4>Leaderboards</h4>
+                                <p>Compete for top spots on our community leaderboards</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="community-section">
+                        <h3 class="section-title">Popular Games</h3>
+                        <div class="games-showcase">
+                            <div class="game-card">
+                                <img src="{% static 'core/images/fc.jpeg' %}" alt="FIFA 24" class="game-image">
+                                <div class="game-info">
+                                    <h4>FIFA 24</h4>
+                                    <p>1,234 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 89</span>
+                                        <span class="stat">Tournaments: 12</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/pes.jpeg' %}" alt="PES" class="game-image">
+                                <div class="game-info">
+                                    <h4>PES</h4>
+                                    <p>567 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 45</span>
+                                        <span class="stat">Tournaments: 8</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/games.jpeg' %}" alt="NBA 2K24" class="game-image">
+                                <div class="game-info">
+                                    <h4>NBA 2K24</h4>
+                                    <p>789 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily matches: 67</span>
+                                        <span class="stat">Tournaments: 15</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="community-sidebar">
+                        <div class="sidebar-card">
+                            <h4>Quick Actions</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-block">
+                                    <i class="fas fa-plus"></i>
+                                    Join Community
+                                </button>
+                                <button class="btn btn-outline-primary btn-block">
+                                    <i class="fab fa-discord"></i>
+                                    <a href="https://discord.com/channels/1409884118094712884/1409884118786900101">Join Discord</a>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-block">
+                                    <i class="fas fa-share"></i>
+                                    Share Community
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Community Stats</h4>
+                            <div class="stats-list">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Members</span>
+                                    <span class="stat-value">2,847</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Online Now</span>
+                                    <span class="stat-value">156</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Active Tournaments</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Daily Matches</span>
+                                    <span class="stat-value">201</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Top Players</h4>
+                            <div class="top-players">
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player1.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>ProGamer123</h5>
+                                        <p>FIFA Champion</p>
+                                    </div>
+                                    <div class="player-rank">#1</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player2.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>SportsMaster</h5>
+                                        <p>NBA 2K Pro</p>
+                                    </div>
+                                    <div class="player-rank">#2</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player3.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>GoalKeeper</h5>
+                                        <p>PES Expert</p>
+                                    </div>
+                                    <div class="player-rank">#3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord Tab -->
+    <div id="discord" class="tab-pane">
+        <div class="container">
+            <div class="discord-section">
+                <div class="discord-header">
+                    <h3 class="section-title">Join Our Discord Community</h3>
+                    <p class="section-text">Connect with fellow sports gamers in real-time, join voice channels, and participate in community events!</p>
+                </div>
+                
+                <div class="discord-embed-container">
+                    <div class="discord-preview">
+                        <div class="discord-preview-header">
+                            <div class="discord-server-info">
+                                <div class="discord-server-icon">
+                                    <i class="fas fa-futbol"></i>
+                                </div>
+                                <div class="discord-server-details">
+                                    <h4>Sports Gaming Community</h4>
+                                    <p>2,847 members • 156 online</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-discord">
+                                <i class="fab fa-discord"></i>
+                                Join Server
+                            </button>
+                        </div>
+                        
+                        <div class="discord-channels">
+                            <div class="channel-category">
+                                <h5><i class="fas fa-hashtag"></i> General</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>general</span>
+                                        <span class="member-count">1.2k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>announcements</span>
+                                        <span class="member-count">2.8k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>rules</span>
+                                        <span class="member-count">2.8k</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-gamepad"></i> Gaming</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>fifa-24</span>
+                                        <span class="member-count">856</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>nba-2k24</span>
+                                        <span class="member-count">432</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>pes</span>
+                                        <span class="member-count">234</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>tournaments</span>
+                                        <span class="member-count">567</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-microphone"></i> Voice Channels</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>General Chat</span>
+                                        <span class="member-count">23</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>FIFA Lobby</span>
+                                        <span class="member-count">15</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>NBA 2K Lobby</span>
+                                        <span class="member-count">8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Placeholder for actual Discord embed -->
+                    <div class="discord-embed-placeholder">
+                        <div class="embed-content">
+                            <i class="fab fa-discord fa-3x"></i>
+                            <h4>Discord Community</h4>
+                            <p>Join our Discord server to connect with fellow sports gamers!</p>
+                            <button class="btn btn-discord btn-lg">
+                                <i class="fab fa-discord"></i>
+                                Join Discord Server
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournaments Tab -->
+    <div id="tournaments" class="tab-pane">
+        <div class="container">
+            <div class="tournaments-section">
+                <div class="section-header">
+                    <h3 class="section-title">Active Tournaments</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Create Tournament
+                    </button>
+                </div>
+                
+                <div class="tournaments-grid">
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>FIFA 24 Weekly Cup</h4>
+                                <p>Weekly tournament for FIFA 24 players</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 15, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>64 participants</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £500</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                    
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>NBA 2K24 3v3 Championship</h4>
+                                <p>Team-based tournament for NBA 2K24</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 20, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>32 teams</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £300</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Tab -->
+    <div id="members" class="tab-pane">
+        <div class="container">
+            <div class="members-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Members</h3>
+                    <div class="member-filters">
+                        <input type="text" placeholder="Search members..." class="form-control">
+                        <select class="form-control">
+                            <option>All Members</option>
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="members-grid">
+                    <!-- Member cards will be populated here -->
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player1.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>ProGamer123</h5>
+                            <p>FIFA Champion</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 156</span>
+                                <span class="stat">Level: 45</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player2.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>SportsMaster</h5>
+                            <p>NBA 2K Pro</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 89</span>
+                                <span class="stat">Level: 32</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player3.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>GoalKeeper</h5>
+                            <p>PES Expert</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 234</span>
+                                <span class="stat">Level: 67</span>
+                            </div>
+                        </div>
+                        <div class="member-status offline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discussions Tab -->
+    <div id="discussions" class="tab-pane">
+        <div class="container">
+            <div class="discussions-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Discussions</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Discussion
+                    </button>
+                </div>
+                
+                <div class="discussions-list">
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player1.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>FIFA 24 Meta Discussion</h5>
+                                <p>Started by ProGamer123 • 2 hours ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 23</span>
+                                <span><i class="fas fa-heart"></i> 45</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">What's everyone's thoughts on the latest FIFA 24 meta? I've been experimenting with...</p>
+                    </div>
+                    
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player2.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>NBA 2K24 Build Guide</h5>
+                                <p>Started by SportsMaster • 5 hours ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 67</span>
+                                <span><i class="fas fa-heart"></i> 89</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">Here's my comprehensive guide for the best NBA 2K24 builds for different positions...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'communities/js/communities.js' %}"></script>
+    <script src="{% static 'communities/js/community_detail.js' %}"></script>
+{% endblock %}

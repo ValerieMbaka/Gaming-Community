@@ -1,20 +1,210 @@
 // Communities Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
+    // Community card click functionality
+    const communityCards = document.querySelectorAll('.community-card[data-url]');
+    communityCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on the join button
+            if (e.target.closest('.community-actions')) {
+                return;
+            }
+            
+            const url = this.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+
+    // Join button click prevention (since it's now a link)
+    const joinButtons = document.querySelectorAll('.community-actions .btn-join');
+    joinButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent card click when clicking join button
+        });
+    });
+    // Force community cards to be visible
+    ensureCardsVisible();
+    
+    // Initialize dark mode functionality
+    initializeDarkMode();
+    
+    // Initialize filter functionality
     initializeFilters();
-    initializeSearch();
-    initializeSorting();
-    initializeCreateCommunity();
+    
+    // Initialize community cards functionality
     initializeCommunityCards();
+    
+    // Initialize search functionality
+    initializeSearch();
+    
+    // Initialize sorting functionality
+    initializeSorting();
+    
+    // Initialize create community functionality
+    initializeCreateCommunity();
+    
+    // Initialize animations
     initializeAnimations();
+    
+    // Initialize accessibility features
+    initializeAccessibility();
 });
 
-// Filter functionality
+// Ensure community cards are visible
+function ensureCardsVisible() {
+    const cards = document.querySelectorAll('.community-card');
+    const cardContainers = document.querySelectorAll('.col-lg-4.col-md-6');
+    const grid = document.getElementById('communitiesGrid');
+    
+    // Force visibility
+    cards.forEach(card => {
+        card.style.display = 'flex';
+        card.style.opacity = '1';
+        card.style.visibility = 'visible';
+        card.style.position = 'relative';
+        card.style.zIndex = '1';
+    });
+    
+    cardContainers.forEach(container => {
+        container.style.display = 'block';
+        container.style.opacity = '1';
+        container.style.visibility = 'visible';
+    });
+    
+    if (grid) {
+        grid.style.display = 'flex';
+        grid.style.opacity = '1';
+        grid.style.visibility = 'visible';
+    }
+    
+    console.log('Community cards visibility ensured:', cards.length, 'cards found');
+    
+    // Apply current theme styles
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    applyDarkModeStyles(currentTheme);
+}
+
+// Dark Mode Functionality
+function initializeDarkMode() {
+    const darkModeToggle = document.querySelector('[data-dark-mode-toggle]');
+    const htmlElement = document.documentElement;
+    
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Update theme
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Add transition effect
+            htmlElement.style.transition = 'all 0.3s ease';
+            
+            // Update toggle button icon/text if needed
+            updateDarkModeToggle(newTheme);
+            
+            // Trigger custom event for other components
+            document.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: newTheme } }));
+        });
+        
+        // Initialize toggle button state
+        updateDarkModeToggle(savedTheme);
+    }
+}
+
+function updateDarkModeToggle(theme) {
+    const darkModeToggle = document.querySelector('[data-dark-mode-toggle]');
+    if (!darkModeToggle) return;
+    
+    const icon = darkModeToggle.querySelector('i');
+    if (icon) {
+        if (theme === 'dark') {
+            icon.className = 'fas fa-sun';
+            darkModeToggle.setAttribute('title', 'Switch to Light Mode');
+        } else {
+            icon.className = 'fas fa-moon';
+            darkModeToggle.setAttribute('title', 'Switch to Dark Mode');
+        }
+    }
+    
+    // Force apply dark mode styles
+    applyDarkModeStyles(theme);
+}
+
+function applyDarkModeStyles(theme) {
+    const cards = document.querySelectorAll('.community-card');
+    const sections = document.querySelectorAll('.communities-section');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const gameTags = document.querySelectorAll('.game-tag');
+    
+    if (theme === 'dark') {
+        // Apply dark mode styles
+        cards.forEach(card => {
+            card.style.backgroundColor = '#2d2d2d';
+            card.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            card.style.color = '#e2e8f0';
+        });
+        
+        sections.forEach(section => {
+            section.style.backgroundColor = '#2d2d2d';
+            section.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        });
+        
+        filterBtns.forEach(btn => {
+            if (!btn.classList.contains('active')) {
+                btn.style.backgroundColor = '#2d2d2d';
+                btn.style.borderColor = '#4a5568';
+                btn.style.color = '#a0aec0';
+            }
+        });
+        
+        gameTags.forEach(tag => {
+            tag.style.backgroundColor = '#2d2d2d';
+            tag.style.color = '#e2e8f0';
+            tag.style.borderColor = '#4a5568';
+        });
+    } else {
+        // Apply light mode styles
+        cards.forEach(card => {
+            card.style.backgroundColor = '#ffffff';
+            card.style.borderColor = 'rgba(0, 0, 0, 0.05)';
+            card.style.color = '#2c3e50';
+        });
+        
+        sections.forEach(section => {
+            section.style.backgroundColor = '#ffffff';
+            section.style.borderColor = 'rgba(0, 0, 0, 0.05)';
+        });
+        
+        filterBtns.forEach(btn => {
+            if (!btn.classList.contains('active')) {
+                btn.style.backgroundColor = '#f8f9fa';
+                btn.style.borderColor = '#e9ecef';
+                btn.style.color = '#6c757d';
+            }
+        });
+        
+        gameTags.forEach(tag => {
+            tag.style.backgroundColor = '#f8f9fa';
+            tag.style.color = '#495057';
+            tag.style.borderColor = '#e9ecef';
+        });
+    }
+}
+
+// Filter Functionality
 function initializeFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const communityCards = document.querySelectorAll('[data-category]');
-
+    const noResultsMessage = document.getElementById('noResults');
+    
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
@@ -23,28 +213,37 @@ function initializeFilters() {
             filterButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
-            // Filter cards
-            let visibleCount = 0;
-            communityCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-                
-                if (filter === 'all' || category === filter) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            
-            // Show/hide no results message
-            const noResults = document.getElementById('noResults');
-            if (visibleCount === 0) {
-                noResults.style.display = 'block';
-            } else {
-                noResults.style.display = 'none';
-            }
+            // Filter communities
+            filterCommunities(filter, communityCards, noResultsMessage);
         });
     });
+}
+
+function filterCommunities(filter, cards, noResultsMessage) {
+    let visibleCount = 0;
+    
+    cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const shouldShow = filter === 'all' || category === filter;
+        
+        if (shouldShow) {
+            card.style.display = 'block';
+            card.style.animation = 'cardFloatIn 0.6s ease-out';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Show/hide no results message
+    if (noResultsMessage) {
+        if (visibleCount === 0) {
+            noResultsMessage.style.display = 'block';
+            noResultsMessage.style.animation = 'noResultsFadeIn 0.8s ease-out';
+        } else {
+            noResultsMessage.style.display = 'none';
+        }
+    }
 }
 
 // Search functionality
@@ -320,11 +519,8 @@ function initializeCommunityCards() {
     });
 }
 
-// Animation functionality
+// Animation Enhancements
 function initializeAnimations() {
-    // Initial animation
-    animateCards();
-    
     // Intersection Observer for scroll animations
     const observerOptions = {
         threshold: 0.1,
@@ -334,86 +530,188 @@ function initializeAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('animate-in');
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
     
-    // Observe all community cards
-    document.querySelectorAll('.community-card').forEach(card => {
-        observer.observe(card);
+    // Observe elements for animation
+    const animateElements = document.querySelectorAll('.community-card, .communities-section');
+    animateElements.forEach(el => observer.observe(el));
+    
+    // Add hover sound effects (optional)
+    addHoverEffects();
+}
+
+function addHoverEffects() {
+    const interactiveElements = document.querySelectorAll('.community-card, .filter-btn, .btn-join, .game-tag');
+    
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            this.style.transform = this.style.transform + ' scale(1.02)';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            this.style.transform = this.style.transform.replace(' scale(1.02)', '');
+        });
     });
 }
 
+// Accessibility Features
+function initializeAccessibility() {
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-navigation');
+        }
+    });
+    
+    document.addEventListener('mousedown', function() {
+        document.body.classList.remove('keyboard-navigation');
+    });
+    
+    // Focus management
+    const focusableElements = document.querySelectorAll('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    
+    focusableElements.forEach(element => {
+        element.addEventListener('focus', function() {
+            this.classList.add('focused');
+        });
+        
+        element.addEventListener('blur', function() {
+            this.classList.remove('focused');
+        });
+    });
+    
+    // Skip to content functionality
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) {
+        skipLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.focus();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+}
+
+// Utility Functions
+function clearFilters() {
+    const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+    if (allButton) {
+        allButton.click();
+    }
+}
+
+// Performance optimizations
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Resize handler with debouncing
+const handleResize = debounce(() => {
+    // Recalculate any layout-dependent animations
+    const cards = document.querySelectorAll('.community-card');
+    cards.forEach(card => {
+        card.style.animation = 'none';
+        card.offsetHeight; // Trigger reflow
+        card.style.animation = null;
+    });
+}, 250);
+
+window.addEventListener('resize', handleResize);
+
+// Theme preference detection
+function detectSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+// Listen for system theme changes
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+        // Only update if user hasn't manually set a preference
+        if (!localStorage.getItem('theme')) {
+            document.documentElement.setAttribute('data-theme', newTheme);
+            updateDarkModeToggle(newTheme);
+        }
+    });
+}
+
+// Toast notification function
+function showToast(message, type = 'info') {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas ${getToastIcon(type)}"></i>
+            <span>${message}</span>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function getToastIcon(type) {
+    switch (type) {
+        case 'success': return 'fa-check-circle';
+        case 'error': return 'fa-exclamation-circle';
+        case 'warning': return 'fa-exclamation-triangle';
+        default: return 'fa-info-circle';
+    }
+}
+
+// Animation function for cards
 function animateCards() {
     const cards = document.querySelectorAll('.community-card');
     cards.forEach((card, index) => {
-        setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 100);
+        card.style.animation = 'none';
+        card.offsetHeight; // Trigger reflow
+        card.style.animation = `cardFloatIn 0.6s ease-out ${index * 0.1}s`;
     });
 }
 
-// Utility functions
-function clearFilters() {
-    // Reset search
-    const searchInput = document.getElementById('communitySearch');
-    if (searchInput) {
-        searchInput.value = '';
-        performSearch('');
-    }
-    
-    // Reset category filter
-    const allFilterBtn = document.querySelector('.filter-btn[data-filter="all"]');
-    if (allFilterBtn) {
-        allFilterBtn.click();
-    }
-    
-    // Reset sort
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.value = 'popular';
-    }
-    
-    showToast('Filters cleared!', 'info');
-}
+// Export functions for global access
+window.CommunitiesPage = {
+    clearFilters,
+    toggleDarkMode: () => {
+        const toggle = document.querySelector('[data-dark-mode-toggle]');
+        if (toggle) toggle.click();
+    },
+    showToast
+};
 
-function showToast(message, type = 'info') {
-    // Check if toast function exists (from users app)
-    if (typeof window.showToast === 'function') {
-        window.showToast(message, type);
-    } else {
-        // Fallback alert
-        alert(message);
-    }
-}
-
-    // Add smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            if (href && href !== '#') {
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
-        });
-    });
-
-// Add CSS for search highlighting
+// Add CSS for search highlighting and additional styles
 const style = document.createElement('style');
 style.textContent = `
     .search-highlight {
@@ -433,8 +731,15 @@ style.textContent = `
         opacity: 1;
         transform: translateY(0);
     }
+    
+    /* Additional utility classes */
+    .keyboard-navigation *:focus {
+        outline: 2px solid var(--primary-gradient-start) !important;
+        outline-offset: 2px !important;
+    }
+    
+    .focused {
+        box-shadow: 0 0 0 2px var(--primary-gradient-start) !important;
+    }
 `;
 document.head.appendChild(style);
-
-// Global function for clearing filters (accessible from HTML)
-window.clearFilters = clearFilters;

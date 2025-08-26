@@ -46,7 +46,7 @@
         <div class="row g-4" id="communitiesGrid">
             <!-- Sports Community -->
             <div class="col-lg-4 col-md-6" data-category="sports" data-activity="high">
-                <div class="community-card" data-community="sports">
+                <div class="community-card" data-community="sports" data-url="{% url 'communities:sports_community' %}" style="cursor: pointer;">
                     <div class="community-card-top">
                         <div class="community-icon sports text-white">
                             <i class="fas fa-futbol"></i>
@@ -71,16 +71,16 @@
                         <div class="community-games">
                             <div class="games-label">Popular Games:</div>
                             <div class="game-tags">
-                                <span class="game-tag">FIFA 24</span>
+                                <span class="game-tag">FIFA 25</span>
                                 <span class="game-tag">NBA 2K24</span>
-                                <span class="game-tag">PES</span>
+                                <span class="game-tag">E-Football</span>
                             </div>
                         </div>
                         
                         <div class="community-actions">
-                            <button class="btn btn-join sports text-white">
+                            <a href="{% url 'communities:sports_community' %}" class="btn btn-join sports text-white">
                                 <i class="fas fa-plus me-2"></i>Join Community
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
 
             <!-- Racing Community -->
             <div class="col-lg-4 col-md-6" data-category="racing" data-activity="medium">
-                <div class="community-card" data-community="racing">
+                <div class="community-card" data-community="racing" data-url="{% url 'communities:racing_community' %}" style="cursor: pointer;">
                     <div class="community-card-top">
                         <div class="community-icon racing text-white">
                             <i class="fas fa-car"></i>
@@ -121,9 +121,9 @@
                         </div>
                         
                         <div class="community-actions">
-                            <button class="btn btn-join racing text-white">
+                            <a href="{% url 'communities:racing_community' %}" class="btn btn-join racing text-white">
                                 <i class="fas fa-plus me-2"></i>Join Community
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
 
             <!-- Action Community -->
             <div class="col-lg-4 col-md-6" data-category="action" data-activity="high">
-                <div class="community-card" data-community="action">
+                <div class="community-card" data-community="action" data-url="{% url 'communities:action_community' %}" style="cursor: pointer;">
                     <div class="community-card-top">
                         <div class="community-icon action text-white">
                             <i class="fas fa-fist-raised"></i>
@@ -164,9 +164,9 @@
                         </div>
                         
                         <div class="community-actions">
-                            <button class="btn btn-join action text-white">
+                            <a href="{% url 'communities:action_community' %}" class="btn btn-join action text-white">
                                 <i class="fas fa-plus me-2"></i>Join Community
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,7 @@
                             <div class="games-label">Expected Games:</div>
                             <div class="game-tags">
                                 <span class="game-tag">Civilization</span>
-                                <span class="game-tag">D&D</span>
+                                <span class="game-tag">Genshin Impact</span>
                                 <span class="game-tag">Final Fantasy</span>
                             </div>
                         </div>
