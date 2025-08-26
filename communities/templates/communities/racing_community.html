@@ -1,0 +1,543 @@
+{% extends 'core/base_minimal.html' %}
+{% load static %}
+
+{% block title %}Racing Gaming Community - Connect with Racing Gamers{% endblock %}
+
+{% block dashboard_css %}
+    <link rel="stylesheet" href="{% static 'communities/css/communities.css' %}">
+    <link rel="stylesheet" href="{% static 'communities/css/community_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Community Hero Section -->
+<section class="community-hero racing-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="community-hero-content">
+                    <div class="community-badge racing">
+                        <i class="fas fa-car"></i>
+                        <span>Racing Community</span>
+                    </div>
+                    <h1 class="community-title">Racing Gaming Community</h1>
+                    <p class="community-subtitle">Speed demons unite! From realistic simulators to arcade racing, experience the thrill of high-speed competition.</p>
+                    <div class="community-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span>1,923 members</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-circle online"></i>
+                            <span>89 online</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>32 tournaments</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="community-hero-image">
+                    <img src="{% static 'core/images/racing.jpeg' %}" alt="Racing Gaming" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Community Navigation -->
+<section class="community-nav">
+    <div class="container">
+        <nav class="community-tabs">
+            <a href="#overview" class="tab-link active" data-tab="overview">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+            </a>
+            <a href="#discord" class="tab-link" data-tab="discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+            <a href="#tournaments" class="tab-link" data-tab="tournaments">
+                <i class="fas fa-trophy"></i>
+                <span>Tournaments</span>
+            </a>
+            <a href="#members" class="tab-link" data-tab="members">
+                <i class="fas fa-users"></i>
+                <span>Members</span>
+            </a>
+            <a href="#discussions" class="tab-link" data-tab="discussions">
+                <i class="fas fa-comments"></i>
+                <span>Discussions</span>
+            </a>
+        </nav>
+    </div>
+</section>
+
+<!-- Tab Content -->
+<div class="tab-content">
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-pane active">
+        <div class="container">
+            <div class="row">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    <section class="community-section">
+                        <h3 class="section-title">About Racing Community</h3>
+                        <p class="section-text">
+                            Welcome to the ultimate racing gaming community! Whether you prefer realistic simulators like Gran Turismo 
+                            or action-packed arcade racing like Need for Speed, you'll find your perfect racing environment here. 
+                            Our community celebrates all forms of racing, from drift competitions to endurance races.
+                        </p>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-flag-checkered"></i>
+                                </div>
+                                <h4>Race Events</h4>
+                                <p>Participate in daily races and special events</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-car-side"></i>
+                                </div>
+                                <h4>Drift Competitions</h4>
+                                <p>Show off your drifting skills in competitions</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h4>Time Trials</h4>
+                                <p>Compete for the fastest lap times</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h4>Team Racing</h4>
+                                <p>Join racing teams and compete together</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="community-section">
+                        <h3 class="section-title">Popular Games</h3>
+                        <div class="games-showcase">
+                            <div class="game-card">
+                                <img src="{% static 'core/images/racing.jpeg' %}" alt="Forza Horizon" class="game-image">
+                                <div class="game-info">
+                                    <h4>Forza Horizon</h4>
+                                    <p>567 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily races: 34</span>
+                                        <span class="stat">Tournaments: 8</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/nfs.jpeg' %}" alt="Need for Speed" class="game-image">
+                                <div class="game-info">
+                                    <h4>Need for Speed</h4>
+                                    <p>432 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily races: 28</span>
+                                        <span class="stat">Tournaments: 6</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card">
+                                <img src="{% static 'core/images/racing1.jpeg' %}" alt="Gran Turismo" class="game-image">
+                                <div class="game-info">
+                                    <h4>Gran Turismo</h4>
+                                    <p>324 active players</p>
+                                    <div class="game-stats">
+                                        <span class="stat">Daily races: 19</span>
+                                        <span class="stat">Tournaments: 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="community-sidebar">
+                        <div class="sidebar-card">
+                            <h4>Quick Actions</h4>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-block">
+                                    <i class="fas fa-plus"></i>
+                                    Join Community
+                                </button>
+                                <button class="btn btn-outline-primary btn-block">
+                                    <i class="fab fa-discord"></i>
+                                    Join Discord
+                                </button>
+                                <button class="btn btn-outline-secondary btn-block">
+                                    <i class="fas fa-share"></i>
+                                    Share Community
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Community Stats</h4>
+                            <div class="stats-list">
+                                <div class="stat-row">
+                                    <span class="stat-label">Total Members</span>
+                                    <span class="stat-value">1,923</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Online Now</span>
+                                    <span class="stat-value">89</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Active Tournaments</span>
+                                    <span class="stat-value">6</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Daily Races</span>
+                                    <span class="stat-value">81</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h4>Top Racers</h4>
+                            <div class="top-players">
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player1.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>SpeedDemon</h5>
+                                        <p>Forza Champion</p>
+                                    </div>
+                                    <div class="player-rank">#1</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player2.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>DriftKing</h5>
+                                        <p>NFS Expert</p>
+                                    </div>
+                                    <div class="player-rank">#2</div>
+                                </div>
+                                <div class="player-item">
+                                    <img src="{% static 'core/images/player3.jpeg' %}" alt="Player" class="player-avatar">
+                                    <div class="player-info">
+                                        <h5>GTMaster</h5>
+                                        <p>Gran Turismo Pro</p>
+                                    </div>
+                                    <div class="player-rank">#3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord Tab -->
+    <div id="discord" class="tab-pane">
+        <div class="container">
+            <div class="discord-section">
+                <div class="discord-header">
+                    <h3 class="section-title">Join Our Discord Community</h3>
+                    <p class="section-text">Connect with fellow racing enthusiasts in real-time, join voice channels, and participate in community events!</p>
+                </div>
+                
+                <div class="discord-embed-container">
+                    <div class="discord-preview">
+                        <div class="discord-preview-header">
+                            <div class="discord-server-info">
+                                <div class="discord-server-icon">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="discord-server-details">
+                                    <h4>Racing Gaming Community</h4>
+                                    <p>1,923 members • 89 online</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-discord">
+                                <i class="fab fa-discord"></i>
+                                Join Server
+                            </button>
+                        </div>
+                        
+                        <div class="discord-channels">
+                            <div class="channel-category">
+                                <h5><i class="fas fa-hashtag"></i> General</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>general</span>
+                                        <span class="member-count">1.9k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>announcements</span>
+                                        <span class="member-count">1.9k</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>rules</span>
+                                        <span class="member-count">1.9k</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-car"></i> Racing</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>forza-horizon</span>
+                                        <span class="member-count">567</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>need-for-speed</span>
+                                        <span class="member-count">432</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>gran-turismo</span>
+                                        <span class="member-count">324</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>drift-zone</span>
+                                        <span class="member-count">234</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="channel-category">
+                                <h5><i class="fas fa-microphone"></i> Voice Channels</h5>
+                                <div class="channel-list">
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>General Chat</span>
+                                        <span class="member-count">12</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>Forza Lobby</span>
+                                        <span class="member-count">8</span>
+                                    </div>
+                                    <div class="channel-item">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>NFS Lobby</span>
+                                        <span class="member-count">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Placeholder for actual Discord embed -->
+                    <div class="discord-embed-placeholder">
+                        <div class="embed-content">
+                            <i class="fab fa-discord fa-3x"></i>
+                            <h4>Discord Community</h4>
+                            <p>Join our Discord server to connect with fellow racing enthusiasts!</p>
+                            <button class="btn btn-discord btn-lg">
+                                <i class="fab fa-discord"></i>
+                                Join Discord Server
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournaments Tab -->
+    <div id="tournaments" class="tab-pane">
+        <div class="container">
+            <div class="tournaments-section">
+                <div class="section-header">
+                    <h3 class="section-title">Active Tournaments</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Create Tournament
+                    </button>
+                </div>
+                
+                <div class="tournaments-grid">
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>Forza Horizon Championship</h4>
+                                <p>Monthly championship for Forza Horizon players</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 18, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>48 participants</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £300</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                    
+                    <div class="tournament-card">
+                        <div class="tournament-header">
+                            <div class="tournament-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="tournament-info">
+                                <h4>NFS Drift Competition</h4>
+                                <p>Drift competition for Need for Speed players</p>
+                            </div>
+                            <div class="tournament-status active">Active</div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Ends: Dec 22, 2024</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <span>32 participants</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <span>Prize: £200</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary btn-block">Join Tournament</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Tab -->
+    <div id="members" class="tab-pane">
+        <div class="container">
+            <div class="members-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Members</h3>
+                    <div class="member-filters">
+                        <input type="text" placeholder="Search members..." class="form-control">
+                        <select class="form-control">
+                            <option>All Members</option>
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="members-grid">
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player1.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>SpeedDemon</h5>
+                            <p>Forza Champion</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 89</span>
+                                <span class="stat">Level: 34</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player2.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>DriftKing</h5>
+                            <p>NFS Expert</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 156</span>
+                                <span class="stat">Level: 56</span>
+                            </div>
+                        </div>
+                        <div class="member-status online"></div>
+                    </div>
+                    
+                    <div class="member-card">
+                        <img src="{% static 'core/images/player3.jpeg' %}" alt="Member" class="member-avatar">
+                        <div class="member-info">
+                            <h5>GTMaster</h5>
+                            <p>Gran Turismo Pro</p>
+                            <div class="member-stats">
+                                <span class="stat">Wins: 78</span>
+                                <span class="stat">Level: 28</span>
+                            </div>
+                        </div>
+                        <div class="member-status offline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discussions Tab -->
+    <div id="discussions" class="tab-pane">
+        <div class="container">
+            <div class="discussions-section">
+                <div class="section-header">
+                    <h3 class="section-title">Community Discussions</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Discussion
+                    </button>
+                </div>
+                
+                <div class="discussions-list">
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player1.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>Forza Horizon 5 Best Cars</h5>
+                                <p>Started by SpeedDemon • 3 hours ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 45</span>
+                                <span><i class="fas fa-heart"></i> 67</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">What are your favourite cars in Forza Horizon 5? I've been testing different builds...</p>
+                    </div>
+                    
+                    <div class="discussion-card">
+                        <div class="discussion-header">
+                            <img src="{% static 'core/images/player2.jpeg' %}" alt="User" class="user-avatar">
+                            <div class="discussion-info">
+                                <h5>NFS Heat Drift Setup Guide</h5>
+                                <p>Started by DriftKing • 6 hours ago</p>
+                            </div>
+                            <div class="discussion-stats">
+                                <span><i class="fas fa-comment"></i> 34</span>
+                                <span><i class="fas fa-heart"></i> 89</span>
+                            </div>
+                        </div>
+                        <p class="discussion-preview">Here's my complete guide for the best drift setups in Need for Speed Heat...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'communities/js/communities.js' %}"></script>
+    <script src="{% static 'communities/js/community_detail.js' %}"></script>
+{% endblock %}

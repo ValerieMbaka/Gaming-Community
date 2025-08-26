@@ -13,3 +13,49 @@ def communities_list(request):
     }
     
     return render(request, 'communities/communities.html', communities_data)
+
+def sports_community(request):
+    """
+    View to display the sports gaming community page
+    """
+    # Dummy data for sports community (will be replaced with database data later)
+    sports_data = {
+        'community_name': 'Sports',
+        'total_members': 2847,
+        'online_members': 156,
+        'active_tournaments': 8,
+    }
+    
+    return render(request, 'communities/sports_community.html', sports_data)
+
+def racing_community(request):
+    """
+    View to display the racing gaming community page
+    """
+    # Dummy data for racing community (will be replaced with database data later)
+    racing_data = {
+        'community_name': 'Racing',
+        'total_members': 1923,
+        'online_members': 89,
+        'active_tournaments': 6,
+    }
+    
+    return render(request, 'communities/racing_community.html', racing_data)
+
+def action_community(request):
+    """
+    View to display the action gaming community page
+    """
+    # Dummy data for action community (will be replaced with database data later)
+    action_data = {
+        'community_name': 'Action',
+        'total_members': 3156,
+        'online_members': 234,
+        'active_tournaments': 12,
+    }
+    
+    return render(request, 'communities/action_community.html', action_data)
+
+
+def feeds_view(request):
+    return render(request, 'communities/feeds.html')
