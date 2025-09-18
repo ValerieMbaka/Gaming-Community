@@ -3,23 +3,82 @@
 
 {% block title %} GameHub | Connect Gamers Across All Platforms {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/index.css' %}">
+{% endblock %}
+
 {% block body %}
     <!-- Hero Section -->
-    <section class="hero-section text-white">
-        <div class="container">
-            <div class="row align-items-center min-vh-75 py-5">
-                <div class="col-lg-6">
-                    <h1 class="display-3 fw-bold mb-4">Unite gamers across all platforms</h1>
-                    <p class="lead mb-4">The ultimate hub connecting PC, Console, and Mobile players in one competitive ecosystem.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="btn btn-primary btn-lg px-4">Join Free</a>
-                        <a href="#platforms" class="btn btn-outline-light btn-lg px-4">Explore Platforms</a>
+    <section class="index-hero-section">
+        <div id="heroCarousel" class="carousel slide mb-0" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Platform Unity"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Communities"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Competitions"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Popular Games"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{% static 'core/images/ps.jpeg' %}" class="d-block w-100" alt="Platform Unity">
+                    <div class="carousel-caption d-none d-md-block">
+                        <div class="text-content">
+                            <h1>Unite gamers across all platforms</h1>
+                            <p>The ultimate hub connecting PC, Console, and Mobile players in one competitive ecosystem.</p>
+                        </div>
+                        <div class="btn-container">
+                            <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg px-4">Join Free</a>
+                        </div>
+                    </div>             
+                </div>
+
+                <div class="carousel-item">
+                    <img src="{% static 'core/images/player.jpeg' %}" class="d-block w-100" alt="Gaming Communities">
+                    <div class="carousel-caption d-none d-md-block">
+                        <div class="text-content">
+                            <h1>Join Gaming Communities</h1>
+                            <p>Connect with like-minded gamers, share strategies, and build lasting friendships in game-specific communities.</p>
+                        </div>
+                        <div class="btn-container">
+                            <a href="#communities" class="btn btn-primary btn-lg px-4">Explore Communities</a>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="{% static 'core/images/ps.jpeg' %}" alt="Gaming Illustration" class="img-fluid">
+
+                <div class="carousel-item">
+                    <img src="{% static 'core/images/codwarzone.jpeg' %}" class="d-block w-100" alt="Gaming Competitions">
+                    <div class="carousel-caption d-none d-md-block">
+                        <div class="text-content">
+                            <h1>Compete & Win Prizes</h1>
+                            <p>Participate in regular tournaments with cash prizes, climb leaderboards, and prove your gaming skills.</p>
+                        </div>
+                        <div class="btn-container">
+                            <a href="#competitions" class="btn btn-primary btn-lg px-4">View Competitions</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <img src="{% static 'core/images/tekken.jpeg' %}" class="d-block w-100" alt="Popular Games">
+                    <div class="carousel-caption d-none d-md-block">
+                        <div class="text-content">
+                            <h1>Discover Popular Games</h1>
+                            <p>Explore trending games, track your performance, and find your next favorite title across all platforms.</p>
+                        </div>
+                        <div class="btn-container">
+                            <a href="#games" class="btn btn-primary btn-lg px-4">Browse Games</a>
+                    </div>
+                </div>
                 </div>
             </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </section>
 
@@ -49,48 +108,47 @@
                                 <div class="text-muted">Platforms</div>
                             </div>
                         </div>
-
-                        <a href="#platforms" class="btn btn-outline-light">Our Platforms</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="row g-3">
                         <div class="col-6">
-                            <div class="card bg-secondary border-0 h-100">
+                            <div class="card about-feature-card border-0 h-100">
                                 <div class="card-body p-4">
-                                    <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
-                                    <h5>Competitions</h5>
-                                    <p class="small text-muted">Weekly tournaments with Kshs prizes</p>
+                                     <i class="fas fa-users fa-2x text-info mb-3"></i>
+                                     <h5 class="text-white">Communities</h5>
+                                     <p class="small text-white-50">Join game-specific communities</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card bg-secondary border-0 h-100">
+                            <div class="card about-feature-card border-0 h-100">
                                 <div class="card-body p-4">
-                                    <i class="fas fa-users fa-2x text-info mb-3"></i>
-                                    <h5>Communities</h5>
-                                    <p class="small text-muted">Join game-specific clans & groups</p>
+                                     <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
+                                     <h5 class="text-white">Competitions</h5>
+                                     <p class="small text-white-50">Regular competitions with cash prizes</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card bg-secondary border-0 h-100">
+                            <div class="card about-feature-card border-0 h-100">
                                 <div class="card-body p-4">
                                     <i class="fas fa-chart-line fa-2x text-success mb-3"></i>
-                                    <h5>Stats Tracking</h5>
-                                    <p class="small text-muted">Monitor your progress across games</p>
+                                     <h5 class="text-white">Performance Analytics</h5>
+                                     <p class="small text-white-50">Detailed performance insights</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="card bg-secondary border-0 h-100">
+                            <div class="card about-feature-card border-0 h-100">
                                 <div class="card-body p-4">
-                                    <i class="fas fa-store fa-2x text-danger mb-3"></i>
-                                    <h5>Shop Discounts</h5>
-                                    <p class="small text-muted">Exclusive deals at local stores</p>
+                                     <i class="fas fa-calendar-alt fa-2x text-danger mb-3"></i>
+                                     <h5 class="text-white">Event Calendar</h5>
+                                     <p class="small text-white-50">Never miss gaming events</p>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -112,25 +170,37 @@
                     <div class="card game-card border-0 h-100">
                         <div class="card-img-top position-relative">
                             <img src="{% static 'core/images/tekken.jpeg' %}" class="img-fluid w-100" alt="Tekken">
-                            <span class="badge bg-success position-absolute top-0 end-0 m-2">+25%</span>
+                            <span class="badge game-badge trending-badge position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-fire me-1"></i>Trending
+                            </span>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">Tekken</h5>
-                                    <div class="d-flex small text-warning mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
+                        <div class="card-body d-flex flex-column">
+                            <div class="game-info">
+                                <!-- Row 1: Game name + Category -->
+                                <div class="game-header mb-2">
+                                    <h5 class="game-title mb-0">Tekken</h5>
+                                    <span class="game-genre">Fighting</span>
+                        </div>
+                                
+                                <!-- Row 2: Platforms -->
+                                <div class="game-platforms mb-2">
+                                    <i class="fas fa-desktop me-1"></i>PC
+                                    <i class="fas fa-gamepad ms-2 me-1"></i>Console
                                     </div>
+                                
+                                <!-- Row 3: Rating + Players -->
+                                <div class="game-footer">
+                                    <div class="game-rating">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star-half-alt text-warning"></i>
                                 </div>
-                                <span class="badge bg-primary">PC</span>
+                                    <span class="game-players">
+                                        <i class="fas fa-users me-1"></i> 42K playing
+                                    </span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 42K playing</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
                             </div>
                         </div>
                     </div>
@@ -141,25 +211,36 @@
                     <div class="card game-card border-0 h-100">
                         <div class="card-img-top position-relative">
                             <img src="{% static 'core/images/pubg.jpeg' %}" class="img-fluid w-100" alt="PUBG Mobile">
-                            <span class="badge bg-danger position-absolute top-0 end-0 m-2">New</span>
+                            <span class="badge game-badge hot-badge position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-fire me-1"></i>Hot
+                            </span>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">PUBG Mobile</h5>
-                                    <div class="d-flex small text-warning mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                        <div class="card-body d-flex flex-column">
+                            <div class="game-info">
+                                <!-- Row 1: Game name + Category -->
+                                <div class="game-header mb-2">
+                                    <h5 class="game-title mb-0">PUBG Mobile</h5>
+                                    <span class="game-genre">Battle Royale</span>
+                                </div>
+                                
+                                <!-- Row 2: Platforms -->
+                                <div class="game-platforms mb-2">
+                                    <i class="fas fa-mobile-alt me-1"></i>Mobile
+                        </div>
+                                
+                                <!-- Row 3: Rating + Players -->
+                                <div class="game-footer">
+                                    <div class="game-rating">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
                                         <i class="far fa-star"></i>
                                     </div>
-                                </div>
-                                <span class="badge bg-success">Mobile</span>
+                                    <span class="game-players">
+                                        <i class="fas fa-users me-1"></i> 38K playing
+                                    </span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 38K playing</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
                             </div>
                         </div>
                     </div>
@@ -168,26 +249,40 @@
                 <!-- Game 3 -->
                 <div class="col-md-3 col-6">
                     <div class="card game-card border-0 h-100">
-                        <div class="card-img-top">
+                        <div class="card-img-top position-relative">
                             <img src="{% static 'core/images/fc.jpeg' %}" class="img-fluid w-100" alt="FIFA 25">
+                            <span class="badge game-badge new-badge position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-arrow-up me-1"></i>New
+                            </span>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">FIFA 25</h5>
-                                    <div class="d-flex small text-warning mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                        <div class="card-body d-flex flex-column">
+                            <div class="game-info">
+                                <!-- Row 1: Game name + Category -->
+                                <div class="game-header mb-2">
+                                    <h5 class="game-title mb-0">FIFA 25</h5>
+                                    <span class="game-genre">Sports</span>
+                        </div>
+                                
+                                <!-- Row 2: Platforms -->
+                                <div class="game-platforms mb-2">
+                                    <i class="fas fa-desktop me-1"></i>PC
+                                    <i class="fas fa-gamepad ms-2 me-1"></i>Console
+                                    <i class="fas fa-mobile-alt ms-2 me-1"></i>Mobile
                                     </div>
+                                
+                                <!-- Row 3: Rating + Players -->
+                                <div class="game-footer">
+                                    <div class="game-rating">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
                                 </div>
-                                <span class="badge bg-warning text-dark">Xbox</span>
+                                    <span class="game-players">
+                                        <i class="fas fa-users me-1"></i> 29K playing
+                                    </span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 29K playing</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
                             </div>
                         </div>
                     </div>
@@ -196,34 +291,43 @@
                 <!-- Game 4 -->
                 <div class="col-md-3 col-6">
                     <div class="card game-card border-0 h-100">
-                        <div class="card-img-top">
+                        <div class="card-img-top position-relative">
                             <img src="{% static 'core/images/nfs.jpeg' %}" class="img-fluid w-100" alt="Need for Speed Heat">
+                            <span class="badge game-badge hot-badge position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-fire me-1"></i>Hot
+                            </span>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">Need for Speed Heat</h5>
-                                    <div class="d-flex small text-warning mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
+                        <div class="card-body d-flex flex-column">
+                            <div class="game-info">
+                                <!-- Row 1: Game name + Category -->
+                                <div class="game-header mb-2">
+                                    <h5 class="game-title mb-0">Need for Speed Heat</h5>
+                                    <span class="game-genre">Racing</span>
                                     </div>
+                                
+                                <!-- Row 2: Platforms -->
+                                <div class="game-platforms mb-2">
+                                    <i class="fas fa-desktop me-1"></i>PC
+                                    <i class="fas fa-gamepad ms-2 me-1"></i>Console
                                 </div>
-                                <span class="badge bg-info">PS5</span>
+                                
+                                <!-- Row 3: Rating + Players -->
+                                <div class="game-footer">
+                                    <div class="game-rating">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star-half-alt text-warning"></i>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><i class="fas fa-users me-1"></i> 35K playing</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                    <span class="game-players">
+                                        <i class="fas fa-users me-1"></i> 35K playing
+                                    </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="text-center mt-5">
-                <a href="#" class="btn btn-outline-primary">View All Games</a>
             </div>
         </div>
     </section>
@@ -287,14 +391,10 @@
                 </div>
 
             </div>
-
-            <div class="text-center mt-5">
-                <a href="#" class="btn btn-primary px-4">Connect Your Platforms</a>
-            </div>
         </div>
     </section>
 
-    <!-- Blog Section (Enhanced) -->
+    <!-- Blog Section -->
     <section id="blog" class="py-5 bg-light">
         <div class="container py-4">
             <div class="text-center mb-5">
@@ -320,10 +420,10 @@
                                     <h5 class="mb-1">Call of Duty: Warzone</h5>
                                     <div class="d-flex small text-muted mb-2">
                                         <span class="me-3"><i class="fas fa-calendar-alt me-1"></i> July 26, 2025</span>
-                                        <span><i class="fas fa-users me-1"></i> 120 Registered</span>
+                                        <span><i class="fas fa-users me-1"></i> 120/200 Registered</span>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <span class="badge bg-warning text-dark me-2">Kshs 750,000 Prize</span>
+                                        <span class="badge bg-warning text-dark me-2">Kshs 5000 Prize</span>
                                         <a href="#" class="btn btn-sm btn-outline-primary ms-auto">Register</a>
                                     </div>
                                 </div>
@@ -338,10 +438,10 @@
                                     <h5 class="mb-1">Fortnite Solo Showdown</h5>
                                     <div class="d-flex small text-muted mb-2">
                                         <span class="me-3"><i class="fas fa-calendar-alt me-1"></i> August 1, 2025 </span>
-                                        <span><i class="fas fa-users me-1"></i> 85 Registered</span>
+                                        <span><i class="fas fa-users me-1"></i> 85/100 Registered</span>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <span class="badge bg-warning text-dark me-2">Kshs 450,000 Prize</span>
+                                        <span class="badge bg-warning text-dark me-2">Kshs 4000 Prize</span>
                                         <a href="#" class="btn btn-sm btn-outline-primary ms-auto">Register</a>
                                     </div>
                                 </div>
@@ -372,9 +472,6 @@
                                     <h6 class="mb-0">ProGamer123</h6>
                                     <small class="text-muted">42 Wins | 3,850 Points</small>
                                 </div>
-                                <div>
-                                    <span class="badge bg-primary">PC</span>
-                                </div>
                             </div>
 
                             <!-- Player 2 -->
@@ -386,9 +483,6 @@
                                 <div class="flex-grow-1">
                                     <h6 class="mb-0">MobileKing</h6>
                                     <small class="text-muted">38 Wins | 3,720 Points</small>
-                                </div>
-                                <div>
-                                    <span class="badge bg-success">Mobile</span>
                                 </div>
                             </div>
 
@@ -402,9 +496,6 @@
                                     <h6 class="mb-0">ConsoleQueen</h6>
                                     <small class="text-muted">35 Wins | 3,600 Points</small>
                                 </div>
-                                <div>
-                                    <span class="badge bg-warning text-dark">PS5</span>
-                                </div>
                             </div>
 
                             <!-- Player 4 -->
@@ -417,14 +508,6 @@
                                     <h6 class="mb-0">FIFAPro</h6>
                                     <small class="text-muted">32 Wins | 3,450 Points</small>
                                 </div>
-                                <div>
-                                    <span class="badge bg-danger">Xbox</span>
-                                </div>
-                            </div>
-
-                            <!-- View All -->
-                            <div class="text-center mt-4">
-                                <a href="#" class="btn btn-outline-primary">View Full Leaderboard</a>
                             </div>
                         </div>
                     </div>
@@ -433,4 +516,8 @@
         </div>
     </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'core/js/index.js' %}"></script>
 {% endblock %}

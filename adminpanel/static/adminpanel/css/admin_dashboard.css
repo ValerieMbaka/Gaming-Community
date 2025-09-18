@@ -1,0 +1,229 @@
+/* Admin Dashboard Specific Styles */
+
+/* KPI Cards */
+.kpi-card {
+    border: 0;
+    color: white;
+    border-radius: var(--radius, 12px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.kpi-card::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    bottom: -30px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(white, rgba(255,255,255,0));
+    opacity: 0.1;
+    border-radius: 50%;
+}
+
+.kpi-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+
+/* Gradient Backgrounds */
+.gradient-blue { 
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+}
+
+.gradient-green { 
+    background: linear-gradient(135deg, #10b981, #059669); 
+}
+
+.gradient-orange { 
+    background: linear-gradient(135deg, #f59e0b, #d97706); 
+}
+
+.gradient-purple { 
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed); 
+}
+
+/* Text Colors */
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Chart Controls */
+.btn-check:checked + .btn-outline-secondary {
+    background-color: var(--primary, #6366f1);
+    border-color: var(--primary, #6366f1);
+    color: white;
+}
+
+/* Activity List */
+.activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light, #e2e8f0);
+    transition: all 0.3s ease;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item:hover {
+    background: var(--bg-secondary, #f8fafc);
+    margin: 0 -12px;
+    padding: 12px;
+    border-radius: var(--radius, 8px);
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-text {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+    color: var(--text-primary, #1e293b);
+    font-weight: 500;
+}
+
+.activity-time {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+}
+
+/* Chart Containers */
+.chart-container {
+    position: relative;
+    height: 180px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.chart-container-small {
+    position: relative;
+    height: 160px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Quick Actions */
+.btn-group-sm .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.quick-actions .btn {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.quick-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Enhancements */
+.card {
+    border: 1px solid var(--border-light, #e2e8f0);
+    border-radius: var(--radius, 12px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .chart-container {
+        height: 160px;
+    }
+    
+    .chart-container-small {
+        height: 140px;
+    }
+}
+
+@media (max-width: 768px) {
+    .kpi-card {
+        margin-bottom: 1rem;
+    }
+    
+    .kpi-icon {
+        font-size: 2rem;
+    }
+    
+    .activity-item {
+        padding: 8px 0;
+    }
+    
+    .activity-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .activity-text {
+        font-size: 0.8rem;
+    }
+    
+    .chart-container {
+        height: 140px;
+    }
+    
+    .chart-container-small {
+        height: 120px;
+    }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .card {
+    background-color: var(--bg-primary, #1a202c);
+    border-color: var(--border-light, #2d3748);
+}
+
+[data-theme="dark"] .activity-item:hover {
+    background: var(--bg-secondary, #2d3748);
+}
+
+[data-theme="dark"] .activity-text {
+    color: var(--text-primary, #f7fafc);
+}
+
+[data-theme="dark"] .activity-time {
+    color: var(--text-muted, #a0aec0);
+}
+
+[data-theme="dark"] .activity-item {
+    border-bottom-color: var(--border-light, #2d3748);
+}

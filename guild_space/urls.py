@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include(('core.urls', 'core'), namespace='core')),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('communities/', include(('communities.urls', 'communities'), namespace='communities')),
+    path('feeds/', include(('feeds.urls', 'feeds'), namespace='feeds')),
+    path('staff/', include(('adminpanel.urls', 'adminpanel'), namespace='adminpanel')),
 ]
 
 if settings.DEBUG:

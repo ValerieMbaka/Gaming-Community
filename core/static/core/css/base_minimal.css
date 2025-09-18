@@ -1,6 +1,6 @@
-/* ===== Base Variables ===== */
+/*  Base MinimalVariables */
 :root {
-    /* Primary Colors - Enhanced Gaming Theme */
+    /* Primary Colors */
     --primary: #6366F1;
     --primary-light: #818CF8;
     --primary-dark: #4F46E5;
@@ -16,13 +16,13 @@
     --accent-light: #FBBF24;
     --accent-dark: #D97706;
     
-    /* Status Colors - Better Contrast */
+    /* Status Colors */
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #EF4444;
     --info: #3B82F6;
     
-    /* Grayscale - Improved Contrast */
+    /* Grayscale */
     --dark: #1F2937;
     --dark-gray: #374151;
     --gray: #6B7280;
@@ -30,36 +30,36 @@
     --light: #F9FAFB;
     --white: #FFFFFF;
     
-    /* Text - Better Readability */
+    /* Text */
     --text-primary: #111827;
     --text-secondary: #4B5563;
     --text-muted: #9CA3AF;
     
-    /* Backgrounds - Cleaner Look */
+    /* Backgrounds */
     --bg-primary: var(--white);
     --bg-secondary: #F9FAFB;
     --bg-sidebar: #1F2937;
     --bg-card: #FFFFFF;
     
-    /* Shadows - Enhanced Depth */
+    /* Shadows */
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
     --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
     --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
     --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
     
-    /* Borders - Subtle */
+    /* Borders */
     --border-radius: 12px;
     --border-radius-sm: 8px;
     --border-color: #E5E7EB;
     
-    /* Spacing - Reduced */
+    /* Spacing */
     --section-gap: 20px;
     
     /* Transitions */
     --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== Base Styles & Resets ===== */
+/* Base Styles & Resets */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -92,7 +92,7 @@ img {
     display: block;
 }
 
-/* ===== Tooltip Styles ===== */
+/* Tooltip Styles */
 .custom-tooltip {
     position: fixed;
     background: var(--bg-sidebar);
@@ -108,7 +108,7 @@ img {
     transform: translateX(-50%) translateY(-100%);
 }
 
-/* ===== Utility Classes ===== */
+/* Utility Classes */
 .highlight {
     color: var(--primary);
     font-weight: 600;
@@ -141,7 +141,7 @@ img {
     margin-top: 0.5rem;
 }
 
-/* ===== Navigation Components ===== */
+/* Navigation Components */
 .top-nav {
     position: fixed;
     top: 0;
@@ -250,11 +250,11 @@ img {
     opacity: 0;
 }
 
-.dark-mode .theme-toggle-btn .fa-moon {
+[data-theme="dark"] .theme-toggle-btn .fa-moon {
     opacity: 0;
 }
 
-.dark-mode .theme-toggle-btn .fa-sun {
+[data-theme="dark"] .theme-toggle-btn .fa-sun {
     opacity: 1;
 }
 
@@ -480,7 +480,7 @@ img {
     border-top: 1px solid var(--border-color);
 }
 
-/* ===== Dashboard Layout ===== */
+/* Dashboard Layout */
 .dashboard-wrapper {
     display: flex;
     min-height: 100vh;
@@ -738,33 +738,33 @@ img {
 }
 
 /* ===== Dark Mode Sidebar ===== */
-.dark-mode .dashboard-sidebar {
+[data-theme="dark"] .dashboard-sidebar {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .sidebar-profile {
+[data-theme="dark"] .sidebar-profile {
     background: rgba(255, 255, 255, 0.05);
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-.dark-mode .sidebar-avatar {
+[data-theme="dark"] .sidebar-avatar {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-.dark-mode .section-header {
+[data-theme="dark"] .section-header {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.dark-mode .nav-link {
+[data-theme="dark"] .nav-link {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.dark-mode .nav-link:hover {
+[data-theme="dark"] .nav-link:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.dark-mode .nav-link.active {
+[data-theme="dark"] .nav-link.active {
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     border-left: 4px solid #ffffff;
@@ -772,19 +772,19 @@ img {
     transform: translateX(0);
 }
 
-.dark-mode .logout-link {
+[data-theme="dark"] .logout-link {
     background: rgba(220, 53, 69, 0.15) !important;
 }
 
-.dark-mode .logout-link:hover {
+[data-theme="dark"] .logout-link:hover {
     background: rgba(220, 53, 69, 0.25) !important;
 }
 
-.dark-mode .badge {
+[data-theme="dark"] .badge {
     background: rgba(255, 255, 255, 0.15);
 }
 
-.dark-mode .logout-section {
+[data-theme="dark"] .logout-section {
     border-top-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -835,8 +835,8 @@ img {
     text-decoration: underline;
 }
 
-/* ===== Dark Mode ===== */
-.dark-mode {
+/* Dark Mode */
+[data-theme="dark"] {
     --text-primary: #F7FAFC;
     --text-secondary: #CBD5E0;
     --bg-primary: #1A202C;
@@ -847,29 +847,29 @@ img {
     --border-color: rgba(255,255,255,0.06);
 }
 
-.dark-mode .card {
+[data-theme="dark"] .card {
     background: var(--bg-primary);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.dark-mode .tab-btn:not(.active) {
+[data-theme="dark"] .tab-btn:not(.active) {
     background: rgba(255,255,255,0.05);
 }
 
-.dark-mode .stat-card {
+[data-theme="dark"] .stat-card {
     background: linear-gradient(135deg, rgba(26, 32, 44, 0.8) 0%, rgba(23, 25, 35, 0.8) 100%);
 }
 
-.dark-mode .custom-tooltip {
+[data-theme="dark"] .custom-tooltip {
     background: var(--bg-sidebar);
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ===== Dark Mode Header Profile ===== */
-.dark-mode .username {
+/* Dark Mode Header Profile */
+[data-theme="dark"] .username {
     color: #F7FAFC !important;
 }
 
-.dark-mode .profile-btn {
+[data-theme="dark"] .profile-btn {
     color: #F7FAFC !important;
 }

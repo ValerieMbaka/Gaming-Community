@@ -45,9 +45,13 @@ INSTALLED_APPS = [
 
     
     # My Apps
+    'adminpanel',
     'core',
     'users',
     'communities',
+    'feeds',
+    'competitions',
+    'notifications',
 ]
 
 AUTHENTICATION_BACKENDS = [

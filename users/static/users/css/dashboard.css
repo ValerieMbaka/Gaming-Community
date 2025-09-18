@@ -1784,95 +1784,95 @@
 }
 
 /* ===== Enhanced Dark Mode for Gaming Theme ===== */
-.dark-mode .profile-card .card-header {
+[data-theme="dark"] .profile-card .card-header {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%) !important;
     border-bottom-color: #667eea !important;
     color: #ffffff !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
 }
 
-.dark-mode .profile-card .card-header:hover {
+[data-theme="dark"] .profile-card .card-header:hover {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
 }
 
-.dark-mode .profile-card .card-header h2 {
+[data-theme="dark"] .profile-card .card-header h2 {
     color: #ffffff !important;
 }
 
-.dark-mode .profile-card .card-header h2 i {
+[data-theme="dark"] .profile-card .card-header h2 i {
     background: transparent !important;
     color: #ffffff !important;
 }
 
-.dark-mode .profile-card .card-header:hover h2 i {
+[data-theme="dark"] .profile-card .card-header:hover h2 i {
     background: transparent !important;
     color: #e0e0e0 !important;
 }
 
-.dark-mode .profile-card .card-header .view-all-link {
+[data-theme="dark"] .profile-card .card-header .view-all-link {
     color: #667eea !important;
     background: rgba(102, 126, 234, 0.15) !important;
     border-color: rgba(102, 126, 234, 0.4) !important;
 }
 
-.dark-mode .profile-card .card-header .view-all-link:hover {
+[data-theme="dark"] .profile-card .card-header .view-all-link:hover {
     background: rgba(102, 126, 234, 0.25) !important;
     border-color: rgba(102, 126, 234, 0.6) !important;
 }
 
-.dark-mode .profile-card {
+[data-theme="dark"] .profile-card {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%) !important;
     border-color: #2d2d44 !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
 }
 
-.dark-mode .profile-card:hover {
+[data-theme="dark"] .profile-card:hover {
     border-color: rgba(102, 126, 234, 0.5) !important;
     box-shadow: 0 12px 35px rgba(102, 126, 234, 0.3) !important;
 }
 
-.dark-mode .profile-card .card-body {
+[data-theme="dark"] .profile-card .card-body {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%) !important;
 }
 
-.dark-mode .profile-card .card-body:hover {
+[data-theme="dark"] .profile-card .card-body:hover {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
     box-shadow: inset 0 1px 3px rgba(102, 126, 234, 0.3) !important;
 }
 
-.dark-mode .dashboard-content {
+[data-theme="dark"] .dashboard-content {
     background: linear-gradient(135deg, #050510 0%, #0a0a1a 100%) !important;
 }
 
-.dark-mode .action-btn {
+[data-theme="dark"] .action-btn {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%) !important;
     border-color: #2d2d44 !important;
     color: #ffffff !important;
 }
 
-.dark-mode .action-btn:hover {
+[data-theme="dark"] .action-btn:hover {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
     border-color: #667eea !important;
 }
 
-.dark-mode .action-btn span {
+[data-theme="dark"] .action-btn span {
     color: #ffffff !important;
 }
 
-.dark-mode .action-btn:hover span {
+[data-theme="dark"] .action-btn:hover span {
     color: #667eea !important;
 }
 
-.dark-mode .activity-item,
-.dark-mode .achievement-item {
+[data-theme="dark"] .activity-item,
+[data-theme="dark"] .achievement-item {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%) !important;
     border-color: #2d2d44 !important;
     color: #ffffff !important;
 }
 
-.dark-mode .activity-item:hover,
-.dark-mode .achievement-item:hover {
+[data-theme="dark"] .activity-item:hover,
+[data-theme="dark"] .achievement-item:hover {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
     border-color: rgba(102, 126, 234, 0.5) !important;
 }
@@ -2425,43 +2425,43 @@
 }
 
 /* ===== Dark Mode for Competition Cards ===== */
-.dark-mode .competition-card {
+[data-theme="dark"] .competition-card {
     background: #1e293b;
     border-color: #334155;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.dark-mode .competition-card:hover {
+[data-theme="dark"] .competition-card:hover {
     border-color: rgba(102, 126, 234, 0.4);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
-.dark-mode .competition-title {
+[data-theme="dark"] .competition-title {
     color: #f8fafc;
 }
 
-.dark-mode .competition-meta {
+[data-theme="dark"] .competition-meta {
     color: #cbd5e0;
 }
 
-.dark-mode .competition-meta i {
+[data-theme="dark"] .competition-meta i {
     color: #667eea;
 }
 
-.dark-mode .competition-prize {
+[data-theme="dark"] .competition-prize {
     color: #667eea;
 }
 
-.dark-mode .countdown-timer {
+[data-theme="dark"] .countdown-timer {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
     border-color: rgba(102, 126, 234, 0.2);
 }
 
-.dark-mode .countdown-value {
+[data-theme="dark"] .countdown-value {
     color: #667eea;
 }
 
-.dark-mode .countdown-label {
+[data-theme="dark"] .countdown-label {
     color: #a0a0a0;
 }
 

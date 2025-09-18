@@ -10,10 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const url = this.getAttribute('data-url');
-            if (url) {
-                window.location.href = url;
-            }
+            // Redirect to pricing page instead of specific community page
+            window.location.href = '/communities/pricing/';
         });
     });
 

@@ -14,6 +14,67 @@ def communities_list(request):
     
     return render(request, 'communities/communities.html', communities_data)
 
+def community_pricing(request):
+    """
+    View to display the community pricing page
+    """
+    # Pricing plans data with actual features and pricing
+    pricing_data = {
+        'plans': [
+            {
+                'name': '1 Month',
+                'duration': '1 month',
+                'price': 1500,
+                'currency': 'Kshs.',
+                'features': [
+                    'Access to all gaming communities',
+                    'Maximum 2 tournaments per month'
+                ],
+                'popular': False
+            },
+            {
+                'name': '3 Months',
+                'duration': '3 months',
+                'price': 2000,
+                'currency': 'Kshs.',
+                'features': [
+                    'Access to all gaming communities',
+                    'Leaderboard access',
+                    'Maximum 8 tournaments per month',
+                ],
+                'popular': True
+            },
+            {
+                'name': '6 Months',
+                'duration': '6 months',
+                'price': 3000,
+                'currency': 'Kshs.',
+                'features': [
+                    'Access to all gaming communities',
+                    'Leaderboard access',
+                    'Maximum 15 tournaments per month',
+                ],
+                'popular': False
+            },
+            {
+                'name': '1 Year',
+                'duration': '1 year',
+                'price': 5500,
+                'currency': 'Kshs.',
+                'features': [
+                    'Access to all gaming communities',
+                    'Leaderboard access',
+                    'Unlimited tournaments',
+                    '1 Physical premium event per year',
+                    'VIP community status',
+                ],
+                'popular': False
+            }
+        ]
+    }
+    
+    return render(request, 'communities/community_pricing.html', pricing_data)
+
 def sports_community(request):
     """
     View to display the sports gaming community page
@@ -55,7 +116,3 @@ def action_community(request):
     }
     
     return render(request, 'communities/action_community.html', action_data)
-
-
-def feeds_view(request):
-    return render(request, 'communities/feeds.html')

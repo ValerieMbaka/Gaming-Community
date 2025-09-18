@@ -3,15 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const darkModeToggle = document.getElementById('darkModeToggle');
     
     function initDarkMode() {
-        const isDark = localStorage.getItem('darkMode') === 'true';
-        if (isDark) {
-            document.body.classList.add('dark-mode');
-        }
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
     }
     
     function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
     }
     
     if (darkModeToggle) {
