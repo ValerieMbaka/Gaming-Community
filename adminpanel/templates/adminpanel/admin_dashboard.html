@@ -1,0 +1,198 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% load static %}
+
+{% block admin_content %}
+<!-- Dashboard Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="mb-1">Admin Dashboard</h4>
+        <p class="text-muted mb-0">Welcome back! Here's what's happening on your platform.</p>
+    </div>
+    <div>
+        <a href="{% url 'adminpanel:notifications_compose' %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-megaphone me-1"></i>Send Notification
+        </a>
+        <a href="/admin/" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-gear me-1"></i>Django Admin
+        </a>
+    </div>
+        </div>
+
+<!-- KPI Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="kpi-card gradient-blue card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-white-50">Total Users</div>
+                    <div class="display-6 fw-bold text-white" id="kpi-users">0</div>
+                    <div class="small text-white-75">+12% this month</div>
+                </div>
+                <div class="kpi-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="kpi-card gradient-green card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-white-50">Communities</div>
+                    <div class="display-6 fw-bold text-white" id="kpi-communities">0</div>
+                    <div class="small text-white-75">+3 new this week</div>
+                </div>
+                <div class="kpi-icon">
+                    <i class="bi bi-collection"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="kpi-card gradient-orange card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-white-50">Ongoing Competitions</div>
+                    <div class="display-6 fw-bold text-white" id="kpi-competitions">0</div>
+                    <div class="small text-white-75">2 starting today</div>
+                </div>
+                <div class="kpi-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="kpi-card gradient-purple card p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="small text-white-50">Pending Approvals</div>
+                    <div class="display-6 fw-bold text-white" id="kpi-approvals">0</div>
+                    <div class="small text-white-75">5 membership requests</div>
+                </div>
+                <div class="kpi-icon">
+                    <i class="bi bi-clock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card p-3">
+            <h6 class="mb-3">Quick Actions</h6>
+            <div class="row g-3 quick-actions">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="{% url 'adminpanel:communities_manage' %}" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-circle me-2"></i>Create Community
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="{% url 'adminpanel:competitions_manage' %}" class="btn btn-success w-100">
+                        <i class="bi bi-trophy me-2"></i>Create Competition
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="{% url 'adminpanel:users_list' %}" class="btn btn-warning w-100">
+                        <i class="bi bi-people me-2"></i>Manage Users
+                    </a>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <a href="{% url 'adminpanel:notifications_compose' %}" class="btn btn-info w-100">
+                        <i class="bi bi-megaphone me-2"></i>Send Notification
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="mb-0">Recent Activity</h6>
+                <a href="#" class="btn btn-outline-secondary btn-sm">View All</a>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon bg-primary">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">New user <strong>GamerPro123</strong> joined the platform</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-success">
+                        <i class="bi bi-collection"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">Community <strong>Valorant Pros</strong> was created</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-warning">
+                        <i class="bi bi-flag"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">Post reported in <strong>CS:GO Community</strong></div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-info">
+                        <i class="bi bi-trophy"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">Tournament <strong>FIFA Championship</strong> completed</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row g-3">
+    <div class="col-12 col-lg-7">
+        <div class="card p-3 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="mb-0">Platform Activity (Last 7 Days)</h6>
+                <div class="btn-group btn-group-sm" role="group">
+                    <input type="radio" class="btn-check" name="chartPeriod" id="week" checked>
+                    <label class="btn btn-outline-secondary" for="week">Week</label>
+                    <input type="radio" class="btn-check" name="chartPeriod" id="month">
+                    <label class="btn btn-outline-secondary" for="month">Month</label>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-5">
+        <div class="card p-3 h-100">
+            <h6 class="mb-3">User Growth</h6>
+            <div class="chart-container-small">
+                <canvas id="userGrowthChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'adminpanel/css/admin_dashboard.css' %}">
+{% endblock %}
+
+{% block admin_extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'adminpanel/js/admin_dashboard.js' %}"></script>
+{% endblock %}

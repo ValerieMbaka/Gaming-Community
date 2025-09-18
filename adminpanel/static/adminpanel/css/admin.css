@@ -1,0 +1,11 @@
+:root {
+    --admin-primary: var(--primary);
+    --admin-primary-dark: var(--primary-dark);
+    --admin-secondary: var(--secondary);
+    --admin-bg: var(--bg-secondary);
+    --admin-surface: var(--bg-card);
+    --admin-text: var(--text-primary);
+    --admin-muted: var(--text-secondary);
+    --admin-border: var(--border-light);
+    --radius: 12px;
+}

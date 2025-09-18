@@ -62,21 +62,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Dark mode toggle
     const darkModeToggle = document.getElementById('settingsDarkModeToggle');
     if (darkModeToggle) {
-        // Set initial state
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        // Set initial state based on current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const isDarkMode = currentTheme === 'dark';
         darkModeToggle.checked = isDarkMode;
-        
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-        }
         
         darkModeToggle.addEventListener('change', function() {
             if (this.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'true');
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
             } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('darkMode', 'false');
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
             }
         });
     }

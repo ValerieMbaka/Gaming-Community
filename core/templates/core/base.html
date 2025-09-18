@@ -10,17 +10,24 @@
 
 	<title> {% block title %} GameHub | Connect Gamers Across All Platforms {% endblock %} </title>
 
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="{% static 'core/images/gamepad.jpeg' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'core/images/gamepad.jpeg' %}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'core/images/gamepad.jpeg' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'core/images/gamepad.jpeg' %}">
+
 	<!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'core/css/base_styles.css' %}">
     <!-- Toast CSS -->
-    <link rel="stylesheet" href="{% static 'users/css/toast.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/toast.css' %}">
 
+	{% block extra_css %} {% endblock %}
 	{% block extra_head %} {% endblock %}
 
 </head>
@@ -29,11 +36,11 @@
     <div id="toast-container"></div>
     
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container-fluid px-4">
             <!-- Logo + Name -->
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" width="30" height="30" class="d-inline-block align-top me-2">
+            <a class="navbar-brand me-0" href="{% url 'core:home' %}">
+                <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" width="30" height="30" class="d-inline-block align-top me-2" loading="lazy">
                 <span class="brand-text">GameHub</span>
             </a>
 
@@ -44,17 +51,47 @@
 
             <!-- Navigation Links -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about"><i class="fas fa-info-circle me-1"></i> About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#games"><i class="fas fa-gamepad me-1"></i> Games</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#platforms"><i class="fas fa-layer-group me-1"></i> Platforms</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#blog"><i class="fas fa-newspaper me-1"></i> Blog</a></li>
-	                <li class="nav-item"><a class="nav-link" href="{% url 'users:gamer_dashboard' %}"> Gamer Dashboard </a></li>
-	                <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}"> Login </a></li>
-{#                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">#}
-{#                        <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-sign-in-alt me-1"></i> Login</a>#}
-{#                    </li>#}
+                <ul class="navbar-nav me-0">
+                    <li class="nav-item me-2"><a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li class="nav-item me-2"><a class="nav-link" href="#about"><i class="fas fa-info-circle me-1"></i> About</a></li>
+                    <li class="nav-item me-2"><a class="nav-link" href="#games"><i class="fas fa-gamepad me-1"></i> Games</a></li>
+                    <li class="nav-item me-2"><a class="nav-link" href="#platforms"><i class="fas fa-layer-group me-1"></i> Platforms</a></li>
+                    <li class="nav-item me-3"><a class="nav-link" href="#blog"><i class="fas fa-newspaper me-1"></i> Blog</a></li>
+                    
+                    <!-- Authentication Links -->
+                    {% if user.is_authenticated or request.session.firebase_authenticated %}
+                        <!-- User is logged in - show dashboard -->
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="{% url 'users:gamer_dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item me-0">
+                            <a class="nav-link" href="{% url 'users:logout' %}">
+                                <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <!-- User is not logged in - show Join Us/Login -->
+                        <li class="nav-item me-2">
+                            <a class="nav-link" href="{% url 'users:register' %}">
+                                <i class="fas fa-user-plus me-1"></i> Join Us
+                            </a>
+                        </li>
+                        <li class="nav-item me-0">
+                            <a class="nav-link" href="{% url 'users:login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- Theme Toggle -->
+                    <li class="nav-item ms-2">
+                        <button class="btn btn-outline-primary btn-sm" id="themeToggle" title="Toggle theme">
+                            <i class="fas fa-sun" id="lightIcon"></i>
+                            <i class="fas fa-moon" id="darkIcon" style="display: none;"></i>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -68,65 +105,51 @@
 	</div>
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark text-white">
-        <div class="container py-4">
+    <footer class="py-5 bg-secondary text-dark">
+        <div class="container-fluid px-4">
             <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="mb-4">
-                        <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" width="40" height="40" class="me-2">
-                        <span class="fs-4 fw-bold brand-text">GameHub</span>
+                <div class="col-lg-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{% static 'core/images/gamepad.jpeg' %}" alt="GameHub Logo" width="25" height="25" class="me-2" loading="lazy">
+                        <span class="fs-6 fw-bold brand-text">GameHub</span>
                     </div>
-                    <p class="mb-4">Connecting gamers across all platforms since 2025. Join the revolution in gaming communities.</p>
-                    <div class="social-icons mb-4">
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-discord fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitch fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
-                    </div>
+                    <p class="mb-2">Connecting gamers across all platforms since 2025.</p>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-2">
-                    <h5 class="mb-4">Navigation</h5>
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="mb-2 fs-6">Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white-50">Home</a></li>
-                        <li class="mb-2"><a href="#about" class="text-white-50">About</a></li>
-                        <li class="mb-2"><a href="#games" class="text-white-50">Games</a></li>
-                        <li class="mb-2"><a href="#platforms" class="text-white-50">Platforms</a></li>
-                        <li class="mb-2"><a href="#blog" class="text-white-50">Blog</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Home</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">About</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Communities</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Competitions</a></li>
                     </ul>
                 </div>
 
-                <div class="col-6 col-md-3 col-lg-2">
-                    <h5 class="mb-4">Competitions</h5>
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="mb-2 fs-6">Support</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="text-white-50">Upcoming</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50">Past Results</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50">Rules</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50">Prizes</a></li>
-                        <li class="mb-2"><a href="#" class="text-white-50">How to Join</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Help Center</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Contact Us</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">FAQs</a></li>
                     </ul>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <h5 class="mb-4">Contact Us</h5>
-                    <ul class="list-unstyled text-white-50">
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> support@gamehub.com</li>
-                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +254 700 000000</li>
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Nairobi, Kenya</li>
+                <div class="col-md-6 col-lg-3">
+                    <h6 class="mb-2 fs-6">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-1"><a href="#" class="text-muted">Privacy Policy</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Terms of Service</a></li>
+                        <li class="mb-1"><a href="#" class="text-muted">Cookie Policy</a></li>
                     </ul>
-                    <div class="mt-4">
-                        <a href="#" class="btn btn-outline-light me-2">Support Center</a>
-                        <a href="#" class="btn btn-primary">Report Issue</a>
-                    </div>
                 </div>
             </div>
 
-            <hr class="my-4 bg-secondary">
+            <hr class="my-2 bg-secondary">
 
             <div class="row">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <p class="mb-0">&copy; 2025 GameHub. All rights reserved.</p>
+                <div class="col-12 text-center">
+                    <p class="mt-2 small">&copy; 2025 GameHub. All rights reserved.</p>
                 </div>
             </div>
         </div>
@@ -142,27 +165,68 @@
     <!-- Custom JS -->
     <script src="{% static 'core/js/base_script.js' %}"></script>
     <!-- Toast JS -->
-    <script src="{% static 'users/js/toast.js' %}"></script>
+    <script src="{% static 'core/js/toast.js' %}"></script>
+    <!-- Django Messages Data -->
+    <script type="application/json" id="django-messages">
+        {% if messages %}
+            [
+                {% for message in messages %}
+                    {
+                        "text": "{{ message|escapejs }}",
+                        "tags": "{{ message.tags }}"
+                    }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]
+        {% else %}
+            []
+        {% endif %}
+    </script>
+    
+    <!-- User Authentication Status -->
+    <script type="application/json" id="user-auth-status">
+        {% if user.is_authenticated %}
+            {"authenticated": true}
+        {% else %}
+            {"authenticated": false}
+        {% endif %}
+    </script>
+    
     <!-- Django Messages to Toast -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            {% if messages %}
-                {% for message in messages %}
-                    showToast("{{ message|escapejs }}", "{{ message.tags }}");
-                {% endfor %}
-            {% endif %}
-            
-            // Clear profile completion data if user is not authenticated
-            {% if not user.is_authenticated %}
-                localStorage.removeItem('profileCompleted');
-                localStorage.removeItem('updatedProfile');
-            {% endif %}
+            try {
+                // Parse Django messages
+                var messagesElement = document.getElementById('django-messages');
+                var authElement = document.getElementById('user-auth-status');
+                
+                if (messagesElement && authElement) {
+                    var djangoMessages = JSON.parse(messagesElement.textContent);
+                    var authStatus = JSON.parse(authElement.textContent);
+                    
+                    // Handle Django messages
+                    if (djangoMessages && djangoMessages.length > 0) {
+                        djangoMessages.forEach(function(message) {
+                            if (message && message.text) {
+                                showToast(message.text, message.tags || 'info');
+                            }
+                        });
+                    }
+                    
+                    // Clear profile completion data if user is not authenticated
+                    if (!authStatus.authenticated) {
+                        localStorage.removeItem('profileCompleted');
+                        localStorage.removeItem('updatedProfile');
+                    }
+                }
+            } catch (error) {
+                console.error('Error processing Django messages:', error);
+            }
         });
     </script>
 
     <!-- Firebase SDK -->
     <script>
-        // Pass Firebase config from Django context to avoid exposing in client code
+        // Pass Firebase config from Django context
         window.firebaseConfig = {
             apiKey: "{{ firebase_config.api_key|default:'' }}",
             authDomain: "{{ firebase_config.auth_domain|default:'' }}",
@@ -173,8 +237,6 @@
             measurementId: "{{ firebase_config.measurement_id|default:'' }}"
         };
     </script>
-
-
 
 	{% block extra_scripts %} {% endblock %}
 

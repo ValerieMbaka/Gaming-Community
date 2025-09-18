@@ -1,0 +1,236 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/base_minimal.css' %}">
+    <link rel="stylesheet" href="{% static 'adminpanel/css/admin.css' %}">
+    {% block head_extra %}{% endblock %}
+    <style>
+        body { background: var(--bg-secondary); }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Back to Home Button -->
+            <a href="{% url 'core:home' %}" class="back-to-home-btn">
+                <i class="fas fa-home"></i>
+                <span>View Site</span>
+            </a>
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search users, communities, posts...">
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <button class="nav-icon theme-toggle-btn" id="darkModeToggle" aria-label="Toggle dark mode" data-tooltip="Dark Mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+
+            <!-- Admin Notifications Dropdown -->
+            <div class="nav-dropdown">
+                <button class="nav-icon" title="Admin Alerts" data-tooltip="Admin Alerts">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-bubble">3</span>
+                </button>
+                <div class="nav-dropdown-content notifications-dropdown">
+                    <div class="dropdown-header">
+                        <h4>Admin Alerts</h4>
+                        <button class="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="dropdown-list">
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Flagged Content:</strong> 2 new posts reported</p>
+                                <small>10 minutes ago</small>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Membership Requests:</strong> 5 pending approvals</p>
+                                <small>1 hour ago</small>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p><strong>Competition Results:</strong> 3 results pending verification</p>
+                                <small>2 hours ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'adminpanel:notifications_admin_alerts' %}" class="dropdown-footer">View All Alerts</a>
+                </div>
+            </div>
+
+            <!-- Admin Profile Dropdown -->
+            <div class="nav-dropdown profile-dropdown">
+                <button class="profile-btn" aria-label="Admin profile">
+                    <img src="{% static 'core/images/player.jpeg' %}" class="profile-avatar" alt="Admin Avatar">
+                    <span class="username">Admin</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="nav-dropdown-content profile-dropdown-content">
+                    <div class="profile-header">
+                        <img src="{% static 'core/images/player.jpeg' %}" class="dropdown-avatar" alt="Admin Avatar">
+                        <div class="profile-info">
+                            <h4>Admin</h4>
+                            <small>Staff Portal</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'adminpanel:admin_dashboard' %}" class="dropdown-item">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="{% url 'adminpanel:site_settings' %}" class="dropdown-item">
+                        <i class="fas fa-user"></i> Site Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'users:logout' %}" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="dashboard-wrapper">
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-profile">
+                <img src="{% static 'core/images/player.jpeg' %}" class="sidebar-avatar" alt="Admin">
+                <div class="sidebar-profile-info">
+                    <h4>Admin</h4>
+                    <small>Staff Portal</small>
+                </div>
+            </div>
+
+            <nav class="dashboard-nav">
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-speedometer2"></i><span>Overview</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:admin_dashboard' %}" class="nav-link active"><i class="bi bi-grid"></i><span>Dashboard</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-window-sidebar"></i><span>Core</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:core' %}" class="nav-link"><i class="bi bi-gear"></i><span>Core Management</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-people"></i><span>Users</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:users_list' %}" class="nav-link"><i class="bi bi-person"></i><span>Users List</span></a></li>
+                        <li><a href="{% url 'adminpanel:users_points' %}" class="nav-link"><i class="bi bi-coin"></i><span>Points & Rewards</span><span class="badge">0</span></a></li>
+                        <li><a href="{% url 'adminpanel:users_bans' %}" class="nav-link"><i class="bi bi-slash-circle"></i><span>Bans & Suspensions</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-collection"></i><span>Communities</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:communities_manage' %}" class="nav-link"><i class="bi bi-people"></i><span>Manage Communities</span></a></li>
+                        <li><a href="{% url 'adminpanel:communities_approvals' %}" class="nav-link"><i class="bi bi-check2-circle"></i><span>Membership Approvals</span><span class="badge">0</span></a></li>
+                        <li><a href="{% url 'adminpanel:communities_pricing' %}" class="nav-link"><i class="bi bi-cash-coin"></i><span>Pricing Manager</span></a></li>
+                        <li><a href="{% url 'adminpanel:communities_games' %}" class="nav-link"><i class="bi bi-controller"></i><span>Games Manager</span></a></li>
+                        <li><a href="{% url 'adminpanel:communities_posts' %}" class="nav-link"><i class="bi bi-chat-dots"></i><span>Community Feeds & Posts</span><span class="badge">0</span></a></li>
+                        <li><a href="{% url 'adminpanel:communities_tournaments' %}" class="nav-link"><i class="bi bi-trophy"></i><span>Tournaments</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-trophy"></i><span>Competitions</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:competitions_manage' %}" class="nav-link"><i class="bi bi-list-task"></i><span>Manage Competitions</span></a></li>
+                        <li><a href="{% url 'adminpanel:competitions_results' %}" class="nav-link"><i class="bi bi-check2-square"></i><span>Results</span><span class="badge">0</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-bar-chart"></i><span>Leaderboards</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:leaderboards_global' %}" class="nav-link"><i class="bi bi-globe"></i><span>Global</span></a></li>
+                        <li><a href="{% url 'adminpanel:leaderboards_community' %}" class="nav-link"><i class="bi bi-people"></i><span>Community</span></a></li>
+                        <li><a href="{% url 'adminpanel:leaderboards_tournament' %}" class="nav-link"><i class="bi bi-trophy"></i><span>Tournament</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-file-post"></i><span>Posts</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:posts_all' %}" class="nav-link"><i class="bi bi-image"></i><span>All Posts</span></a></li>
+                        <li><a href="{% url 'adminpanel:posts_reports' %}" class="nav-link"><i class="bi bi-flag"></i><span>Reports</span><span class="badge">0</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-bell"></i><span>Notifications</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:notifications_compose' %}" class="nav-link"><i class="bi bi-megaphone"></i><span>User Notifications</span></a></li>
+                        <li><a href="{% url 'adminpanel:notifications_history' %}" class="nav-link"><i class="bi bi-clock-history"></i><span>History</span></a></li>
+                        <li><a href="{% url 'adminpanel:notifications_admin_alerts' %}" class="nav-link"><i class="bi bi-bug"></i><span>Admin Alerts</span><span class="badge">0</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="section-header"><i class="bi bi-gear"></i><span>Settings</span></div>
+                    <ul class="nav-list">
+                        <li><a href="{% url 'adminpanel:site_settings' %}" class="nav-link"><i class="bi bi-gear"></i><span>Site Settings</span><span class="badge">0</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section logout-section">
+                    <a href="{% url 'users:logout' %}" class="nav-link logout-link"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="dashboard-content">
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'core/js/base_minimal.js' %}"></script>
+    <script src="{% static 'users/js/sidebar.js' %}"></script>
+    <script src="{% static 'core/js/toast.js' %}"></script>
+    
+    <!-- Dark Mode Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        });
+    </script>
+    
+    {% block admin_extra_js %}{% endblock %}
+</body>
+</html>
+
+
