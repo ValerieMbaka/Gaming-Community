@@ -1,92 +1,9 @@
-/* Base Styles */
-:root {
-    /* Light Theme Colors */
-    --primary: #6366f1;
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --secondary: #10b981;
-    --secondary-light: #34d399;
-    --secondary-dark: #059669;
-    
-    /* Accent Colors */
-    --accent: #f59e0b;
-    --accent-light: #fbbf24;
-    --accent-dark: #d97706;
-    
-    /* Status Colors */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #3b82f6;
-    
-    /* Light Theme Backgrounds */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --bg-card: #ffffff;
-    --bg-navbar: #f8fafc;
-    --bg-footer: #f1f5f9;
-    
-    /* Light Theme Text */
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --text-light: #ffffff;
-    
-    /* Light Theme Borders */
-    --border-light: #e2e8f0;
-    --border-medium: #cbd5e1;
-    --border-dark: #94a3b8;
-    
-    /* Light Theme Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    
-    /* Legacy Colors (for backward compatibility) */
-    --dark: #1e293b;
-    --light: #f8fafc;
-    --gray: #64748b;
-}
+/* ============================================
+   BASE STYLES - Optimized for GuildSpace
+   ============================================ */
 
-/* Dark Theme Colors */
-[data-theme="dark"] {
-    --primary: #6c5ce7;
-    --primary-light: #a29bfe;
-    --primary-dark: #5649c0;
-    --secondary: #0984e3;
-    --secondary-light: #74b9ff;
-    --secondary-dark: #0652dd;
-    
-    --accent: #fdcb6e;
-    --accent-light: #ffeaa7;
-    --accent-dark: #e17055;
-    
-    --success: #00b894;
-    --warning: #fdcb6e;
-    --danger: #d63031;
-    --info: #00cec9;
-    
-    --bg-primary: #2d3436;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #0f172a;
-    --bg-card: #334155;
-    --bg-navbar: #1e293b;
-    --bg-footer: #0f172a;
-    
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --text-light: #ffffff;
-    
-    --border-light: #475569;
-    --border-medium: #64748b;
-    --border-dark: #94a3b8;
-    
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-}
+/* Import variables */
+@import url('_variables.css');
 
 /* ===== BASE ELEMENTS ===== */
 body {

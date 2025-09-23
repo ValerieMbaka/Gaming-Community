@@ -1,7 +1,7 @@
 {% extends 'core/base_minimal.html' %}
 {% load static %}
 
-{% block title %}Gaming Feeds - Stay Updated with Your Community{% endblock %}
+{% block title %} Gaming Feeds - Stay Updated with Your Community {% endblock %}
 
 {% block dashboard_css %}
     <link rel="stylesheet" href="{% static 'feeds/css/feeds.css' %}">
@@ -16,11 +16,18 @@
                 <h1 class="feeds-title">Gaming Feeds</h1>
                 <p class="feeds-subtitle">Stay connected with your gaming community</p>
             </div>
-            <div class="col-lg-4 text-end">
-                <button class="btn btn-primary create-post-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">
-                    <i class="fas fa-plus me-2"></i>Create Post
-                </button>
-            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filters Bar -->
+<section class="feeds-filters-bar">
+    <div class="container">
+        <div class="filters-bar d-flex flex-wrap align-items-center gap-2">
+            <button class="filter-chip active" data-filter="all"><i class="fas fa-globe me-1"></i> All</button>
+            <button class="filter-chip" data-filter="highlights"><i class="fas fa-star me-1"></i> Highlights</button>
+            <button class="filter-chip" data-filter="tournaments"><i class="fas fa-trophy me-1"></i> Tournaments</button>
+	        <button id="viewMembersBtn" class="btn btn-outline-primary btn-sm ms-auto"><i class="fas fa-users me-1"></i> View Members</button>
         </div>
     </div>
 </section>
@@ -29,77 +36,21 @@
 <section class="feeds-content">
     <div class="container">
         <div class="row">
-            <!-- Left Sidebar - Filters -->
-            <div class="col-lg-3">
-                <div class="feeds-sidebar">
-                    <div class="filter-section">
-                        <h4 class="filter-title">Filter Feeds</h4>
-                        <div class="filter-options">
-                            <button class="filter-option active" data-filter="all">
-                                <i class="fas fa-globe me-2"></i>All Posts
-                            </button>
-                            <button class="filter-option" data-filter="highlights">
-                                <i class="fas fa-star me-2"></i>Highlights
-                            </button>
-                            <button class="filter-option" data-filter="tournaments">
-                                <i class="fas fa-trophy me-2"></i>Tournaments
-                            </button>
-                            <button class="filter-option" data-filter="tips">
-                                <i class="fas fa-lightbulb me-2"></i>Tips & Tricks
-                            </button>
-                            <button class="filter-option" data-filter="memes">
-                                <i class="fas fa-laugh me-2"></i>Gaming Memes
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="trending-section">
-                        <h4 class="trending-title">Trending Topics</h4>
-                        <div class="trending-topics">
-                            <div class="trending-topic">
-                                <span class="topic-tag">#ValorantChampionship</span>
-                                <small>2.5k posts</small>
-                            </div>
-                            <div class="trending-topic">
-                                <span class="topic-tag">#FIFA25Tips</span>
-                                <small>1.8k posts</small>
-                            </div>
-                            <div class="trending-topic">
-                                <span class="topic-tag">#GamingSetup</span>
-                                <small>3.2k posts</small>
-                            </div>
-                            <div class="trending-topic">
-                                <span class="topic-tag">#CODWarzone</span>
-                                <small>4.1k posts</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Feed -->
-            <div class="col-lg-6">
+            <!-- Main Feed - Left Side -->
+            <div class="col-lg-7">
                 <div class="feeds-main">
-                    <!-- Create Post Card -->
-                    <div class="post-card create-post-card">
-                        <div class="post-header">
+                    <!-- Create Post -->
+                    <div class="post-card start-post-card" id="startPostCard">
+                        <div class="start-post-header d-flex align-items-center gap-2">
                             <div class="user-avatar">
                                 <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
                             </div>
-                            <div class="post-input-wrapper">
-                                <input type="text" class="post-input" placeholder="What's happening in your gaming world?" readonly data-bs-toggle="modal" data-bs-target="#createPostModal">
-                            </div>
+                            <button type="button" class="start-post-input w-100 text-start" data-bs-toggle="modal" data-bs-target="#createPostModal">Start a post</button>
                         </div>
-                        <div class="post-actions">
-                            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">
-                                <i class="fas fa-image"></i> Photo
-                            </button>
-                            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">
-                                <i class="fas fa-video"></i> Video
-                            </button>
-                            <button class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">
-                                <i class="fas fa-trophy"></i> Achievement
-                            </button>
+                        <div class="start-post-actions d-flex gap-2 mt-2">
+                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-image"></i> Photo</button>
+                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-video"></i> Video</button>
+                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-pen"></i> Write</button>
                         </div>
                     </div>
 
@@ -131,12 +82,13 @@
                                 </div>
                             </div>
 
+                            <div class="post-meta-row">
                             <div class="post-stats">
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
                                     <span>247 likes</span>
                                 </div>
-                                <div class="stat-item">
+                                <div class="stat-item comments-stat" data-post-id="1">
                                     <i class="fas fa-comment"></i>
                                     <span>23 comments</span>
                                 </div>
@@ -145,7 +97,6 @@
                                     <span>12 shares</span>
                                 </div>
                             </div>
-
                             <div class="post-actions">
                                 <button class="action-btn like-btn" data-post-id="1">
                                     <i class="fas fa-heart"></i> Like
@@ -157,17 +108,18 @@
                                     <i class="fas fa-share"></i> Share
                                 </button>
                             </div>
+                            </div>
 
                             <!-- Comments Section -->
                             <div class="comments-section" id="comments-1">
-                                <div class="comment-input">
+                                <div class="comment-input d-none">
                                     <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
                                     <input type="text" placeholder="Write a comment..." class="comment-text">
                                     <button class="comment-send">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </div>
-                                <div class="comments-list">
+                                <div class="comments-list d-none">
                                     <div class="comment">
                                         <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar" class="comment-avatar">
                                         <div class="comment-content">
@@ -218,12 +170,13 @@
                                 </div>
                             </div>
 
+                            <div class="post-meta-row">
                             <div class="post-stats">
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
                                     <span>892 likes</span>
                                 </div>
-                                <div class="stat-item">
+                                <div class="stat-item comments-stat" data-post-id="2">
                                     <i class="fas fa-comment"></i>
                                     <span>67 comments</span>
                                 </div>
@@ -232,7 +185,6 @@
                                     <span>34 shares</span>
                                 </div>
                             </div>
-
                             <div class="post-actions">
                                 <button class="action-btn like-btn" data-post-id="2">
                                     <i class="fas fa-heart"></i> Like
@@ -243,6 +195,29 @@
                                 <button class="action-btn share-btn" data-post-id="2">
                                     <i class="fas fa-share"></i> Share
                                 </button>
+                            </div>
+                            </div>
+                            <!-- Comments Section -->
+                            <div class="comments-section" id="comments-2">
+                                <div class="comment-input d-none">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                    <input type="text" placeholder="Write a comment..." class="comment-text">
+                                    <button class="comment-send">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                                <div class="comments-list d-none">
+                                    <div class="comment">
+                                        <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <span class="comment-username">RGBEnthusiast</span>
+                                                <span class="comment-time">3 hours ago</span>
+                                            </div>
+                                            <p class="comment-text">That setup is clean! What chair model is that?</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -269,12 +244,13 @@
                                 <p class="post-text">🔥 FIFA 25 Pro Tip: Master the new skill moves! The "Elastico" and "Roulette" are game-changers this year. Practice in skill games for 10 minutes daily and watch your gameplay improve dramatically! #FIFA25Tips #GamingTips</p>
                             </div>
 
+                            <div class="post-meta-row">
                             <div class="post-stats">
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
                                     <span>1,234 likes</span>
                                 </div>
-                                <div class="stat-item">
+                                <div class="stat-item comments-stat" data-post-id="3">
                                     <i class="fas fa-comment"></i>
                                     <span>89 comments</span>
                                 </div>
@@ -283,7 +259,6 @@
                                     <span>156 shares</span>
                                 </div>
                             </div>
-
                             <div class="post-actions">
                                 <button class="action-btn like-btn" data-post-id="3">
                                     <i class="fas fa-heart"></i> Like
@@ -295,10 +270,19 @@
                                     <i class="fas fa-share"></i> Share
                                 </button>
                             </div>
+                            </div>
+                        
+                            <!-- Comments Section -->
+                            <div class="comments-section" id="comments-3">
+                                <div class="comment-input d-none">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                    <input type="text" placeholder="Write a comment..." class="comment-text">
+                                    <button class="comment-send">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Post 4 - Gaming Meme -->
-                        <div class="post-card" data-category="memes">
                             <div class="post-header">
                                 <div class="user-info">
                                     <div class="user-avatar">
@@ -323,12 +307,13 @@
                                 </div>
                             </div>
 
+                            <div class="post-meta-row">
                             <div class="post-stats">
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
                                     <span>2,567 likes</span>
                                 </div>
-                                <div class="stat-item">
+                                <div class="stat-item comments-stat" data-post-id="4">
                                     <i class="fas fa-comment"></i>
                                     <span>234 comments</span>
                                 </div>
@@ -337,7 +322,6 @@
                                     <span>567 shares</span>
                                 </div>
                             </div>
-
                             <div class="post-actions">
                                 <button class="action-btn like-btn" data-post-id="4">
                                     <i class="fas fa-heart"></i> Like
@@ -348,6 +332,18 @@
                                 <button class="action-btn share-btn" data-post-id="4">
                                     <i class="fas fa-share"></i> Share
                                 </button>
+                            </div>
+                            </div>
+                        
+                            <!-- Comments Section -->
+                            <div class="comments-section" id="comments-4">
+                                <div class="comment-input d-none">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                    <input type="text" placeholder="Write a comment..." class="comment-text">
+                                    <button class="comment-send">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -361,39 +357,111 @@
                 </div>
             </div>
 
-            <!-- Right Sidebar - Suggestions -->
-            <div class="col-lg-3">
+            <!-- Leaderboard & Events - Right Side -->
+            <div class="col-lg-5">
                 <div class="feeds-sidebar">
-                    <div class="suggestions-section">
-                        <h4 class="suggestions-title">Suggested Gamers</h4>
-                        <div class="suggested-users">
-                            <div class="suggested-user">
-                                <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar" class="user-avatar">
-                                <div class="user-info">
-                                    <h6 class="username">ValorantQueen</h6>
-                                    <small class="user-bio">Pro Valorant Player</small>
+                    <!-- Leaderboard -->
+                    <div class="leaderboard-aside">
+                        <h4 class="suggestions-title d-flex align-items-center justify-content-between">
+                            <span><i class="fas fa-crown me-2 text-warning"></i>Global Leaderboard</span>
+                            <small class="text-muted">Top players overall</small>
+                        </h4>
+                        <div id="globalLeaderboard" class="lb-rows">
+                            <!-- Dummy data (static for now) -->
+                            <div class="lb-row">
+                                <div class="rank">1</div>
+                                <img src="{% static 'core/images/player2.jpeg' %}" alt="FIFA_Master" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">FIFA_Master</div>
+                                    <div class="meta">FIFA 25</div>
                                 </div>
-                                <button class="follow-btn">Follow</button>
+                                <div class="points ms-auto"><i class="fas fa-star text-warning me-1"></i>3120 pts</div>
                             </div>
-                            <div class="suggested-user">
-                                <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar" class="user-avatar">
-                                <div class="user-info">
-                                    <h6 class="username">FIFA_Master</h6>
-                                    <small class="user-bio">FIFA Pro & Content Creator</small>
+                            <div class="lb-row">
+                                <div class="rank">2</div>
+                                <img src="{% static 'core/images/player1.jpeg' %}" alt="GoalMachine" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">GoalMachine</div>
+                                    <div class="meta">FIFA 25</div>
                                 </div>
-                                <button class="follow-btn">Follow</button>
+                                <div class="points ms-auto">3005 pts</div>
                             </div>
-                            <div class="suggested-user">
-                                <img src="{% static 'core/images/player3.jpeg' %}" alt="User Avatar" class="user-avatar">
-                                <div class="user-info">
-                                    <h6 class="username">COD_Elite</h6>
-                                    <small class="user-bio">Call of Duty Champion</small>
+                            <div class="lb-row">
+                                <div class="rank">3</div>
+                                <img src="{% static 'core/images/player3.jpeg' %}" alt="COD_Elite" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">COD_Elite</div>
+                                    <div class="meta">Call of Duty</div>
                                 </div>
-                                <button class="follow-btn">Follow</button>
+                                <div class="points ms-auto">2950 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">4</div>
+                                <img src="{% static 'core/images/player3.jpeg' %}" alt="SkillMovesPro" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">SkillMovesPro</div>
+                                    <div class="meta">FIFA 25</div>
+                                </div>
+                                <div class="points ms-auto">2875 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">5</div>
+                                <img src="{% static 'core/images/player1.jpeg' %}" alt="WarzoneAce" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">WarzoneAce</div>
+                                    <div class="meta">Call of Duty</div>
+                                </div>
+                                <div class="points ms-auto">2830 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">6</div>
+                                <img src="{% static 'core/images/player2.jpeg' %}" alt="SniperWolf" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">SniperWolf</div>
+                                    <div class="meta">Call of Duty</div>
+                                </div>
+                                <div class="points ms-auto">2795 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">7</div>
+                                <img src="{% static 'core/images/player1.jpeg' %}" alt="ValorantQueen" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">ValorantQueen</div>
+                                    <div class="meta">Valorant</div>
+                                </div>
+                                <div class="points ms-auto">2680 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">8</div>
+                                <img src="{% static 'core/images/player2.jpeg' %}" alt="AgentSharp" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">AgentSharp</div>
+                                    <div class="meta">Valorant</div>
+                                </div>
+                                <div class="points ms-auto">2540 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">9</div>
+                                <img src="{% static 'core/images/player3.jpeg' %}" alt="SpikeMaster" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">SpikeMaster</div>
+                                    <div class="meta">Valorant</div>
+                                </div>
+                                <div class="points ms-auto">2410 pts</div>
+                            </div>
+                            <div class="lb-row">
+                                <div class="rank">10</div>
+                                <img src="{% static 'core/images/player.jpeg' %}" alt="You" class="avatar-sm">
+                                <div class="user-col">
+                                    <div class="name">You</div>
+                                    <div class="meta">Valorant</div>
+                                </div>
+                                <div class="points ms-auto">1200 pts</div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Upcoming Events -->
                     <div class="upcoming-events">
                         <h4 class="events-title">Upcoming Events</h4>
                         <div class="event-list">
@@ -426,52 +494,74 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Members Panel (hidden by default; toggled by View Members) -->
+                    <div id="membersPanel" class="members-panel d-none">
+                        <div class="members-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <h4 class="mb-0"><i class="fas fa-users me-2"></i>All Members</h4>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="members-search">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="membersSearch" placeholder="Search members by name or community..." />
+                                </div>
+                                <div class="members-filters d-flex flex-wrap gap-2">
+                                    <button class="chip chip-sm active" data-community="all">All</button>
+                                    <button class="chip chip-sm" data-community="valorant">Valorant</button>
+                                    <button class="chip chip-sm" data-community="fifa25">FIFA 25</button>
+                                    <button class="chip chip-sm" data-community="cod">Call of Duty</button>
+                                </div>
+                                <button id="backToFeed" class="btn btn-sm btn-outline-secondary">Back to Feed</button>
+                            </div>
+                        </div>
+                        <div id="membersList" class="members-list mt-3"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Create Post Modal -->
-<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createPostModalLabel">Create New Post</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="createPostForm">
-                    <div class="post-creator">
-                        <div class="user-avatar">
-                            <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
-                        </div>
-                        <div class="post-content-area">
-                            <textarea class="form-control post-textarea" placeholder="What's happening in your gaming world?" rows="4"></textarea>
-                            <div class="post-attachments">
-                                <button type="button" class="attachment-btn">
-                                    <i class="fas fa-image"></i> Add Photo
-                                </button>
-                                <button type="button" class="attachment-btn">
-                                    <i class="fas fa-video"></i> Add Video
-                                </button>
-                                <button type="button" class="attachment-btn">
-                                    <i class="fas fa-trophy"></i> Share Achievement
-                                </button>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'feeds/js/feeds.js' %}"></script>
+    <!-- Create Post Modal -->
+    <div class="modal fade" id="createPostModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="modalPostForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <div class="user-avatar">
+                                <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
                             </div>
+                            <textarea class="form-control" id="modalPostContent" name="content" rows="4" placeholder="What do you want to talk about?"></textarea>
                         </div>
+                        <div class="d-flex gap-2">
+                            <label class="btn btn-outline-secondary btn-sm mb-0">
+                                <i class="fas fa-image me-1"></i> Photo
+                                <input type="file" accept="image/*" id="modalPhotoInput" name="image" hidden>
+                            </label>
+                            <label class="btn btn-outline-secondary btn-sm mb-0">
+                                <i class="fas fa-video me-1"></i> Video
+                                <input type="file" accept="video/*" id="modalVideoInput" name="video" hidden>
+                            </label>
+                        </div>
+                        <div class="mt-3" id="modalMediaPreview" style="display:none;">
+                            <img id="modalImagePreview" src="" alt="Preview" style="max-width:100%; border-radius:8px;">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Post</button>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="publishPost">Publish Post</button>
-            </div>
         </div>
     </div>
-</div>
-{% endblock %}
-
-{% block extra_scripts %}
-    <script src="{% static 'feeds/js/feeds.js' %}"></script>
 {% endblock %}

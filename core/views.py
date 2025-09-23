@@ -1,8 +1,13 @@
+# views.py
 from django.shortcuts import render
+from .models import Slider, About, Platform
 
-# Create your views
 def index(request):
-    """
-    Render the index page of the gaming platform.
-    """
-    return render(request, 'core/index.html')
+    sliders = Slider.objects.all()
+    about = About.objects.first()
+    platforms = Platform.objects.all()
+    return render(request, 'core/index.html', {
+        'sliders': sliders,  # Fixed variable name
+        'about': about,
+        'platforms': platforms
+    })

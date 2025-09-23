@@ -1,0 +1,93 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% load static %}
+{% load admin_extras %}
+{% block title %}{{ page_title }} - Admin{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="mb-0">{{ model._meta.verbose_name_plural|capfirst }}</h2>
+      <small class="text-muted">App: {{ model._meta.app_label }} • Model: {{ model._meta.object_name }}</small>
+    </div>
+    <div>
+      <a class="btn btn-outline-secondary" href="{% url 'adminpanel:models_index' %}"><i class="bi bi-arrow-left"></i> All Models</a>
+      <a class="btn btn-primary" href="{% url 'adminpanel:object_add' app_label model_name %}"><i class="bi bi-plus-lg"></i> Add {{ model._meta.verbose_name|capfirst }}</a>
+    </div>
+  </div>
+
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+      <input type="search" name="q" value="{{ search }}" placeholder="Search..." class="form-control">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i> Search</button>
+    </div>
+  </form>
+
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            {% for f in fields %}
+              {% if not f.primary_key %}
+                <th>{{ f.verbose_name|capfirst }}</th>
+              {% endif %}
+            {% endfor %}
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for obj in page_obj.object_list %}
+            <tr>
+              <td>{{ obj.pk }}</td>
+              {% for f in fields %}
+                {% if not f.primary_key %}
+                  <td>
+                    {% with val=obj|attr:f.name %}
+                      {% if val is None %}
+                        <span class="text-muted">—</span>
+                      {% else %}
+                        {{ val }}
+                      {% endif %}
+                    {% endwith %}
+                  </td>
+                {% endif %}
+              {% endfor %}
+              <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'adminpanel:object_edit' app_label model_name obj.pk %}"><i class="bi bi-pencil-square"></i> Edit</a>
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'adminpanel:object_delete' app_label model_name obj.pk %}"><i class="bi bi-trash"></i> Delete</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="999" class="text-center text-muted py-4">No objects found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <div>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} • {{ page_obj.paginator.count }} total</div>
+      <nav>
+        <ul class="pagination mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?q={{ search }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+          {% endif %}
+          <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?q={{ search }}&page={{ page_obj.next_page_number }}">Next</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% comment %}
+Helper filter to access attribute by name. If not present in project, we inline a simple workaround using obj|attr. But since custom filters can't be declared here, ensure we avoid it by directly using getattr in view if needed. For now, many Django setups have built-in attr filter; otherwise, values may appear empty. 
+{% endcomment %}

@@ -1,55 +1,89 @@
-// Back to Top Button
-window.addEventListener('scroll', function() {
-    var backToTop = document.getElementById('backToTop');
-    if (window.pageYOffset > 300) {
-        backToTop.classList.add('active');
-    } else {
-        backToTop.classList.remove('active');
+/**
+ * Core JavaScript Utilities for GameHub
+ * Handles common UI interactions and animations
+ */
+
+// Scroll to Top Button
+class ScrollToTop {
+    constructor() {
+        this.backToTop = document.getElementById('backToTop');
+        if (this.backToTop) this.init();
     }
-});
 
-document.getElementById('backToTop').addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
+    init() {
+        window.addEventListener('scroll', this.toggleButton.bind(this));
+        this.backToTop.addEventListener('click', this.scrollToTop.bind(this));
+    }
 
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+    toggleButton() {
+        if (window.pageYOffset > 300) {
+            this.backToTop.classList.add('active');
+        } else {
+            this.backToTop.classList.remove('active');
+        }
+    }
+
+    scrollToTop(e) {
         e.preventDefault();
-    
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Smooth Scrolling for Anchor Links
+class SmoothScroller {
+    constructor() {
+        this.links = document.querySelectorAll('a[href^="#"]');
+        if (this.links.length) this.init();
+    }
+
+    init() {
+        this.links.forEach(link => {
+            link.addEventListener('click', this.handleClick.bind(this));
+        });
+    }
+
+    handleClick(e) {
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
-    
+        
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
+            e.preventDefault();
             window.scrollTo({
                 top: targetElement.offsetTop - 80,
                 behavior: 'smooth'
             });
         }
-    });
-});
+    }
+}
 
-// Add animation classes when elements come into view
-const animateOnScroll = function() {
-    const elements = document.querySelectorAll('.fade-in-up');
-  
-    elements.forEach(element => {
-        const elementPosition = element.getBoundingClientRect().top;
+// Scroll-based Animations
+class ScrollAnimator {
+    constructor() {
+        this.elements = document.querySelectorAll('.fade-in-up');
+        if (this.elements.length) this.init();
+    }
+
+    init() {
+        window.addEventListener('scroll', this.checkElements.bind(this));
+        this.checkElements(); // Check on load
+    }
+
+    checkElements() {
         const windowHeight = window.innerHeight;
-    
-        if (elementPosition < windowHeight - 100) {
-            element.classList.add('animated');
-        }
-    });
-};
-
-window.addEventListener('scroll', animateOnScroll);
-window.addEventListener('load', animateOnScroll);
+        
+        this.elements.forEach(element => {
+            const elementPosition = element.getBoundingClientRect().top;
+            
+            if (elementPosition < windowHeight - 100) {
+                element.classList.add('animated');
+            }
+        });
+    }
+}
 
 // Initialize tooltips
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -57,7 +91,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
-// Theme Management 
+// Theme Management
 class ThemeManager {
     constructor() {
         this.themeToggle = document.getElementById('themeToggle');
@@ -65,87 +99,69 @@ class ThemeManager {
         this.darkIcon = document.getElementById('darkIcon');
         this.html = document.documentElement;
         
-        this.init();
+        if (this.themeToggle) this.init();
     }
-    
+
     init() {
-        // Check for saved theme preference or default to light
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        this.html.setAttribute('data-theme', currentTheme);
-        this.updateThemeUI(currentTheme);
-        
-        // Add event listener
-        if (this.themeToggle) {
-            this.themeToggle.addEventListener('click', () => this.toggleTheme());
-        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        this.setTheme(savedTheme);
+        this.themeToggle.addEventListener('click', () => this.toggleTheme());
     }
-    
+
+    setTheme(theme) {
+        this.html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.updateIcons(theme);
+    }
+
     toggleTheme() {
-        const currentTheme = this.html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        this.html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        this.updateThemeUI(newTheme);
+        const currentTheme = this.html.getAttribute('data-theme') || 'light';
+        this.setTheme(currentTheme === 'dark' ? 'light' : 'dark');
     }
-    
-    updateThemeUI(theme) {
-        if (theme === 'dark') {
-            if (this.lightIcon) this.lightIcon.style.display = 'none';
-            if (this.darkIcon) this.darkIcon.style.display = 'inline-block';
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
-            if (this.lightIcon) this.lightIcon.style.display = 'inline-block';
-            if (this.darkIcon) this.darkIcon.style.display = 'none';
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
+
+    updateIcons(theme) {
+        if (!this.lightIcon || !this.darkIcon) return;
+        
+        const isDark = theme === 'dark';
+        this.lightIcon.style.display = isDark ? 'none' : 'inline';
+        this.darkIcon.style.display = isDark ? 'inline' : 'none';
     }
 }
 
 // Navigation Management
 class NavigationManager {
     constructor() {
-        this.init();
+        this.navLinks = document.querySelectorAll('nav a');
+        if (this.navLinks.length) this.init();
     }
-    
+
     init() {
         this.updateActiveNavLink();
         this.addClickHandlers();
+        window.addEventListener('scroll', () => this.updateActiveNavLink());
     }
-    
+
     updateActiveNavLink() {
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            
-            // Check if the link href matches current path
-            if (link.getAttribute('href') === currentPath) {
-                link.classList.add('active');
-            }
-            
-            // Special case for home page
-            if (currentPath === '/' && link.getAttribute('href') === '#') {
-                link.classList.add('active');
+        const sections = document.querySelectorAll('section[id]');
+        let current = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
             }
         });
+
+        this.navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+        });
     }
-    
+
     addClickHandlers() {
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Remove active class from all links
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                
-                // Add active class to clicked link
+        this.navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                this.navLinks.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
-                
-                // Add visual feedback
-                link.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    link.style.transform = '';
-                }, 150);
             });
         });
     }
@@ -154,42 +170,101 @@ class NavigationManager {
 // Lazy Loading Manager
 class LazyLoadingManager {
     constructor() {
-        this.init();
+        this.images = document.querySelectorAll('img[loading="lazy"]');
+        if (this.images.length) this.init();
     }
-    
+
     init() {
-        if ('IntersectionObserver' in window) {
-            this.setupIntersectionObserver();
+        if ('loading' in HTMLImageElement.prototype) {
+            this.nativeLazyLoading();
+        } else if ('IntersectionObserver' in window) {
+            this.intersectionObserverLazyLoading();
         } else {
             this.fallbackLazyLoading();
         }
     }
-    
-    setupIntersectionObserver() {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
+
+    nativeLazyLoading() {
+        this.images.forEach(img => {
+            if (img.dataset.src) img.src = img.dataset.src;
+            if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+        });
+    }
+
+    intersectionObserverLazyLoading() {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                    }
+                    if (img.dataset.src) img.src = img.dataset.src;
+                    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
                     observer.unobserve(img);
                 }
             });
         });
 
-        // Observe all images with data-src attribute
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
+        this.images.forEach(img => observer.observe(img));
     }
-    
+
     fallbackLazyLoading() {
         // Fallback for older browsers
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
+        const lazyLoad = () => {
+            this.images = this.images.filter(img => {
+                const rect = img.getBoundingClientRect();
+                const isVisible = (rect.top <= window.innerHeight && rect.bottom >= 0) && 
+                                getComputedStyle(img).display !== 'none';
+                
+                if (isVisible) {
+                    if (img.dataset.src) img.src = img.dataset.src;
+                    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+                    return false; // Remove from array
+                }
+                return true; // Keep in array
+            });
+
+            if (this.images.length === 0) {
+                window.removeEventListener('scroll', lazyLoad);
+                window.removeEventListener('resize', lazyLoad);
+            }
+        };
+
+        // Initial check
+        lazyLoad();
+        
+        // Event listeners for scroll and resize
+        window.addEventListener('scroll', lazyLoad);
+        window.addEventListener('resize', lazyLoad);
+    }
+}
+
+// Enhanced Link States
+class LinkStateManager {
+    constructor() {
+        this.links = document.querySelectorAll('a, button, [role="button"]');
+        if (this.links.length) this.init();
+    }
+
+    init() {
+        this.addInteractionStates();
+    }
+
+    addInteractionStates() {
+        this.links.forEach(element => {
+            // Mouse interactions
+            element.addEventListener('mousedown', () => element.classList.add('active'));
+            element.addEventListener('mouseup', () => element.classList.remove('active'));
+            element.addEventListener('mouseleave', () => element.classList.remove('active'));
+            
+            // Keyboard navigation
+            element.addEventListener('focus', (e) => {
+                if (e.relatedTarget?.matches('a, button, [role="button"]')) {
+                    element.classList.add('keyboard-focus');
+                }
+            });
+            
+            element.addEventListener('blur', () => {
+                element.classList.remove('keyboard-focus', 'active');
+            });
         });
     }
 }
@@ -241,52 +316,29 @@ class DjangoMessagesManager {
     }
 }
 
-// ===== Enhanced Link States =====
-class LinkStateManager {
-    constructor() {
-        this.init();
-    }
-    
-    init() {
-        this.addLinkEnhancements();
-        this.addButtonEnhancements();
-    }
-    
-    addLinkEnhancements() {
-        // Add enhanced states to all links
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Add subtle click feedback
-                link.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    link.style.transform = '';
-                }, 150);
-            });
-        });
-    }
-    
-    addButtonEnhancements() {
-        // Add enhanced states to buttons
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // Add click feedback
-                btn.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    btn.style.transform = '';
-                }, 150);
-            });
-        });
-    }
-}
-
 // Main Initialization
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all managers
-    new ThemeManager();
-    new NavigationManager();
-    new LazyLoadingManager();
-    new DjangoMessagesManager();
-    new LinkStateManager();
+    // Initialize core components
+    const components = [
+        new ScrollToTop(),
+        new SmoothScroller(),
+        new ScrollAnimator(),
+        new ThemeManager(),
+        new NavigationManager(),
+        new LazyLoadingManager(),
+        new DjangoMessagesManager(),
+        new LinkStateManager()
+    ];
     
+    // Expose components to window for debugging if needed
+    if (process.env.NODE_ENV === 'development') {
+        window.app = {
+            components: components.reduce((acc, component) => {
+                const name = component.constructor.name;
+                acc[name] = component;
+                return acc;
+            }, {})
+        };
+    }
     console.log('GameHub Base Scripts Initialized Successfully!');
 });
