@@ -1,0 +1,37 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% load static %}
+{% block title %}Models - Admin{% endblock %}
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'adminpanel/css/admin_dashboard.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Data Models</h2>
+    <a class="btn btn-secondary" href="{% url 'adminpanel:admin_dashboard' %}"><i class="bi bi-grid"></i> Dashboard</a>
+  </div>
+  {% if grouped %}
+    {% for app_key, app in grouped.items %}
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <strong>{{ app.app_verbose_name }}</strong>
+          <span class="text-muted small">{{ app.models|length }} models</span>
+        </div>
+        <div class="list-group list-group-flush">
+          {% for m in app.models %}
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="{% url 'adminpanel:object_list' m.app_label m.model_name %}">
+              <span>
+                <i class="bi bi-database"></i>
+                {{ m.verbose_name_plural|capfirst }}
+              </span>
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-warning">No models discovered.</div>
+  {% endif %}
+</div>
+{% endblock %}

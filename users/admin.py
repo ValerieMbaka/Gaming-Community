@@ -1,6 +1,6 @@
 # users\admin.py
 from django.contrib import admin
-from .models import Gamer
+from .models import Gamer, Activity
 
 # Register your models here.
 
@@ -26,3 +26,12 @@ class GamerAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """Allow deletion of Gamer objects"""
         return True
+
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'verb', 'target_type', 'target_id', 'created_at')
+    list_filter = ('verb', 'created_at')
+    search_fields = (
+        'user__custom_username', 'user__first_name', 'user__last_name', 'verb'
+    )

@@ -1,98 +1,206 @@
-from django.shortcuts import render
+from django.apps import apps
+from django.contrib import messages
+from django.contrib.admin.utils import quote
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import Paginator
+from django.forms import modelform_factory
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 
+def staff_required(view_func):
+    return user_passes_test(lambda u: u.is_active and u.is_staff)(view_func)
+
+
+@staff_required
 def admin_dashboard(request):
-    return render(request, 'adminpanel/admin_dashboard.html', {'page_title': 'Admin Dashboard'})
+    # Basic stats for dashboard
+    stats = {}
+    try:
+        user_model = apps.get_model('users', 'CustomUser') if apps.is_installed('users') else None
+        if user_model:
+            stats['users_count'] = user_model.objects.count()
+    except Exception:
+        stats['users_count'] = None
+
+    try:
+        feed_post = apps.get_model('feeds', 'Post') if apps.is_installed('feeds') else None
+        if feed_post:
+            stats['posts_count'] = feed_post.objects.count()
+    except Exception:
+        stats['posts_count'] = None
+
+    context = {
+        'page_title': 'Admin Dashboard',
+        'stats': stats,
+    }
+    return render(request, 'adminpanel/admin_dashboard.html', context)
 
 
-# Core
-def core(request):
-    return render(request, 'adminpanel/pages/core.html', {'page_title': 'Core Management'})
+def _get_all_models_grouped():
+    grouped = {}
+    for app_config in apps.get_app_configs():
+        # Skip Django contrib admin itself
+        if app_config.name.startswith('django.'):
+            continue
+        models = app_config.get_models()
+        model_items = []
+        for m in models:
+            # Hide proxy/abstract models and ContentType itself
+            if getattr(m._meta, 'proxy', False) or getattr(m._meta, 'abstract', False):
+                continue
+            if m is ContentType:
+                continue
+            model_items.append({
+                'app_label': m._meta.app_label,
+                'model_name': m._meta.model_name,
+                'object_name': m._meta.object_name,
+                'verbose_name': m._meta.verbose_name,
+                'verbose_name_plural': m._meta.verbose_name_plural,
+            })
+        if model_items:
+            grouped[app_config.label] = {
+                'app_label': app_config.label,
+                'app_verbose_name': getattr(app_config, 'verbose_name', app_config.label.title()),
+                'models': sorted(model_items, key=lambda x: x['verbose_name_plural'])
+            }
+    return dict(sorted(grouped.items(), key=lambda x: x[0]))
 
 
-# Users
-def users_list(request):
-    return render(request, 'adminpanel/pages/users_list.html', {'page_title': 'Users List'})
+@staff_required
+def models_index(request):
+    grouped = _get_all_models_grouped()
+    return render(request, 'adminpanel/models_index.html', {
+        'page_title': 'Data Models',
+        'grouped': grouped,
+    })
 
 
-def users_points(request):
-    return render(request, 'adminpanel/pages/users_points.html', {'page_title': 'Points & Rewards'})
+def _resolve_model_or_404(app_label: str, model_name: str):
+    try:
+        model = apps.get_model(app_label, model_name)
+    except LookupError:
+        raise Http404('Model not found')
+    if model is None:
+        raise Http404('Model not found')
+    return model
 
 
-def users_bans(request):
-    return render(request, 'adminpanel/pages/users_bans.html', {'page_title': 'Bans & Suspensions'})
+@staff_required
+def object_list(request, app_label: str, model_name: str):
+    model = _resolve_model_or_404(app_label, model_name)
+
+    # Basic search across char/text fields
+    qs = model.objects.all()
+    search = request.GET.get('q', '').strip()
+    if search:
+        from django.db.models import Q
+        q = Q()
+        for f in model._meta.get_fields():
+            try:
+                if getattr(f, 'attname', None) and getattr(f, 'get_internal_type', lambda: None)() in ('CharField', 'TextField'):
+                    q |= Q(**{f.attname + '__icontains': search})
+            except Exception:
+                continue
+        if q:
+            qs = qs.filter(q)
+
+    # Order by -pk by default
+    try:
+        qs = qs.order_by('-pk')
+    except Exception:
+        pass
+
+    paginator = Paginator(qs, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    fields = [f for f in model._meta.fields]
+
+    context = {
+        'page_title': f"{model._meta.verbose_name_plural.title()}",
+        'model': model,
+        'fields': fields,
+        'page_obj': page_obj,
+        'search': search,
+        'app_label': app_label,
+        'model_name': model_name,
+    }
+    return render(request, 'adminpanel/object_list.html', context)
 
 
-# Communities
-def communities_manage(request):
-    return render(request, 'adminpanel/pages/communities_manage.html', {'page_title': 'Manage Communities'})
+def _build_modelform(model):
+    # Exclude many-to-many and auto fields by default
+    exclude = []
+    for f in model._meta.get_fields():
+        if getattr(f, 'auto_created', False) and not getattr(f, 'concrete', True):
+            exclude.append(f.name)
+        if getattr(f, 'auto_now', False) or getattr(f, 'auto_now_add', False):
+            exclude.append(f.name)
+        if getattr(f, 'primary_key', False) and getattr(f, 'auto_created', False):
+            exclude.append(f.name)
+    try:
+        form_class = modelform_factory(model, exclude=exclude)
+    except Exception:
+        form_class = modelform_factory(model, fields='__all__')
+    return form_class
 
 
-def communities_approvals(request):
-    return render(request, 'adminpanel/pages/communities_approvals.html', {'page_title': 'Membership Approvals'})
+@staff_required
+def object_add(request, app_label: str, model_name: str):
+    model = _resolve_model_or_404(app_label, model_name)
+    Form = _build_modelform(model)
+    if request.method == 'POST':
+        form = Form(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save()
+            messages.success(request, f"Created {model._meta.verbose_name} #{obj.pk}.")
+            return redirect('adminpanel:object_list', app_label=app_label, model_name=model_name)
+    else:
+        form = Form()
+    return render(request, 'adminpanel/object_form.html', {
+        'page_title': f"Add {model._meta.verbose_name.title()}",
+        'form': form,
+        'model': model,
+        'is_add': True,
+    })
 
 
-def communities_pricing(request):
-    return render(request, 'adminpanel/pages/communities_pricing.html', {'page_title': 'Pricing Manager'})
+@staff_required
+def object_edit(request, app_label: str, model_name: str, pk: int):
+    model = _resolve_model_or_404(app_label, model_name)
+    obj = get_object_or_404(model, pk=pk)
+    Form = _build_modelform(model)
+    if request.method == 'POST':
+        form = Form(request.POST, request.FILES, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Updated {model._meta.verbose_name} #{obj.pk}.")
+            return redirect('adminpanel:object_list', app_label=app_label, model_name=model_name)
+    else:
+        form = Form(instance=obj)
+    return render(request, 'adminpanel/object_form.html', {
+        'page_title': f"Edit {model._meta.verbose_name.title()} #{obj.pk}",
+        'form': form,
+        'model': model,
+        'object': obj,
+        'is_add': False,
+    })
 
 
-def communities_games(request):
-    return render(request, 'adminpanel/pages/communities_games.html', {'page_title': 'Games Manager'})
-
-
-def communities_posts(request):
-    return render(request, 'adminpanel/pages/communities_posts.html', {'page_title': 'Community Feeds & Posts'})
-
-
-def communities_tournaments(request):
-    return render(request, 'adminpanel/pages/communities_tournaments.html', {'page_title': 'Community Tournaments'})
-
-
-# Competitions
-def competitions_manage(request):
-    return render(request, 'adminpanel/pages/competitions_manage.html', {'page_title': 'Manage Competitions'})
-
-
-def competitions_results(request):
-    return render(request, 'adminpanel/pages/competitions_results.html', {'page_title': 'Competition Results'})
-
-
-# Leaderboards
-def leaderboards_global(request):
-    return render(request, 'adminpanel/pages/leaderboards_global.html', {'page_title': 'Global Leaderboard'})
-
-
-def leaderboards_community(request):
-    return render(request, 'adminpanel/pages/leaderboards_community.html', {'page_title': 'Community Leaderboards'})
-
-
-def leaderboards_tournament(request):
-    return render(request, 'adminpanel/pages/leaderboards_tournament.html', {'page_title': 'Tournament Leaderboards'})
-
-
-# Posts
-def posts_all(request):
-    return render(request, 'adminpanel/pages/posts_all.html', {'page_title': 'All Posts'})
-
-
-def posts_reports(request):
-    return render(request, 'adminpanel/pages/posts_reports.html', {'page_title': 'Post Reports'})
-
-
-# Notifications
-def notifications_compose(request):
-    return render(request, 'adminpanel/pages/notifications_compose.html', {'page_title': 'User Notifications'})
-
-
-def notifications_history(request):
-    return render(request, 'adminpanel/pages/notifications_history.html', {'page_title': 'Notification History'})
-
-
-def notifications_admin_alerts(request):
-    return render(request, 'adminpanel/pages/notifications_admin_alerts.html', {'page_title': 'Admin Alerts'})
-
-
-# Settings
-def site_settings(request):
-    return render(request, 'adminpanel/pages/site_settings.html', {'page_title': 'Site Settings'})
-
+@staff_required
+def object_delete(request, app_label: str, model_name: str, pk: int):
+    model = _resolve_model_or_404(app_label, model_name)
+    obj = get_object_or_404(model, pk=pk)
+    if request.method == 'POST':
+        obj_display = str(obj)
+        obj.delete()
+        messages.success(request, f"Deleted {model._meta.verbose_name} '{obj_display}'.")
+        return redirect('adminpanel:object_list', app_label=app_label, model_name=model_name)
+    return render(request, 'adminpanel/confirm_delete.html', {
+        'page_title': f"Delete {model._meta.verbose_name.title()} #{obj.pk}",
+        'model': model,
+        'object': obj,
+    })

@@ -42,16 +42,14 @@ class Gamer(models.Model):
     
     def is_profile_complete(self):
         """Check if the user's profile is complete"""
-        # Check individual conditions first
-        bio_ok = self.bio and self.bio != 'Bio' and self.bio != '' and len(self.bio.strip()) > 0
-        location_ok = self.location and self.location != '' and len(self.location.strip()) > 0
-        games_ok = self.games and len(self.games) > 0
-        platforms_ok = self.platforms and len(self.platforms) > 0
-        # Make custom username optional - not required for profile completion
-        username_ok = True  # Always true since custom username is optional
+        # Check individual conditions with more efficient string checks
+        bio_ok = bool(self.bio and self.bio.strip() not in ('', 'Bio'))
+        location_ok = bool(self.location and self.location.strip())
+        games_ok = bool(self.games and len(self.games) > 0)
+        platforms_ok = bool(self.platforms and len(self.platforms) > 0)
         
-        # All conditions must be met
-        is_complete = bio_ok and location_ok and games_ok and platforms_ok and username_ok
+        # All conditions must be met (username is optional)
+        is_complete = all([bio_ok, location_ok, games_ok, platforms_ok])
         
         # Update the profile_completed flag if it doesn't match the actual state
         if is_complete != self.profile_completed:
@@ -97,10 +95,6 @@ class Gamer(models.Model):
             return True
         return False
     
-    def get_points(self):
-        """Get the user's current points"""
-        return self.points
-    
     class Meta:
         verbose_name = 'Gamer'
         verbose_name_plural = 'Gamers'
@@ -108,3 +102,21 @@ class Gamer(models.Model):
             UniqueConstraint(Lower('uid'), name='unique_lower_uid'),
             UniqueConstraint('email', name='unique_email')
         ]
+
+
+class Activity(models.Model):
+    """Lightweight activity stream for users (recent activity).
+    Currently used to record post creations from the Feeds app.
+    """
+    user = models.ForeignKey('Gamer', on_delete=models.CASCADE, related_name='activities')
+    verb = models.CharField(max_length=64)  # e.g., 'created_post'
+    target_type = models.CharField(max_length=32, blank=True)
+    target_id = models.IntegerField(blank=True, null=True)
+    data = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"Activity({self.user_id}, {self.verb}, {self.target_type}:{self.target_id})"

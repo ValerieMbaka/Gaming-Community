@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Admin{% endblock %}</title>
+    <title>{% block title %} Admin {% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'core/css/base_minimal.css' %}">
     <link rel="stylesheet" href="{% static 'adminpanel/css/admin.css' %}">
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{% url 'adminpanel:notifications_admin_alerts' %}" class="dropdown-footer">View All Alerts</a>
+                    <a href="" class="dropdown-footer">View All Alerts</a>
                 </div>
             </div>
 
@@ -98,19 +98,18 @@
                         <img src="{% static 'core/images/player.jpeg' %}" class="dropdown-avatar" alt="Admin Avatar">
                         <div class="profile-info">
                             <h4>Admin</h4>
-                            <small>Staff Portal</small>
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
                     <a href="{% url 'adminpanel:admin_dashboard' %}" class="dropdown-item">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
-                    <a href="{% url 'adminpanel:site_settings' %}" class="dropdown-item">
+                    <a href="" class="dropdown-item">
                         <i class="fas fa-user"></i> Site Settings
                     </a>
                     <div class="dropdown-divider"></div>
                     <div class="dropdown-divider"></div>
-                    <a href="{% url 'users:logout' %}" class="dropdown-item">
+                    <a href="" class="dropdown-item">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </div>
@@ -123,7 +122,6 @@
                 <img src="{% static 'core/images/player.jpeg' %}" class="sidebar-avatar" alt="Admin">
                 <div class="sidebar-profile-info">
                     <h4>Admin</h4>
-                    <small>Staff Portal</small>
                 </div>
             </div>
 
@@ -138,74 +136,74 @@
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-window-sidebar"></i><span>Core</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:core' %}" class="nav-link"><i class="bi bi-gear"></i><span>Core Management</span></a></li>
+                        <li><a href="{% url 'adminpanel:models_index' %}" class="nav-link"><i class="bi bi-gear"></i><span>Data Models</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-people"></i><span>Users</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:users_list' %}" class="nav-link"><i class="bi bi-person"></i><span>Users List</span></a></li>
-                        <li><a href="{% url 'adminpanel:users_points' %}" class="nav-link"><i class="bi bi-coin"></i><span>Points & Rewards</span><span class="badge">0</span></a></li>
-                        <li><a href="{% url 'adminpanel:users_bans' %}" class="nav-link"><i class="bi bi-slash-circle"></i><span>Bans & Suspensions</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-person"></i><span>Users List</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-coin"></i><span>Points & Rewards</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-slash-circle"></i><span>Bans & Suspensions</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-collection"></i><span>Communities</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:communities_manage' %}" class="nav-link"><i class="bi bi-people"></i><span>Manage Communities</span></a></li>
-                        <li><a href="{% url 'adminpanel:communities_approvals' %}" class="nav-link"><i class="bi bi-check2-circle"></i><span>Membership Approvals</span><span class="badge">0</span></a></li>
-                        <li><a href="{% url 'adminpanel:communities_pricing' %}" class="nav-link"><i class="bi bi-cash-coin"></i><span>Pricing Manager</span></a></li>
-                        <li><a href="{% url 'adminpanel:communities_games' %}" class="nav-link"><i class="bi bi-controller"></i><span>Games Manager</span></a></li>
-                        <li><a href="{% url 'adminpanel:communities_posts' %}" class="nav-link"><i class="bi bi-chat-dots"></i><span>Community Feeds & Posts</span><span class="badge">0</span></a></li>
-                        <li><a href="{% url 'adminpanel:communities_tournaments' %}" class="nav-link"><i class="bi bi-trophy"></i><span>Tournaments</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-people"></i><span>Manage Communities</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-check2-circle"></i><span>Membership Approvals</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-cash-coin"></i><span>Pricing Manager</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-controller"></i><span>Games Manager</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-chat-dots"></i><span>Community Feeds & Posts</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-trophy"></i><span>Tournaments</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-trophy"></i><span>Competitions</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:competitions_manage' %}" class="nav-link"><i class="bi bi-list-task"></i><span>Manage Competitions</span></a></li>
-                        <li><a href="{% url 'adminpanel:competitions_results' %}" class="nav-link"><i class="bi bi-check2-square"></i><span>Results</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-list-task"></i><span>Manage Competitions</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-check2-square"></i><span>Results</span><span class="badge">0</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-bar-chart"></i><span>Leaderboards</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:leaderboards_global' %}" class="nav-link"><i class="bi bi-globe"></i><span>Global</span></a></li>
-                        <li><a href="{% url 'adminpanel:leaderboards_community' %}" class="nav-link"><i class="bi bi-people"></i><span>Community</span></a></li>
-                        <li><a href="{% url 'adminpanel:leaderboards_tournament' %}" class="nav-link"><i class="bi bi-trophy"></i><span>Tournament</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-globe"></i><span>Global</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-people"></i><span>Community</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-trophy"></i><span>Tournament</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-file-post"></i><span>Posts</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:posts_all' %}" class="nav-link"><i class="bi bi-image"></i><span>All Posts</span></a></li>
-                        <li><a href="{% url 'adminpanel:posts_reports' %}" class="nav-link"><i class="bi bi-flag"></i><span>Reports</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-image"></i><span>All Posts</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-flag"></i><span>Reports</span><span class="badge">0</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-bell"></i><span>Notifications</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:notifications_compose' %}" class="nav-link"><i class="bi bi-megaphone"></i><span>User Notifications</span></a></li>
-                        <li><a href="{% url 'adminpanel:notifications_history' %}" class="nav-link"><i class="bi bi-clock-history"></i><span>History</span></a></li>
-                        <li><a href="{% url 'adminpanel:notifications_admin_alerts' %}" class="nav-link"><i class="bi bi-bug"></i><span>Admin Alerts</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-megaphone"></i><span>User Notifications</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-clock-history"></i><span>History</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-bug"></i><span>Admin Alerts</span><span class="badge">0</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <div class="section-header"><i class="bi bi-gear"></i><span>Settings</span></div>
                     <ul class="nav-list">
-                        <li><a href="{% url 'adminpanel:site_settings' %}" class="nav-link"><i class="bi bi-gear"></i><span>Site Settings</span><span class="badge">0</span></a></li>
+                        <li><a href="" class="nav-link"><i class="bi bi-gear"></i><span>Site Settings</span><span class="badge">0</span></a></li>
                     </ul>
                 </div>
 
                 <div class="nav-section logout-section">
-                    <a href="{% url 'users:logout' %}" class="nav-link logout-link"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+                    <a href="" class="nav-link logout-link"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
                 </div>
             </nav>
         </aside>

@@ -1,0 +1,18 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}{{ page_title }} - Admin{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="card border-danger">
+    <div class="card-header bg-danger text-white">Confirm delete</div>
+    <div class="card-body">
+      <p>Are you sure you want to delete this {{ model._meta.verbose_name }}?</p>
+      <div class="alert alert-warning"><strong>{{ object }}</strong></div>
+      <form method="post">
+        {% csrf_token %}
+        <a class="btn btn-secondary" href="javascript:history.back()">Cancel</a>
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
