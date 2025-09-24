@@ -1,13 +1,11 @@
-# views.py
 from django.shortcuts import render
-from .models import Slider, About, Platform
+from .models import Slider, About
 
 def index(request):
-    sliders = Slider.objects.all()
-    about = About.objects.first()
-    platforms = Platform.objects.all()
+    sliders = Slider.objects.filter(is_active=True)
+    about = About.objects.filter(is_active=True).first()
+    
     return render(request, 'core/index.html', {
-        'sliders': sliders,  # Fixed variable name
-        'about': about,
-        'platforms': platforms
+        'sliders': sliders,
+        'about': about
     })

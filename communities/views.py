@@ -1,12 +1,7 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render# Create your views here.
 
 def communities_list(request):
-    """
-    View to display all gaming communities
-    """
-    # Dummy data for communities (will be replaced with database data later)
+    # Dummy data for communities
     communities_data = {
         'total_communities': 6,
         'total_members': 20598,  # Sum of all community members
@@ -15,9 +10,6 @@ def communities_list(request):
     return render(request, 'communities/communities.html', communities_data)
 
 def community_pricing(request):
-    """
-    View to display the community pricing page
-    """
     # Pricing plans data with actual features and pricing
     pricing_data = {
         'plans': [
@@ -76,10 +68,7 @@ def community_pricing(request):
     return render(request, 'communities/community_pricing.html', pricing_data)
 
 def sports_community(request):
-    """
-    View to display the sports gaming community page
-    """
-    # Dummy data for sports community (will be replaced with database data later)
+    # Dummy data for sports community
     sports_data = {
         'community_name': 'Sports',
         'total_members': 2847,
@@ -90,10 +79,7 @@ def sports_community(request):
     return render(request, 'communities/sports_community.html', sports_data)
 
 def racing_community(request):
-    """
-    View to display the racing gaming community page
-    """
-    # Dummy data for racing community (will be replaced with database data later)
+    # Dummy data for racing community
     racing_data = {
         'community_name': 'Racing',
         'total_members': 1923,
@@ -104,10 +90,7 @@ def racing_community(request):
     return render(request, 'communities/racing_community.html', racing_data)
 
 def action_community(request):
-    """
-    View to display the action gaming community page
-    """
-    # Dummy data for action community (will be replaced with database data later)
+    # Dummy data for action community
     action_data = {
         'community_name': 'Action',
         'total_members': 3156,

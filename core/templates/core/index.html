@@ -19,59 +19,35 @@
             </div>
             <div class="carousel-inner">
 	            {% for slider in sliders %}
-
-	            {% endfor %}
-                <div class="carousel-item active">
-                    <img src="{% static 'core/images/ps.jpeg' %}" class="d-block w-100" alt="Platform Unity">
-                    <div class="carousel-caption d-none d-md-block">
-                        <div class="text-content">
-                            <h1>Unite gamers across all platforms</h1>
-                            <p>The ultimate hub connecting PC, Console, and Mobile players in one competitive ecosystem.</p>
-                        </div>
-                        <div class="btn-container">
-                            <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg px-4">Join Free</a>
-                        </div>
-                    </div>             
-                </div>
-
-                <div class="carousel-item">
-                    <img src="{% static 'core/images/player.jpeg' %}" class="d-block w-100" alt="Gaming Communities">
-                    <div class="carousel-caption d-none d-md-block">
-                        <div class="text-content">
-                            <h1>Join Gaming Communities</h1>
-                            <p>Connect with like-minded gamers, share strategies, and build lasting friendships in game-specific communities.</p>
-                        </div>
-                        <div class="btn-container">
-                            <a href="#communities" class="btn btn-primary btn-lg px-4">Explore Communities</a>
+                    <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                        <img src="{{ slider.background_image.url }}" class="d-block w-100" alt="{{ slider.title }}">
+                        <div class="carousel-caption d-none d-md-block">
+                            <div class="text-content">
+                                <h1>{{ slider.title }}</h1>
+                                <p>{{ slider.subtitle }}</p>
+                            </div>
+                            {% if slider.cta_text %}
+                                <div class="btn-container">
+                                    <a href="{{ slider.cta_link }}" class="btn btn-primary btn-lg px-4">{{ slider.cta_text }}</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-
-                <div class="carousel-item">
-                    <img src="{% static 'core/images/codwarzone.jpeg' %}" class="d-block w-100" alt="Gaming Competitions">
-                    <div class="carousel-caption d-none d-md-block">
-                        <div class="text-content">
-                            <h1>Compete & Win Prizes</h1>
-                            <p>Participate in regular tournaments with cash prizes, climb leaderboards, and prove your gaming skills.</p>
-                        </div>
-                        <div class="btn-container">
-                            <a href="#competitions" class="btn btn-primary btn-lg px-4">View Competitions</a>
+                {% empty %}
+                    <!-- Fallback if no sliders exist -->
+                    <div class="carousel-item active">
+                        <img src="{% static 'core/images/ps.jpeg' %}" class="d-block w-100" alt="Platform Unity">
+                        <div class="carousel-caption d-none d-md-block">
+                            <div class="text-content">
+                                <h1>Unite gamers across all platforms</h1>
+                                <p>The ultimate hub connecting PC, Console, and Mobile players in one competitive ecosystem.</p>
+                            </div>
+                            <div class="btn-container">
+                                <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg px-4">Join Free</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="carousel-item">
-                    <img src="{% static 'core/images/tekken.jpeg' %}" class="d-block w-100" alt="Popular Games">
-                    <div class="carousel-caption d-none d-md-block">
-                        <div class="text-content">
-                            <h1>Discover Popular Games</h1>
-                            <p>Explore trending games, track your performance, and find your next favorite title across all platforms.</p>
-                        </div>
-                        <div class="btn-container">
-                            <a href="#games" class="btn btn-primary btn-lg px-4">Browse Games</a>
-                    </div>
-                </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -82,24 +58,22 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <div class="pe-lg-5">
-                        <span class="badge bg-primary mb-3">WHO WE ARE</span>
-                        <h2 class="mb-4">Redefining Gaming Communities</h2>
-                        <p class="mb-4">GameHub breaks down platform barriers, creating a unified space
-	                        where gamers connect, compete, and grow together regardless of their preferred
-	                        gaming device.</p>
+                        <span class="badge bg-primary mb-3">{{ about.badge_text }}</span>
+                        <h2 class="mb-4">{{ about.heading }}</h2>
+                        <p class="mb-4">{{ about.content }}</p>
 
                         <div class="d-flex mb-3">
                             <div class="me-4">
-                                <div class="fs-1 text-primary mb-1">10K+</div>
-                                <div class="text-muted">Active Players</div>
+                                <div class="fs-1 text-primary mb-1">{{ about.active_players_count }}</div>
+                                <div class="text-muted">{{ about.active_players }}</div>
                             </div>
                             <div class="me-4">
-                                <div class="fs-1 text-primary mb-1">500+</div>
-                                <div class="text-muted">Tournaments</div>
+                                <div class="fs-1 text-primary mb-1">{{ about.tournaments_count }}</div>
+                                <div class="text-muted">{{ about.tournaments }}</div>
                             </div>
                             <div>
-                                <div class="fs-1 text-primary mb-1">4</div>
-                                <div class="text-muted">Platforms</div>
+                                <div class="fs-1 text-primary mb-1">{{ about.platforms_count }}</div>
+                                <div class="text-muted">{{ about.platforms }}</div>
                             </div>
                         </div>
                     </div>
@@ -147,7 +121,7 @@
                 </div>
             </div>
         </div>
-    </section>
+	</section>
 
     <!-- Trending Games -->
     <section id="games" class="py-5 bg-light">
@@ -327,7 +301,7 @@
     </section>
 
     <!-- Game Platforms -->
-    <section id="platforms" class="py-5 bg-white">
+     <section id="platforms" class="py-5 bg-white">
         <div class="container py-4">
             <div class="text-center mb-5">
                 <span class="badge bg-primary mb-3">OUR PLATFORMS</span>

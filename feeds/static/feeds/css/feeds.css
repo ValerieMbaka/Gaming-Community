@@ -30,9 +30,6 @@
     --text-muted: #9ca3af;
 }
 
-/* Smooth Theme Transitions */
-
-
 /* Feeds Header */
 .feeds-header {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -44,10 +41,10 @@
     overflow: hidden;
     margin-right: 30px;
     margin-left: 30px;
-    
+    margin-top: 20px;
 }
 
-/* Filters Bar (below header) */
+/* Filters Bar */
 .feeds-filters-bar {
     background: var(--card-bg);
     border-bottom: 1px solid var(--border-color);

@@ -1,8 +1,3 @@
-/**
- * Core JavaScript Utilities for GameHub
- * Handles common UI interactions and animations
- */
-
 // Scroll to Top Button
 class ScrollToTop {
     constructor() {
@@ -167,76 +162,6 @@ class NavigationManager {
     }
 }
 
-// Lazy Loading Manager
-class LazyLoadingManager {
-    constructor() {
-        this.images = document.querySelectorAll('img[loading="lazy"]');
-        if (this.images.length) this.init();
-    }
-
-    init() {
-        if ('loading' in HTMLImageElement.prototype) {
-            this.nativeLazyLoading();
-        } else if ('IntersectionObserver' in window) {
-            this.intersectionObserverLazyLoading();
-        } else {
-            this.fallbackLazyLoading();
-        }
-    }
-
-    nativeLazyLoading() {
-        this.images.forEach(img => {
-            if (img.dataset.src) img.src = img.dataset.src;
-            if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-        });
-    }
-
-    intersectionObserverLazyLoading() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) img.src = img.dataset.src;
-                    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-                    observer.unobserve(img);
-                }
-            });
-        });
-
-        this.images.forEach(img => observer.observe(img));
-    }
-
-    fallbackLazyLoading() {
-        // Fallback for older browsers
-        const lazyLoad = () => {
-            this.images = this.images.filter(img => {
-                const rect = img.getBoundingClientRect();
-                const isVisible = (rect.top <= window.innerHeight && rect.bottom >= 0) && 
-                                getComputedStyle(img).display !== 'none';
-                
-                if (isVisible) {
-                    if (img.dataset.src) img.src = img.dataset.src;
-                    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
-                    return false; // Remove from array
-                }
-                return true; // Keep in array
-            });
-
-            if (this.images.length === 0) {
-                window.removeEventListener('scroll', lazyLoad);
-                window.removeEventListener('resize', lazyLoad);
-            }
-        };
-
-        // Initial check
-        lazyLoad();
-        
-        // Event listeners for scroll and resize
-        window.addEventListener('scroll', lazyLoad);
-        window.addEventListener('resize', lazyLoad);
-    }
-}
-
 // Enhanced Link States
 class LinkStateManager {
     constructor() {
@@ -325,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
         new ScrollAnimator(),
         new ThemeManager(),
         new NavigationManager(),
-        new LazyLoadingManager(),
         new DjangoMessagesManager(),
         new LinkStateManager()
     ];

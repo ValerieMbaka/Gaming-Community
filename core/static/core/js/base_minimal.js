@@ -126,7 +126,5 @@ document.addEventListener('DOMContentLoaded', function () {
             group.classList.toggle('active');
         });
     });
-
-    // Profile form submission is handled in profile_completion.js
-    // No conflicting handlers here
+    
 });

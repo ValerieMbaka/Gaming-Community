@@ -1,3 +1,4 @@
+// Toast Manager
 function showToast(message, type = 'info', duration = 5000) {
     const container = document.getElementById('toast-container');
     if (!container) {

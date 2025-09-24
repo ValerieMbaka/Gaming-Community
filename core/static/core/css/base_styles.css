@@ -1,11 +1,9 @@
-/* ============================================
-   BASE STYLES - Optimized for GuildSpace
-   ============================================ */
+/* ===== BASE STYLES ===== */
 
 /* Import variables */
 @import url('_variables.css');
 
-/* ===== BASE ELEMENTS ===== */
+/* Base elements */
 body {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
     color: var(--text-primary);
@@ -43,14 +41,14 @@ a:visited:hover {
     color: var(--primary);
 }
 
-/* ===== BRAND & TYPOGRAPHY ===== */
+/* Typography */
 .brand-text {
     font-family: 'Poppins', 'Segoe UI', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
 }
 
-/* ===== NAVBAR ===== */
+/* Navbar */
 .navbar {
     padding: 0.8rem 0;
     background-color: var(--bg-navbar) !important;
@@ -143,7 +141,7 @@ a:visited:hover {
     color: var(--text-light) !important;
 }
 
-/* ===== HERO SECTION ===== */
+/* Hero Section */
 .hero-section {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
               url('../images/games.jpeg') no-repeat center center;
@@ -170,7 +168,7 @@ a:visited:hover {
     z-index: 2;
 }
 
-/* ===== SECTION BACKGROUNDS ===== */
+/* Section Backgrounds */
 .bg-dark {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
@@ -181,7 +179,7 @@ a:visited:hover {
     color: var(--text-primary) !important;
 }
 
-/* ===== ICONS & WRAPPERS ===== */
+/* Icons & Wrappers */
 .icon-wrapper {
     width: 70px;
     height: 70px;
@@ -191,7 +189,7 @@ a:visited:hover {
     border-radius: 50%;
 }
 
-/* ===== CARDS ===== */
+/* Cards */
 .card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-light);
@@ -234,7 +232,7 @@ a:visited:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== FOOTER ===== */
+/* Footer */
 footer {
     background-color: var(--bg-footer) !important;
     border-top: 1px solid var(--border-light);
@@ -328,7 +326,7 @@ footer .small {
     color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* ===== BACK TO TOP BUTTON ===== */
+/* Back to Top Button */
 .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -350,7 +348,7 @@ footer .small {
     visibility: visible;
 }
 
-/* ===== UTILITIES ===== */
+/* Utilities */
 .badge {
     font-weight: 500;
     padding: 0.35em 0.65em;
@@ -376,7 +374,7 @@ footer .small {
     background-color: var(--bg-primary) !important;
 }
 
-/* ===== BUTTONS ===== */
+/* Buttons */
 .btn:active {
     transform: scale(0.98);
 }
@@ -385,7 +383,7 @@ footer .small {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
 
-/* ===== ANIMATIONS ===== */
+/* Animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -413,7 +411,7 @@ footer .small {
     animation-delay: 0.6s;
 }
 
-/* ===== THEME TOGGLE ===== */
+/* Theme Toggle */
 #themeToggle {
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
@@ -424,7 +422,7 @@ footer .small {
     transform: scale(1.05);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* Responsive Design */
 @media (max-width: 768px) {
     .hero-section {
         min-height: auto;
@@ -446,7 +444,7 @@ footer .small {
     }
 }
 
-/* ===== SMOOTH TRANSITIONS ===== */
+/* Smooth Transitions */
 .navbar-brand,
 .nav-link,
 .btn,

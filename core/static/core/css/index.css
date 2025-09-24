@@ -21,7 +21,7 @@
     --primary-color: var(--primary);
 }
 
-/* ===== HERO SECTION ===== */
+/* Hero Section */
 .index-hero-section {
     height: 60vh;
     max-height: 500px;
@@ -31,7 +31,7 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* ===== CAROUSEL BASE ===== */
+/* Carousel */
 .index-hero-section #heroCarousel {
     height: 100%;
     width: 100%;
@@ -65,7 +65,6 @@
     z-index: 1;
 }
 
-/* ===== CAROUSEL CAPTION ===== */
 .index-hero-section .carousel-caption {
     position: absolute;
     bottom: 0;
@@ -80,7 +79,6 @@
     min-height: 80px;
 }
 
-/* ===== CAPTION CONTENT ===== */
 .index-hero-section .carousel-caption .text-content {
     flex: 1;
     display: flex;
@@ -113,7 +111,6 @@
     text-align: left;
 }
 
-/* ===== BUTTON STYLES ===== */
 .index-hero-section .carousel-caption .btn-container {
     display: flex;
     justify-content: flex-end;
@@ -140,7 +137,6 @@
     background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
 }
 
-/* ===== CAROUSEL CONTROLS ===== */
 .index-hero-section .carousel-control-prev,
 .index-hero-section .carousel-control-next {
     width: 60px;
@@ -168,7 +164,6 @@
     right: 20px;
 }
 
-/* ===== CAROUSEL INDICATORS ===== */
 .index-hero-section .carousel-indicators {
     bottom: 5px;
     gap: 5px;
@@ -194,8 +189,7 @@
     transform: scale(1.1);
 }
 
-/* ===== SECTION DIFFERENTIATION ===== */
-/* About Section - Dark theme with subtle pattern */
+/* About Section */
 #about {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     position: relative;
@@ -213,7 +207,7 @@
     pointer-events: none;
 }
 
-/* Trending Games Section - Warm light theme */
+/* Trending Games Section */
 #games {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     position: relative;
@@ -231,7 +225,7 @@
     pointer-events: none;
 }
 
-/* Platforms Section - Cool light theme */
+/* Platforms Section */
 #platforms {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     position: relative;
@@ -249,7 +243,7 @@
     pointer-events: none;
 }
 
-/* Blog Section - Neutral light theme */
+/* Blog Section */
 #blog {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     position: relative;
@@ -300,7 +294,7 @@
     background-image: radial-gradient(circle at 75% 25%, rgba(203, 213, 225, 0.1) 0%, transparent 50%);
 }
 
-/* ===== ABOUT SECTION FEATURE CARDS ===== */
+/* About Feature Cards */
 .about-feature-card {
     background: linear-gradient(135deg, #237aa0 0%, #278ab5 100%) !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -351,8 +345,7 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== BLOG SECTION STYLING ===== */
-/* Enhanced column titles */
+/* Blog Section */
 #blog .card-header h3 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -429,7 +422,6 @@
     margin-left: var(--spacing-xs);
 }
 
-/* Enhanced badges and buttons */
 #blog .badge {
     font-size: 0.75rem;
     font-weight: 600;
@@ -466,7 +458,7 @@
     box-shadow: var(--box-shadow);
 }
 
-/* ===== TRENDING GAMES SECTION ===== */
+/* Trending Games Section */
 .game-card {
     transition: var(--transition);
     border-radius: var(--border-radius);
@@ -583,7 +575,7 @@
     font-size: 0.9rem;
 }
 
-/* Enhanced Game Badges */
+/* Game Badges */
 .game-badge {
     font-size: 0.75rem;
     font-weight: 600;
