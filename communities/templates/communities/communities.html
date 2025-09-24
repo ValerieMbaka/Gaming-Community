@@ -8,180 +8,184 @@
 {% endblock %}
 
 {% block content %}
-	<!-- Hero Section -->
-	<section class="communities-hero">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-8">
-                    <h1 class="display-4 fw-bold mb-3">Gaming Communities</h1>
-                    <p class="lead mb-4">Connect with fellow gamers, share strategies, and dominate your favourite games together!</p>
-                </div>
-            </div>
-            <div class="hero-pricing-btn">
-                <a href="{% url 'communities:community_pricing' %}" class="btn btn-outline-light btn-lg">
-                    <i class="fas fa-tags me-2"></i>View Pricing Plans
-                </a>
+<!-- Hero Section -->
+<section class="communities-hero">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Gaming Communities</h1>
+                <p class="lead mb-4">Connect with fellow gamers, share strategies, and dominate your favourite games together!</p>
             </div>
         </div>
-	</section>
+        <div class="hero-pricing-btn">
+            <a href="{% url 'communities:community_pricing' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-tags me-2"></i>View Pricing Plans
+            </a>
+        </div>
+    </div>
+</section>
 
-	<!-- Active Communities Section -->
-	<section class="communities-section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-header-left">
-                    <h3 class="section-title">Active Communities</h3>
-                    <p class="section-subtitle">Join these thriving gaming communities</p>
-                </div>
-                <div class="section-header-right">
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">All Communities</button>
-                        <button class="filter-btn" data-filter="sports">Sports</button>
-                        <button class="filter-btn" data-filter="racing">Racing</button>
-                        <button class="filter-btn" data-filter="action">Action</button>
-                    </div>
+<!-- Active Communities Section -->
+<section class="communities-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-header-left">
+                <h3 class="section-title">Active Communities</h3>
+                <p class="section-subtitle">Join these thriving gaming communities</p>
+            </div>
+            <div class="section-header-right">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All Communities</button>
+                    <button class="filter-btn" data-filter="sports">Sports</button>
+                    <button class="filter-btn" data-filter="racing">Racing</button>
+                    <button class="filter-btn" data-filter="action">Action</button>
                 </div>
             </div>
+        </div>
         
-            <div class="row g-4" id="communitiesGrid">
-                <!-- Sports Community -->
-                <div class="col-lg-4 col-md-6" data-category="sports" data-activity="high">
-                    <div class="community-card" data-community="sports" data-url="{% url 'communities:sports_community' %}" style="cursor: pointer;">
-                        <div class="community-card-top">
-                            <div class="community-icon sports text-white">
-                                <i class="fas fa-futbol"></i>
-                            </div>
-                            <div class="community-header">
-                                <h3 class="community-title">Sports</h3>
-                                <div class="community-stats">
-                                    <div class="stat-item">
-                                        <i class="fas fa-users stat-icon"></i>
-                                        <span>2,847 members</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <i class="fas fa-circle stat-icon online"></i>
-                                        <span>156 online</span>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="row g-4" id="communitiesGrid">
+            <!-- Sports Community -->
+            <div class="col-lg-4 col-md-6" data-category="sports" data-activity="high">
+                <div class="community-card" data-community="sports" data-url="{% url 'communities:sports_community' %}" style="cursor: pointer;">
+                    <div class="community-card-top">
+                        <div class="community-icon sports text-white">
+                            <i class="fas fa-futbol"></i>
                         </div>
-                        <div class="community-card-bottom">
-                            <div class="community-description">The ultimate destination for sports gaming enthusiasts. From FIFA to NBA 2K, compete with the best players worldwide!</div>
-	                            <div class="community-games">
-                                    <div class="games-label">Popular Games:</div>
-                                    <div class="game-tags">
-                                        <span class="game-tag">FIFA 25</span>
-                                        <span class="game-tag">NBA 2K24</span>
-                                        <span class="game-tag">E-Football</span>
-                                    </div>
+                        <div class="community-header">
+                            <h3 class="community-title">Sports</h3>
+                            <div class="community-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-users stat-icon"></i>
+                                    <span>2,847 members</span>
                                 </div>
-
-                            <div class="community-actions">
-                                <a href="{% url 'communities:sports_community' %}" class="btn btn-join sports text-white">
-	                                <i class="fas fa-plus me-2"></i>Join Community
-                                </a>
+                                <div class="stat-item">
+                                    <i class="fas fa-circle stat-icon online"></i>
+                                    <span>156 online</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Racing Community -->
-                <div class="col-lg-4 col-md-6" data-category="racing" data-activity="medium">
-                    <div class="community-card" data-community="racing" data-url="{% url 'communities:racing_community' %}" style="cursor: pointer;">
-                        <div class="community-card-top">
-                            <div class="community-icon racing text-white">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <div class="community-header">
-                                <h3 class="community-title">Racing</h3>
-                                <div class="community-stats">
-                                    <div class="stat-item">
-                                        <i class="fas fa-users stat-icon"></i>
-                                        <span>1,923 members</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <i class="fas fa-circle stat-icon online"></i>
-                                        <span>89 online</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     
-                        <div class="community-card-bottom">
-                            <div class="community-description">Speed demons unite! From realistic simulators to arcade racing, experience the thrill of high-speed competition.</div>
-	                        <div class="community-games">
-		                        <div class="games-label">Popular Games:</div>
-		                        <div class="game-tags">
-			                        <span class="game-tag">Forza Horizon</span>
-			                        <span class="game-tag">Need for Speed</span>
-			                        <span class="game-tag">Gran Turismo</span>
-		                        </div>
-	                        </div>
-	                        <div class="community-actions">
-		                        <a href="{% url 'communities:racing_community' %}" class="btn btn-join racing text-white">
-			                        <i class="fas fa-plus me-2"></i>Join Community
-		                        </a>
-	                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Community -->
-                <div class="col-lg-4 col-md-6" data-category="action" data-activity="high">
-                    <div class="community-card" data-community="action" data-url="{% url 'communities:action_community' %}" style="cursor: pointer;">
-                        <div class="community-card-top">
-                            <div class="community-icon action text-white">
-                                <i class="fas fa-fist-raised"></i>
-                            </div>
-                            <div class="community-header">
-                                <h3 class="community-title">Action</h3>
-                                <div class="community-stats">
-                                    <div class="stat-item">
-                                        <i class="fas fa-users stat-icon"></i>
-                                        <span>3,156 members</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <i class="fas fa-circle stat-icon online"></i>
-                                        <span>234 online</span>
-                                    </div>
-                                </div>
+                    <div class="community-card-bottom">
+                        <div class="community-description">The ultimate destination for sports gaming enthusiasts. From FIFA to NBA 2K, compete with the best players worldwide!</div>
+                        <div class="community-games">
+                            <div class="games-label">Popular Games:</div>
+                            <div class="game-tags">
+                                <span class="game-tag">FIFA 25</span>
+                                <span class="game-tag">NBA 2K24</span>
+                                <span class="game-tag">E-Football</span>
                             </div>
                         </div>
-                    
-                        <div class="community-card-bottom">
-                            <div class="community-description">Fighting & Combat games at their finest. Master combos, perfect your timing, and become the ultimate warrior!</div>
-                            <div class="community-games">
-                                <div class="games-label">Popular Games:</div>
-                                <div class="game-tags">
-	                                <span class="game-tag">Tekken 8</span>
-	                                <span class="game-tag">Street Fighter</span>
-                                    <span class="game-tag">Mortal Kombat</span>
-                                </div>
-                            </div>
                         
-                            <div class="community-actions">
-                                <a href="{% url 'communities:action_community' %}" class="btn btn-join action text-white">
-                                    <i class="fas fa-plus me-2"></i>Join Community
-                                </a>
-                            </div>
+                        <div class="community-actions">
+                            <a href="{% url 'communities:community_pricing' %}" class="btn btn-join sports text-white">
+                                <i class="fas fa-plus me-2"></i>Join Community
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- No Results Message -->
-            <div id="noResults" class="text-center py-5" style="display: none;">
-                <div class="no-results-content">
-                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4 class="text-muted">No communities found</h4>
-                    <p class="text-muted">Try adjusting your search or filter criteria.</p>
-                    <button class="btn btn-outline-primary" onclick="clearFilters()">
-                        <i class="fas fa-times me-2"></i>Clear Filters
-                    </button>
+            <!-- Racing Community -->
+            <div class="col-lg-4 col-md-6" data-category="racing" data-activity="medium">
+                <div class="community-card" data-community="racing" data-url="{% url 'communities:racing_community' %}" style="cursor: pointer;">
+                    <div class="community-card-top">
+                        <div class="community-icon racing text-white">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="community-header">
+                            <h3 class="community-title">Racing</h3>
+                            <div class="community-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-users stat-icon"></i>
+                                    <span>1,923 members</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-circle stat-icon online"></i>
+                                    <span>89 online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Speed demons unite! From realistic simulators to arcade racing, experience the thrill of high-speed competition.</div>
+                        
+                        <div class="community-games">
+                            <div class="games-label">Popular Games:</div>
+                            <div class="game-tags">
+                                <span class="game-tag">Forza Horizon</span>
+                                <span class="game-tag">Need for Speed</span>
+                                <span class="game-tag">Gran Turismo</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <a href="{% url 'communities:community_pricing' %}" class="btn btn-join racing text-white">
+                                <i class="fas fa-plus me-2"></i>Join Community
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Community -->
+            <div class="col-lg-4 col-md-6" data-category="action" data-activity="high">
+                <div class="community-card" data-community="action" data-url="{% url 'communities:action_community' %}" style="cursor: pointer;">
+                    <div class="community-card-top">
+                        <div class="community-icon action text-white">
+                            <i class="fas fa-fist-raised"></i>
+                        </div>
+                        <div class="community-header">
+                            <h3 class="community-title">Action</h3>
+                            <div class="community-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-users stat-icon"></i>
+                                    <span>3,156 members</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-circle stat-icon online"></i>
+                                    <span>234 online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="community-card-bottom">
+                        <div class="community-description">Fighting & Combat games at their finest. Master combos, perfect your timing, and become the ultimate warrior!</div>
+                        
+                        <div class="community-games">
+                            <div class="games-label">Popular Games:</div>
+                            <div class="game-tags">
+                                <span class="game-tag">Tekken 8</span>
+                                <span class="game-tag">Street Fighter</span>
+                                <span class="game-tag">Mortal Kombat</span>
+                            </div>
+                        </div>
+                        
+                        <div class="community-actions">
+                            <a href="{% url 'communities:community_pricing' %}" class="btn btn-join action text-white">
+                                <i class="fas fa-plus me-2"></i>Join Community
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-	</section>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="text-center py-5" style="display: none;">
+            <div class="no-results-content">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No communities found</h4>
+                <p class="text-muted">Try adjusting your search or filter criteria.</p>
+                <button class="btn btn-outline-primary" onclick="clearFilters()">
+                    <i class="fas fa-times me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Coming Soon Communities Section -->
 <section class="communities-section">
@@ -280,6 +284,8 @@
         </div>
     </div>
 </section>
+
+
 {% endblock %}
 
 {% block scripts %}
