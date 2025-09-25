@@ -15,20 +15,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (viewMembersBtn && membersPanel && feedPosts) {
     viewMembersBtn.addEventListener('click', function() {
-      feedPosts.classList.add('d-none');
-      membersPanel.classList.remove('d-none');
-      membersPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      ensureMembersLoaded();
+        // Hide the entire sidebar content
+        const sidebarContent = document.querySelector('.feeds-sidebar > *:not(#membersPanel)');
+        if (sidebarContent) {
+            sidebarContent.style.display = 'none';
+        }
+        
+        // Show members panel
+        membersPanel.classList.remove('d-none');
+        membersPanel.style.display = 'block';
+        
+        ensureMembersLoaded();
     });
-  }
+    }
 
-  if (backToFeedBtn && membersPanel && feedPosts) {
+    if (backToFeedBtn && membersPanel && feedPosts) {
     backToFeedBtn.addEventListener('click', function() {
-      membersPanel.classList.add('d-none');
-      feedPosts.classList.remove('d-none');
-      feedPosts.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Hide members panel
+        membersPanel.classList.add('d-none');
+        membersPanel.style.display = 'none';
+        
+        // Show the sidebar content
+        const sidebarContent = document.querySelector('.feeds-sidebar > *:not(#membersPanel)');
+        if (sidebarContent) {
+            sidebarContent.style.display = 'block';
+        }
     });
-  }
+    }
 
   // Toggle comment input when user clicks Comment action
   commentButtons.forEach(function(btn) {

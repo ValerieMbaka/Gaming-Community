@@ -284,12 +284,13 @@
     display: block;
 }
 
-/* Post Stats */
 .post-stats {
     display: flex;
-    gap: 0.75rem;
-    flex: 1 1 auto; /* push actions to the far right */
-    font-size: 0.8rem; /* smaller stat text */
+    gap: 1rem;
+    flex: 1;
+    font-size: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .stat-item {
@@ -305,6 +306,13 @@
     font-size: 0.9rem; /* smaller stat icon */
 }
 
+.stat-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80px; /* Adjust as needed */
+}
+
 /* Post Actions */
 .post-actions {
     display: flex;
@@ -317,10 +325,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 0.75rem 0;
     border-top: 1px solid var(--border-color);
     margin-bottom: 0.25rem;
+    min-height: 40px;
 }
 
 /* Make the two columns distinct with a subtle divider */
