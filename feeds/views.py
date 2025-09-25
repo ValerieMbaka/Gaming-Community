@@ -4,11 +4,8 @@ from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import F
-
 from .models import Post, Comment, Like, Share
 from users.models import Gamer
-
-# Create your views here.
 
 def feeds_view(request):
     return render(request, 'feeds/feeds.html')

@@ -131,7 +131,7 @@ img {
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    z-index: 900;
+    z-index: 1000;
     transition: var(--transition);
 }
 
@@ -619,7 +619,7 @@ img {
 
 .sidebar-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
+    color: var(--primary);
 }
 
 /* Dashboard Sidebar Collapsed */
@@ -747,6 +747,7 @@ img {
     flex: 1;
     margin-left: 240px;
     transition: var(--transition);
+    margin-top: 50px;
 }
 
 /* Dashboard Card Styles */

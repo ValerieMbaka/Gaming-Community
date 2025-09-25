@@ -16,7 +16,7 @@ class Slider(models.Model):
         return self.title
 
 class About(models.Model):
-    badge_text = models.CharField(max_length=100)
+    badge_text = models.CharField(max_length=100, default="WHO WE ARE")
     heading = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='about/', blank=True)

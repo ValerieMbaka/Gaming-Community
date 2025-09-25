@@ -217,10 +217,8 @@
     padding: 30px 0;
     border-radius: 20px;
     position: relative;
-    margin-bottom: 40px;
     overflow: hidden;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin: 80px 30px 40px;
     animation: heroSlideIn 0.8s ease-out;
 }
 

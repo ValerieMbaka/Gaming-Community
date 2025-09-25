@@ -8,341 +8,279 @@
 {% endblock %}
 
 {% block content %}
-<!-- Feeds Header -->
-<section class="feeds-header">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="feeds-title">Gaming Feeds</h1>
-                <p class="feeds-subtitle">Stay connected with your gaming community</p>
+	<!-- Feeds Header -->
+	<section class="feeds-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="feeds-title">Gaming Feeds</h1>
+                    <p class="feeds-subtitle">Stay connected with your gaming community</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+	</section>
 
-<!-- Filters Bar -->
-<section class="feeds-filters-bar">
-    <div class="container">
-        <div class="filters-bar d-flex flex-wrap align-items-center gap-2">
-            <button class="filter-chip active" data-filter="all"><i class="fas fa-globe me-1"></i> All</button>
-            <button class="filter-chip" data-filter="highlights"><i class="fas fa-star me-1"></i> Highlights</button>
-            <button class="filter-chip" data-filter="tournaments"><i class="fas fa-trophy me-1"></i> Tournaments</button>
-	        <button id="viewMembersBtn" class="btn btn-outline-primary btn-sm ms-auto"><i class="fas fa-users me-1"></i> View Members</button>
+	<!-- Filters Bar -->
+	<section class="feeds-filters-bar">
+        <div class="container">
+            <div class="filters-bar d-flex flex-wrap align-items-center gap-2">
+                <button class="filter-chip active" data-filter="all"><i class="fas fa-globe me-1"></i> All</button>
+                <button class="filter-chip" data-filter="highlights"><i class="fas fa-star me-1"></i> Highlights</button>
+                <button class="filter-chip" data-filter="tournaments"><i class="fas fa-trophy me-1"></i> Tournaments</button>
+	            <button id="viewMembersBtn" class="btn btn-outline-primary btn-sm ms-auto"><i class="fas fa-users me-1"></i> View Members</button>
+            </div>
         </div>
-    </div>
-</section>
+	</section>
 
-<!-- Feeds Content -->
-<section class="feeds-content">
-    <div class="container">
-        <div class="row">
-            <!-- Main Feed - Left Side -->
-            <div class="col-lg-7">
-                <div class="feeds-main">
-                    <!-- Create Post -->
-                    <div class="post-card start-post-card" id="startPostCard">
-                        <div class="start-post-header d-flex align-items-center gap-2">
-                            <div class="user-avatar">
-                                <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
+	<!-- Feeds Content -->
+	<section class="feeds-content">
+        <div class="container">
+            <div class="row">
+                <!-- Main Feed - Left Side -->
+                <div class="col-lg-7">
+                    <div class="feeds-main">
+                        <!-- Create Post -->
+                        <div class="post-card start-post-card" id="startPostCard">
+                            <div class="start-post-header d-flex align-items-center gap-2">
+                                <div class="user-avatar">
+                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
+                                </div>
+                                <button type="button" class="start-post-input w-100 text-start" data-bs-toggle="modal" data-bs-target="#createPostModal">Start a post</button>
                             </div>
-                            <button type="button" class="start-post-input w-100 text-start" data-bs-toggle="modal" data-bs-target="#createPostModal">Start a post</button>
+                            <div class="start-post-actions d-flex gap-2 mt-2">
+                                <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-image"></i> Photo</button>
+                                <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-video"></i> Video</button>
+                                <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-pen"></i> Write</button>
+                            </div>
                         </div>
-                        <div class="start-post-actions d-flex gap-2 mt-2">
-                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-image"></i> Photo</button>
-                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-video"></i> Video</button>
-                            <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#createPostModal"><i class="fas fa-pen"></i> Write</button>
-                        </div>
-                    </div>
 
-                    <!-- Feed Posts -->
-                    <div class="feed-posts" id="feedPosts">
-                        <!-- Post 1 - Tournament Highlight -->
-                        <div class="post-card" data-category="tournaments">
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar">
-                                    </div>
-                                    <div class="user-details">
-                                        <h5 class="username">ProGamer_Elite</h5>
-                                        <span class="post-time">2 hours ago</span>
-                                    </div>
-                                </div>
-                                <div class="post-menu">
-                                    <button class="menu-btn">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="post-content">
-                                <p class="post-text">Just qualified for the Valorant Championship Finals! 🎯🔥 The competition was intense, but our team pulled through. Can't wait to represent our community in the finals next week! #ValorantChampionship #GamingCommunity</p>
-                                <div class="post-image">
-                                    <img src="{% static 'core/images/cod.jpeg' %}" alt="Tournament Victory">
-                                </div>
-                            </div>
-
-                            <div class="post-meta-row">
-                            <div class="post-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-heart"></i>
-                                    <span>247 likes</span>
-                                </div>
-                                <div class="stat-item comments-stat" data-post-id="1">
-                                    <i class="fas fa-comment"></i>
-                                    <span>23 comments</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-share"></i>
-                                    <span>12 shares</span>
-                                </div>
-                            </div>
-                            <div class="post-actions">
-                                <button class="action-btn like-btn" data-post-id="1">
-                                    <i class="fas fa-heart"></i> Like
-                                </button>
-                                <button class="action-btn comment-btn" data-post-id="1">
-                                    <i class="fas fa-comment"></i> Comment
-                                </button>
-                                <button class="action-btn share-btn" data-post-id="1">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                            </div>
-                            </div>
-
-                            <!-- Comments Section -->
-                            <div class="comments-section" id="comments-1">
-                                <div class="comment-input d-none">
-                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                    <input type="text" placeholder="Write a comment..." class="comment-text">
-                                    <button class="comment-send">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                </div>
-                                <div class="comments-list d-none">
-                                    <div class="comment">
-                                        <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                        <div class="comment-content">
-                                            <div class="comment-header">
-                                                <span class="comment-username">GamingLegend</span>
-                                                <span class="comment-time">1 hour ago</span>
-                                            </div>
-                                            <p class="comment-text">Amazing performance! Good luck in the finals! 🏆</p>
+                        <!-- Feed Posts -->
+                        <div class="feed-posts" id="feedPosts">
+                            <!-- Post 1 - Tournament Highlight -->
+                            <div class="post-card" data-category="tournaments">
+                                <div class="post-header">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar">
+                                        </div>
+                                        <div class="user-details">
+                                            <h5 class="username">ProGamer_Elite</h5>
+                                            <span class="post-time">2 hours ago</span>
                                         </div>
                                     </div>
-                                    <div class="comment">
-                                        <img src="{% static 'core/images/player3.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                        <div class="comment-content">
-                                            <div class="comment-header">
-                                                <span class="comment-username">ValorantPro</span>
-                                                <span class="comment-time">30 minutes ago</span>
-                                            </div>
-                                            <p class="comment-text">Your team coordination was perfect! 🔥</p>
+                                    <div class="post-menu">
+                                        <button class="menu-btn">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="post-content">
+                                    <p class="post-text">Just qualified for the Valorant Championship Finals! 🎯🔥 The competition was intense, but our team pulled through. Can't wait to represent our community in the finals next week! #ValorantChampionship #GamingCommunity</p>
+                                    <div class="post-image">
+                                        <img src="{% static 'core/images/cod.jpeg' %}" alt="Tournament Victory">
+                                    </div>
+                                </div>
+
+                                <div class="post-meta-row">
+                                    <div class="post-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-heart"></i>
+                                            <span>247</span>
+                                        </div>
+                                        <div class="stat-item comments-stat" data-post-id="1">
+                                            <i class="fas fa-comment"></i>
+                                            <span>23</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-share"></i>
+                                            <span>12</span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Post 2 - Gaming Setup -->
-                        <div class="post-card" data-category="highlights">
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar">
-                                    </div>
-                                    <div class="user-details">
-                                        <h5 class="username">SetupMaster</h5>
-                                        <span class="post-time">5 hours ago</span>
+                                    <div class="post-actions">
+                                        <button class="action-btn like-btn" data-post-id="1">
+                                            <i class="fas fa-heart"></i> Like
+                                        </button>
+                                        <button class="action-btn comment-btn" data-post-id="1">
+                                            <i class="fas fa-comment"></i> Comment
+                                        </button>
+                                        <button class="action-btn share-btn" data-post-id="1">
+                                            <i class="fas fa-share"></i> Share
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="post-menu">
-                                    <button class="menu-btn">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                </div>
-                            </div>
 
-                            <div class="post-content">
-                                <p class="post-text">Finally completed my dream gaming setup! 🎮✨ RGB everything, ultrawide monitor, and the perfect chair. Ready to dominate in any game! #GamingSetup #RGBLife #GamingCommunity</p>
-                                <div class="post-image">
-                                    <img src="{% static 'core/images/gameroom.jpeg' %}" alt="Gaming Setup">
-                                </div>
-                            </div>
-
-                            <div class="post-meta-row">
-                            <div class="post-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-heart"></i>
-                                    <span>892 likes</span>
-                                </div>
-                                <div class="stat-item comments-stat" data-post-id="2">
-                                    <i class="fas fa-comment"></i>
-                                    <span>67 comments</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-share"></i>
-                                    <span>34 shares</span>
-                                </div>
-                            </div>
-                            <div class="post-actions">
-                                <button class="action-btn like-btn" data-post-id="2">
-                                    <i class="fas fa-heart"></i> Like
-                                </button>
-                                <button class="action-btn comment-btn" data-post-id="2">
-                                    <i class="fas fa-comment"></i> Comment
-                                </button>
-                                <button class="action-btn share-btn" data-post-id="2">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                            </div>
-                            </div>
-                            <!-- Comments Section -->
-                            <div class="comments-section" id="comments-2">
-                                <div class="comment-input d-none">
-                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                    <input type="text" placeholder="Write a comment..." class="comment-text">
-                                    <button class="comment-send">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                </div>
-                                <div class="comments-list d-none">
-                                    <div class="comment">
-                                        <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                        <div class="comment-content">
-                                            <div class="comment-header">
-                                                <span class="comment-username">RGBEnthusiast</span>
-                                                <span class="comment-time">3 hours ago</span>
+                                <!-- Comments Section -->
+                                <div class="comments-section" id="comments-1">
+                                    <div class="comment-input d-none">
+                                        <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                        <input type="text" placeholder="Write a comment..." class="comment-text">
+                                        <button class="comment-send">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <div class="comments-list d-none">
+                                        <div class="comment">
+                                            <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <span class="comment-username">GamingLegend</span>
+                                                    <span class="comment-time">1 hour ago</span>
+                                                </div>
+                                                <p class="comment-text">Amazing performance! Good luck in the finals! 🏆</p>
                                             </div>
-                                            <p class="comment-text">That setup is clean! What chair model is that?</p>
+                                        </div>
+                                        <div class="comment">
+                                            <img src="{% static 'core/images/player3.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <span class="comment-username">ValorantPro</span>
+                                                    <span class="comment-time">30 minutes ago</span>
+                                                </div>
+                                                <p class="comment-text">Your team coordination was perfect! 🔥</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Post 3 - Tips & Tricks -->
-                        <div class="post-card" data-category="tips">
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        <img src="{% static 'core/images/player3.jpeg' %}" alt="User Avatar">
+                            <!-- Post 2 - Gaming Setup -->
+                            <div class="post-card" data-category="highlights">
+                                <div class="post-header">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            <img src="{% static 'core/images/player2.jpeg' %}" alt="User Avatar">
+                                        </div>
+                                        <div class="user-details">
+                                            <h5 class="username">SetupMaster</h5>
+                                            <span class="post-time">5 hours ago</span>
+                                        </div>
                                     </div>
-                                    <div class="user-details">
-                                        <h5 class="username">FIFA_Pro_Tips</h5>
-                                        <span class="post-time">1 day ago</span>
+                                    <div class="post-menu">
+                                        <button class="menu-btn">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="post-menu">
-                                    <button class="menu-btn">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
+
+                                <div class="post-content">
+                                    <p class="post-text">Finally completed my dream gaming setup! 🎮✨ RGB everything, ultrawide monitor, and the perfect chair. Ready to dominate in any game! #GamingSetup #RGBLife #GamingCommunity</p>
+                                    <div class="post-image">
+                                        <img src="{% static 'core/images/gameroom.jpeg' %}" alt="Gaming Setup">
+                                    </div>
+                                </div>
+
+                                <div class="post-meta-row">
+                                    <div class="post-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-heart"></i>
+                                            <span>892</span>
+                                        </div>
+                                        <div class="stat-item comments-stat" data-post-id="2">
+                                            <i class="fas fa-comment"></i>
+                                            <span>67</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-share"></i>
+                                            <span>34</span>
+                                        </div>
+                                    </div>
+                                    <div class="post-actions">
+                                        <button class="action-btn like-btn" data-post-id="2">
+                                            <i class="fas fa-heart"></i> Like
+                                        </button>
+                                        <button class="action-btn comment-btn" data-post-id="2">
+                                            <i class="fas fa-comment"></i> Comment
+                                        </button>
+                                        <button class="action-btn share-btn" data-post-id="2">
+                                            <i class="fas fa-share"></i> Share
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Comments Section -->
+                                <div class="comments-section" id="comments-2">
+                                    <div class="comment-input d-none">
+                                        <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                        <input type="text" placeholder="Write a comment..." class="comment-text">
+                                        <button class="comment-send">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <div class="comments-list d-none">
+                                        <div class="comment">
+                                            <img src="{% static 'core/images/player1.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <span class="comment-username">RGBEnthusiast</span>
+                                                    <span class="comment-time">3 hours ago</span>
+                                                </div>
+                                                <p class="comment-text">That setup is clean! What chair model is that?</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="post-content">
-                                <p class="post-text">🔥 FIFA 25 Pro Tip: Master the new skill moves! The "Elastico" and "Roulette" are game-changers this year. Practice in skill games for 10 minutes daily and watch your gameplay improve dramatically! #FIFA25Tips #GamingTips</p>
-                            </div>
+                            <!-- Post 3 - Tips & Tricks -->
+                            <div class="post-card" data-category="tips">
+                                <div class="post-header">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            <img src="{% static 'core/images/player3.jpeg' %}" alt="User Avatar">
+                                        </div>
+                                        <div class="user-details">
+                                            <h5 class="username">FIFA_Pro_Tips</h5>
+                                            <span class="post-time">1 day ago</span>
+                                        </div>
+                                    </div>
+                                    <div class="post-menu">
+                                        <button class="menu-btn">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-                            <div class="post-meta-row">
-                            <div class="post-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-heart"></i>
-                                    <span>1,234 likes</span>
+                                <div class="post-content">
+                                    <p class="post-text">🔥 FIFA 25 Pro Tip: Master the new skill moves! The "Elastico" and "Roulette" are game-changers this year. Practice in skill games for 10 minutes daily and watch your gameplay improve dramatically! #FIFA25Tips #GamingTips</p>
                                 </div>
-                                <div class="stat-item comments-stat" data-post-id="3">
-                                    <i class="fas fa-comment"></i>
-                                    <span>89 comments</span>
+
+                                <div class="post-meta-row">
+                                    <div class="post-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-heart"></i>
+                                            <span>1,234</span>
+                                        </div>
+                                        <div class="stat-item comments-stat" data-post-id="3">
+                                            <i class="fas fa-comment"></i>
+                                            <span>89</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-share"></i>
+                                            <span>156</span>
+                                        </div>
+                                    </div>
+                                    <div class="post-actions">
+                                        <button class="action-btn like-btn" data-post-id="3">
+                                            <i class="fas fa-heart"></i> Like
+                                        </button>
+                                        <button class="action-btn comment-btn" data-post-id="3">
+                                            <i class="fas fa-comment"></i> Comment
+                                        </button>
+                                        <button class="action-btn share-btn" data-post-id="3">
+                                            <i class="fas fa-share"></i> Share
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-share"></i>
-                                    <span>156 shares</span>
-                                </div>
-                            </div>
-                            <div class="post-actions">
-                                <button class="action-btn like-btn" data-post-id="3">
-                                    <i class="fas fa-heart"></i> Like
-                                </button>
-                                <button class="action-btn comment-btn" data-post-id="3">
-                                    <i class="fas fa-comment"></i> Comment
-                                </button>
-                                <button class="action-btn share-btn" data-post-id="3">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                            </div>
-                            </div>
                         
-                            <!-- Comments Section -->
-                            <div class="comments-section" id="comments-3">
-                                <div class="comment-input d-none">
-                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                    <input type="text" placeholder="Write a comment..." class="comment-text">
-                                    <button class="comment-send">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <div class="user-avatar">
-                                        <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar">
+                                <!-- Comments Section -->
+                                <div class="comments-section" id="comments-3">
+                                    <div class="comment-input d-none">
+                                        <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
+                                        <input type="text" placeholder="Write a comment..." class="comment-text">
+                                        <button class="comment-send">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
                                     </div>
-                                    <div class="user-details">
-                                        <h5 class="username">GamingMemeLord</h5>
-                                        <span class="post-time">3 days ago</span>
-                                    </div>
-                                </div>
-                                <div class="post-menu">
-                                    <button class="menu-btn">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="post-content">
-                                <p class="post-text">When you finally win a match after losing 10 in a row 😂 #GamingLife #Relatable #GamingMemes</p>
-                                <div class="post-image">
-                                    <img src="{% static 'core/images/fortnite.jpeg' %}" alt="Gaming Meme">
-                                </div>
-                            </div>
-
-                            <div class="post-meta-row">
-                            <div class="post-stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-heart"></i>
-                                    <span>2,567 likes</span>
-                                </div>
-                                <div class="stat-item comments-stat" data-post-id="4">
-                                    <i class="fas fa-comment"></i>
-                                    <span>234 comments</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-share"></i>
-                                    <span>567 shares</span>
-                                </div>
-                            </div>
-                            <div class="post-actions">
-                                <button class="action-btn like-btn" data-post-id="4">
-                                    <i class="fas fa-heart"></i> Like
-                                </button>
-                                <button class="action-btn comment-btn" data-post-id="4">
-                                    <i class="fas fa-comment"></i> Comment
-                                </button>
-                                <button class="action-btn share-btn" data-post-id="4">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
-                            </div>
-                            </div>
-                        
-                            <!-- Comments Section -->
-                            <div class="comments-section" id="comments-4">
-                                <div class="comment-input d-none">
-                                    <img src="{% static 'core/images/player.jpeg' %}" alt="User Avatar" class="comment-avatar">
-                                    <input type="text" placeholder="Write a comment..." class="comment-text">
-                                    <button class="comment-send">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -495,7 +433,7 @@
                         </div>
                     </div>
 
-                    <!-- Members Panel (hidden by default; toggled by View Members) -->
+                    <!-- Members Panel - toggled by clicking the "View Members" button -->
                     <div id="membersPanel" class="members-panel d-none">
                         <div class="members-header d-flex flex-wrap align-items-center justify-content-between gap-2">
                             <h4 class="mb-0"><i class="fas fa-users me-2"></i>All Members</h4>
@@ -518,8 +456,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+	</section>
 
 {% endblock %}
 
